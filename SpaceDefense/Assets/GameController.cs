@@ -18,13 +18,25 @@ namespace Assets
     /// </summary>
     public class GameController : MonoBehaviour
     {
-        public Vector2 PosA;
-        public Vector2 PosB;
-        public AttachedBeam Beam;
+        /// <summary>
+        /// The current singleton instance of the <see cref="GameController"/> class
+        /// </summary>
+        public static GameController CurrentInstancce { get; private set; }
 
-        protected void Update()
+        /// <summary>
+        /// Called when the given enemy successfully reached the end of their path
+        /// </summary>
+        /// <param name="enemy">Target enemy</param>
+        public void OnEnemyReachEnd(Enemy enemy)
         {
-            Beam.Attach(this.PosA, this.PosB);
+        }
+
+        /// <summary>
+        /// Used for initialization
+        /// </summary>
+        protected void Start()
+        {
+            GameController.CurrentInstancce = this;
         }
     }
 }

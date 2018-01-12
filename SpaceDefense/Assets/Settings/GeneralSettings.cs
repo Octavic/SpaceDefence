@@ -19,7 +19,7 @@ namespace Assets.Settings
         /// <summary>
         /// The maximum amount of connection that can exist at the same time on an input/output socket
         /// </summary>
-        public const int MaxConnectionPerSocket = 10;
+        public const int MaxConnectionPerSocket = 5;
 
         /// <summary>
         /// By default, transforms have a minimal of 500ms delay when triggered and emitting a new signal
