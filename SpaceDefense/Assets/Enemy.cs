@@ -11,6 +11,7 @@ namespace Assets
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using Settings;
 
     /// <summary>
     /// Describes an enemy entity
@@ -18,14 +19,25 @@ namespace Assets
     public class Enemy : MonoBehaviour
     {
         /// <summary>
-        /// The effects currently active and their respective duration left
+        /// The health bar component 
         /// </summary>
-        protected Dictionary<EffectsEnum, float> Effects;
+        public EnemyHealthBar HealthBar;
 
+        
         /// <summary>
         /// How fast the enemy moves per frame
         /// </summary>
         public float Speed;
+
+        /// <summary>
+        /// The amount of total hit points for the enemy
+        /// </summary>
+        public float TotalHealth;
+
+        /// <summary>
+        /// Gets the current health level of the enemy
+        /// </summary>
+        public float CurrentHealth { get; private set; }
 
         /// <summary>
         /// Gets or sets the route that the enemy will take
@@ -33,9 +45,19 @@ namespace Assets
         public List<Vector2> Path { get; set; }
 
         /// <summary>
+        /// The effects currently active and their respective duration left
+        /// </summary>
+        protected Dictionary<EffectEnum, float> Effects = new Dictionary<EffectEnum, float>();
+
+        /// <summary>
+        /// A dictionary of effect => value until proc
+        /// </summary>
+        protected Dictionary<EffectEnum, float> EffectResistance = new Dictionary<EffectEnum, float>();
+
+        /// <summary>
         /// The node in the route that the enemy is trying to reach
         /// </summary>
-        private int _currentGoalNode;
+        private int _currentPathNodeIndex;
 
         /// <summary>
         /// The rigidbody component
@@ -49,13 +71,55 @@ namespace Assets
         }
 
         /// <summary>
+        /// Called when the enemy takes damage
+        /// </summary>
+        /// <param name="damage">How much damage to take</param>
+        /// <param name="carriedEffect">The effect carried</param>
+        public void TakeDamage(float damage, EffectEnum carriedEffect)
+        {
+            this.CurrentHealth -= damage;
+            if (this.CurrentHealth < 0)
+            {
+                Destroy(this.HealthBar.gameObject);
+                Destroy(this.gameObject);
+                return;
+            }
+
+            this.HealthBar.UpdateHealth(this);
+            this.EffectResistance[carriedEffect] += damage;
+
+            if (this.EffectResistance[carriedEffect] > 0)
+            {
+                this.ApplyEffect(carriedEffect);
+                this.EffectResistance[carriedEffect] = GeneralSettings.EffectResistance;
+            }
+        }
+
+        /// <summary>
+        /// Applies the given effect
+        /// </summary>
+        /// <param name="effect">Target effect</param>
+        public void ApplyEffect(EffectEnum effect)
+        {
+            this.Effects[effect] = GeneralSettings.EffectDuration;
+        }
+
+        /// <summary>
         /// If the enemy has the  target effect
         /// </summary>
         /// <param name="effect">Target effect</param>
         /// <returns>True if the enemy has the effect</returns>
-        public bool HasEffect(EffectsEnum effect)
+        public bool HasEffect(EffectEnum effect)
         {
             return this.Effects.ContainsKey(effect);
+        }
+
+        /// <summary>
+        /// Used for initialization
+        /// </summary>
+        protected virtual void Start()
+        {
+            this.CurrentHealth = this.TotalHealth;
         }
 
         /// <summary>
@@ -64,14 +128,14 @@ namespace Assets
         protected virtual void Update()
         {
             Vector2 curPos = this.transform.position;
-            Vector2 curGoal = this.Path[this._currentGoalNode];
+            Vector2 curGoal = this.Path[this._currentPathNodeIndex];
             Vector2 diff = curGoal - curPos;
             var movementThisFrame = this.Speed * Time.deltaTime;
             if (diff.magnitude < movementThisFrame)
             {
                 // Can reach destination this frame, proceed to 
-                this._currentGoalNode++;
-                if (this._currentGoalNode >= this.Path.Count)
+                this._currentPathNodeIndex++;
+                if (this._currentPathNodeIndex >= this.Path.Count)
                 {
                     GameController.CurrentInstancce.OnEnemyReachEnd(this);
                     return;
@@ -82,6 +146,30 @@ namespace Assets
             {
                 //  Not yet reached, proceed
                 this._rigidbody.MovePosition(curPos + diff.normalized * movementThisFrame);
+            }
+
+            // Decay effects
+            var keys = new List<EffectEnum>(this.Effects.Keys);
+            var decay = Time.deltaTime;
+            foreach (var key in keys)
+            {
+                var remainingDuration = this.Effects[key];
+                if (remainingDuration <= decay)
+                {
+                    this.Effects.Remove(key);
+                }
+                this.Effects[key] -= decay;
+            }
+
+            // Decay effect proc
+            decay *= GeneralSettings.EffectBuildUpDecayPerSecond;
+            foreach (var key in this.EffectResistance.Keys)
+            {
+                var curValue = this.EffectResistance[key];
+                if (curValue > GeneralSettings.EffectResistance)
+                {
+                    this.EffectResistance[key] -= decay;
+                }
             }
         }
     }
