@@ -26,7 +26,7 @@ namespace Assets.Wiring
         /// <summary>
         /// A collection of connected sources => Current state
         /// </summary>
-        public Dictionary<OutputSocket, bool> ConnectedOutputs;
+        public Dictionary<OutputSocket, bool> ConnectedOutputs = new Dictionary<OutputSocket, bool>();
 
         /// <summary>
         /// The amount of connected outputs that's currently on
@@ -52,6 +52,15 @@ namespace Assets.Wiring
 
             this.ConnectedOutputs[newOutput] = false;
             return true;
+        }
+
+        /// <summary>
+        /// Disconnects the given output
+        /// </summary>
+        /// <param name="output">Target output</param>
+        public void DisconnectOutput(OutputSocket output)
+        {
+            this.ConnectedOutputs.Remove(output);
         }
 
         /// <summary>

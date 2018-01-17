@@ -19,9 +19,14 @@ namespace Assets.Wiring
     public class OutputSocket : MonoBehaviour, ISocket
     {
         /// <summary>
-        /// A  collection of connected input sockets
+        /// Prefab for the  socket beam 
         /// </summary>
-        public HashSet<InputSocket> ConnectedInputs;
+        public AttachedBeam BeamPrefab;
+
+        /// <summary>
+        /// A  collection of connected input sockets => their respective beams
+        /// </summary>
+        public Dictionary<InputSocket, AttachedBeam> ConnectedInputs = new Dictionary<InputSocket, AttachedBeam>();
 
         /// <summary>
         /// Try to add another input socket onto the list of subscribers
@@ -30,7 +35,7 @@ namespace Assets.Wiring
         /// <returns>True if successful</returns>
         public bool TryAddInputSocket(InputSocket newInput)
         {
-            if (this.ConnectedInputs.Contains(newInput))
+            if (this.ConnectedInputs.ContainsKey(newInput))
             {
                 return false;
             }
@@ -40,8 +45,37 @@ namespace Assets.Wiring
                 return false;
             }
 
-            this.ConnectedInputs.Add(newInput);
+            if (!newInput.TryAddOutput(this))
+            {
+                return false;
+            }
+
+            var newBeam = Instantiate(this.BeamPrefab.gameObject).GetComponent<AttachedBeam>();
+            newBeam.Attach(this.transform.position, newInput.transform.position);
+            this.ConnectedInputs[newInput] = newBeam;
             return true;
+        }
+
+        /// <summary>
+        /// /Disconnects the given input
+        /// </summary>
+        /// <param name="input">Target input</param>
+        public void DisconnectInputSocket(InputSocket input)
+        {
+            if (input == null)
+            {
+                return;
+            }
+
+            AttachedBeam beam;
+            if (!this.ConnectedInputs.TryGetValue(input, out beam))
+            {
+                return;
+            }
+
+            Destroy(beam.gameObject);
+            input.DisconnectOutput(this);
+            this.ConnectedInputs.Remove(input);
         }
 
         /// <summary>
@@ -52,7 +86,8 @@ namespace Assets.Wiring
         {
             foreach (var input in this.ConnectedInputs)
             {
-                input.Trigger(this, newState);
+                input.Key.Trigger(this, newState);
+                input.Value.Trigger(newState);
             }
         }
     }
