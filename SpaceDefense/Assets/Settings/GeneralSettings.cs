@@ -24,7 +24,7 @@ namespace Assets.Settings
         /// <summary>
         /// By default, transforms have a minimal of 500ms delay when triggered and emitting a new signal
         /// </summary>
-        public const float TransformerDefaultTriggerDelay = 0.5f;
+        public const float TransformerDefaultTriggerDelay = 0.2f;
 
         /// <summary>
         /// The counter weight that must be cleared before an enemy is afflicted by a certain effect

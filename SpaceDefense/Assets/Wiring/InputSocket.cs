@@ -24,6 +24,11 @@ namespace Assets.Wiring
         public bool IsOn { get; private set; }
 
         /// <summary>
+        /// Get or set the receiver that'll be notified if this socket changes
+        /// </summary>
+        public IReceiver Receiver { get; set; }
+
+        /// <summary>
         /// A collection of connected sources => Current state
         /// </summary>
         public Dictionary<OutputSocket, bool> ConnectedOutputs = new Dictionary<OutputSocket, bool>();
@@ -94,6 +99,10 @@ namespace Assets.Wiring
             }
 
             this.IsOn = newState;
+            if (this.Receiver != null)
+            {
+                this.Receiver.OnInputChange();
+            }
         }
     }
 }
