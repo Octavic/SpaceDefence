@@ -29,6 +29,11 @@ namespace Assets.Wiring
         public Dictionary<InputSocket, AttachedBeam> ConnectedInputs = new Dictionary<InputSocket, AttachedBeam>();
 
         /// <summary>
+        /// The current state for the socket
+        /// </summary>
+        private bool _currentState = false;
+
+        /// <summary>
         /// Try to add another input socket onto the list of subscribers
         /// </summary>
         /// <param name="newInput">New input socket</param>
@@ -53,6 +58,8 @@ namespace Assets.Wiring
             var newBeam = Instantiate(this.BeamPrefab.gameObject).GetComponent<AttachedBeam>();
             newBeam.Attach(this.transform.position, newInput.transform.position);
             this.ConnectedInputs[newInput] = newBeam;
+            newInput.Trigger(this, this._currentState);
+            newBeam.Trigger(this._currentState);
             return true;
         }
 
@@ -84,6 +91,8 @@ namespace Assets.Wiring
         /// <param name="newState">The new state</param>
         public void Trigger(bool newState)
         {
+            this._currentState = newState;
+
             foreach (var input in this.ConnectedInputs)
             {
                 input.Key.Trigger(this, newState);

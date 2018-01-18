@@ -32,12 +32,7 @@ namespace Assets.Wiring
         /// A collection of connected sources => Current state
         /// </summary>
         public Dictionary<OutputSocket, bool> ConnectedOutputs = new Dictionary<OutputSocket, bool>();
-
-        /// <summary>
-        /// The amount of connected outputs that's currently on
-        /// </summary>
-        private int triggeredOutputCount;
-
+        
         /// <summary>
         /// Try to add a new connected output
         /// </summary>
@@ -82,26 +77,26 @@ namespace Assets.Wiring
                 return;
             }
 
-            if (currentState == newState)
+            this.ConnectedOutputs[source] = newState;
+
+            // No need to trigger receiver if the input didn't change
+            if (newState == this.IsOn)
             {
-                Debug.LogError("Input triggered on by the same output multiple times.");
                 return;
             }
 
-            this.ConnectedOutputs[source] = newState;
-            if (newState)
-            {
-                this.triggeredOutputCount++;
-            }
-            else
-            {
-                this.triggeredOutputCount--;
-            }
+            // Possible change  of state, recalculate
+            var newCurrentState = this.ConnectedOutputs.Any(output => output.Value);
 
-            this.IsOn = newState;
-            if (this.Receiver != null)
+            // Re-evaluate
+            if (newCurrentState != this.IsOn)
             {
-                this.Receiver.OnInputChange();
+                this.IsOn = newCurrentState;
+
+                if (this.Receiver != null)
+                {
+                    this.Receiver.OnInputChange();
+                }
             }
         }
     }

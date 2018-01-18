@@ -23,14 +23,14 @@ namespace Assets.Wiring
         public Sprite ActivateSprite;
 
         /// <summary>
+        /// Sprite for when the beam is inactive
+        /// </summary>
+        public Sprite InactiveSprite;
+
+        /// <summary>
         /// The sprite renderer component
         /// </summary>
         public SpriteRenderer Renderer;
-
-        /// <summary>
-        /// Sprite for when the beam is inactive
-        /// </summary>
-        private Sprite _inactiveSprite;
 
         /// <summary>
         /// Attach the beam to two items
@@ -59,16 +59,8 @@ namespace Assets.Wiring
             }
             else
             {
-                this.Renderer.sprite = this._inactiveSprite;
+                this.Renderer.sprite = this.InactiveSprite;
             }
         }
-
-        /// <summary>
-        /// Used for initialization
-        /// </summary>
-        protected void Start()
-        {
-            this._inactiveSprite = this.Renderer.sprite;
-        }
-    }
+    }   
 }

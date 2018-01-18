@@ -1,33 +1,21 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="NOTGate.cs">
+//  <copyright file="Grid.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Wiring.Transformers
+namespace Assets.Grid
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using UnityEngine;
 
     /// <summary>
-    /// Defines a NOT gate
+    /// A grid for the big map
     /// </summary>
-    public class NOTGate : Transformer
+    public class Grid
     {
-        /// <summary>
-        /// Called when the input changes
-        /// </summary>
-        public override void OnInputChange()
-        {
-            this.Trigger(!this.Inputs[0].IsOn);
-        }
-
-        protected override void Start()
-        {
-            this.Trigger(true);
-            base.Start();
-        }
     }
 }
