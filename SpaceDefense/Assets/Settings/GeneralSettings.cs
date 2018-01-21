@@ -45,5 +45,10 @@ namespace Assets.Settings
         /// The amount that effect resistance is gained per second
         /// </summary>
         public const float EffectBuildUpDecayPerSecond = -400.0f;
+
+        /// <summary>
+        /// The size  of the grid blocks
+        /// </summary>
+        public const float GridSize = 0.32f;
     }
 }

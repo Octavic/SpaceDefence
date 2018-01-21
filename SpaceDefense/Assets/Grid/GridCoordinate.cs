@@ -45,5 +45,13 @@ namespace Assets.Grid
         {
             return new GridCoordinate(c1.X - c2.X, c1.Y - c2.Y);
         }
+        public static GridCoordinate operator *(GridCoordinate c, int i)
+        {
+            return new GridCoordinate(c.X * i, c.Y * i);
+        }
+        public static GridCoordinate operator /(GridCoordinate c, int i)
+        {
+            return new GridCoordinate(c.X / i, c.Y / i);
+        }
     }
 }
