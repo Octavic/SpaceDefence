@@ -24,7 +24,7 @@ namespace Assets.Settings
         /// <summary>
         /// By default, transforms have a minimal of 500ms delay when triggered and emitting a new signal
         /// </summary>
-        public const float TransformerDefaultTriggerDelay = 0.5f;
+        public const float TransformerDefaultTriggerDelay = 0.2f;
 
         /// <summary>
         /// The counter weight that must be cleared before an enemy is afflicted by a certain effect
@@ -45,5 +45,10 @@ namespace Assets.Settings
         /// The amount that effect resistance is gained per second
         /// </summary>
         public const float EffectBuildUpDecayPerSecond = -400.0f;
+
+        /// <summary>
+        /// The size  of the grid blocks
+        /// </summary>
+        public const float GridSize = 0.32f;
     }
 }

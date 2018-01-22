@@ -24,15 +24,15 @@ namespace Assets.Wiring
         public bool IsOn { get; private set; }
 
         /// <summary>
-        /// A collection of connected sources => Current state
+        /// Get or set the receiver that'll be notified if this socket changes
         /// </summary>
-        public Dictionary<OutputSocket, bool> ConnectedOutputs;
+        public IReceiver Receiver { get; set; }
 
         /// <summary>
-        /// The amount of connected outputs that's currently on
+        /// A collection of connected sources => Current state
         /// </summary>
-        private int triggeredOutputCount;
-
+        public Dictionary<OutputSocket, bool> ConnectedOutputs = new Dictionary<OutputSocket, bool>();
+        
         /// <summary>
         /// Try to add a new connected output
         /// </summary>
@@ -55,6 +55,15 @@ namespace Assets.Wiring
         }
 
         /// <summary>
+        /// Disconnects the given output
+        /// </summary>
+        /// <param name="output">Target output</param>
+        public void DisconnectOutput(OutputSocket output)
+        {
+            this.ConnectedOutputs.Remove(output);
+        }
+
+        /// <summary>
         /// Called when the output is turned on
         /// </summary>
         /// <param name="source">The one turning on this socket</param>
@@ -68,23 +77,27 @@ namespace Assets.Wiring
                 return;
             }
 
-            if (currentState == newState)
+            this.ConnectedOutputs[source] = newState;
+
+            // No need to trigger receiver if the input didn't change
+            if (newState == this.IsOn)
             {
-                Debug.LogError("Input triggered on by the same output multiple times.");
                 return;
             }
 
-            this.ConnectedOutputs[source] = newState;
-            if (newState)
-            {
-                this.triggeredOutputCount++;
-            }
-            else
-            {
-                this.triggeredOutputCount--;
-            }
+            // Possible change  of state, recalculate
+            var newCurrentState = this.ConnectedOutputs.Any(output => output.Value);
 
-            this.IsOn = newState;
+            // Re-evaluate
+            if (newCurrentState != this.IsOn)
+            {
+                this.IsOn = newCurrentState;
+
+                if (this.Receiver != null)
+                {
+                    this.Receiver.OnInputChange();
+                }
+            }
         }
     }
 }

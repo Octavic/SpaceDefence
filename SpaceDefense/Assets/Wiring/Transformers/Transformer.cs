@@ -81,6 +81,17 @@ namespace Assets.Wiring.Transformers
         }
 
         /// <summary>
+        /// Used for initialization
+        /// </summary>
+        protected virtual void Start()
+        {
+            foreach (var input in this.Inputs)
+            {
+                input.Receiver = this;
+            }
+        }
+
+        /// <summary>
         /// Called once per frame
         /// </summary>
         protected virtual void Update()

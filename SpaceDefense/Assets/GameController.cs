@@ -38,5 +38,12 @@ namespace Assets
         {
             GameController.CurrentInstancce = this;
         }
+
+        /// <summary>
+        /// Called once per frame
+        /// </summary>
+        protected void Update()
+        {
+        }
     }
 }

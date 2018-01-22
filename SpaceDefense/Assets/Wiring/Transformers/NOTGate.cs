@@ -23,5 +23,11 @@ namespace Assets.Wiring.Transformers
         {
             this.Trigger(!this.Inputs[0].IsOn);
         }
+
+        protected override void Start()
+        {
+            this.Trigger(true);
+            base.Start();
+        }
     }
 }
