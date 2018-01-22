@@ -4,6 +4,9 @@
 /[Bb]uild/
 /[Bb]uilds/
 /Assets/AssetStoreTools*
+SpaceDefense/Library
+*.meta
+SpaceDefense/.vs
 
 # Visual Studio 2015 cache directory
 /.vs/
