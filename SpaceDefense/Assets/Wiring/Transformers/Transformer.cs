@@ -12,11 +12,12 @@ namespace Assets.Wiring.Transformers
     using System.Text;
     using UnityEngine;
     using Settings;
-    
+    using Grid;
+
     /// <summary>
     /// Implements basic functionality for transformer
     /// </summary>
-    public abstract class Transformer : MonoBehaviour, ITransformer
+    public abstract class Transformer : GridEntity, ITransformer
     {
         /// <summary>
         /// The time delay between triggering and actually emitting the signal

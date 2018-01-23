@@ -1,42 +1,37 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="GridEntity.cs">
+//  <copyright file="Weapon.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Grid
+namespace Assets.Wiring.Weapon
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using UnityEngine;
+    using Grid;
 
     /// <summary>
-    /// Defines an entity on the grid
+    /// Defines a base weapon class
     /// </summary>
-    public class GridEntity : MonoBehaviour
+    public abstract class Weapon : GridEntity, IReceiver
     {
         /// <summary>
-        /// The width of the entity
+        /// A collection of input sockets
         /// </summary>
-        public virtual int SizeOffsetX
+        public List<InputSocket> InputSockets;
+        public IList<InputSocket> Inputs
         {
             get
             {
-                return 1;
+                return this.InputSockets;
             }
         }
 
         /// <summary>
-        /// The width of the entity
+        /// Called when any of the input changes
         /// </summary>
-        public virtual int SizeOffsetY
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public abstract void OnInputChange();
     }
 }

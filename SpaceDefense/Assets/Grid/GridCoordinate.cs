@@ -10,6 +10,7 @@ namespace Assets.Grid
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using UnityEngine;
 
     /// <summary>
     /// Defines a grid coordinate
@@ -35,6 +36,15 @@ namespace Assets.Grid
         {
             this.X = x;
             this.Y = y;
+        }
+
+        /// <summary>
+        /// Gets the vector 2 equilivant of the coordinate
+        /// </summary>
+        /// <returns>The converted vector 2</returns>
+        public Vector2 ToVector2()
+        {
+            return new Vector2(this.X, this.Y);
         }
 
         public static GridCoordinate operator +(GridCoordinate c1, GridCoordinate c2)

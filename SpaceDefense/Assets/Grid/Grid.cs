@@ -69,6 +69,7 @@ namespace Assets.Grid
                 this._map[coor] = newEntity;
             }
 
+            newEntity.transform.position = this.GetCellWorldPosition(coordinate);
             return true;
         }
 
@@ -81,6 +82,12 @@ namespace Assets.Grid
         {
             var diff = mousepos - this._topLeftCornerWorldPosition;
             return new GridCoordinate((int)(diff.x / GeneralSettings.GridSize), (int)(diff.y / GeneralSettings.GridSize));
+        }
+
+        public Vector2 GetCellWorldPosition(GridCoordinate coordinate)
+        {
+            var diff = coordinate.ToVector2() * GeneralSettings.GridSize;
+            return this._topLeftCornerWorldPosition + diff + coordinate.ToVector2() * 0.5f;
         }
 
         /// <summary>
@@ -111,10 +118,10 @@ namespace Assets.Grid
         }
 
         /// <summary>
-        /// Construsts a list of needed coordinates
+        /// Constructs a list of needed coordinates
         /// </summary>
         /// <param name="newEntity">Target entity</param>
-        /// <param name="index">Index coordiante</param>
+        /// <param name="index">Index coordinate</param>
         /// <returns>A list of coordinates that the target entity will take up</returns>
         private List<GridCoordinate> _getNeededCoordinates(GridEntity newEntity, GridCoordinate index)
         {

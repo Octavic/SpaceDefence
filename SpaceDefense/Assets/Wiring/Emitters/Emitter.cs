@@ -11,11 +11,12 @@ namespace Assets.Wiring.Emitters
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using Grid;
 
     /// <summary>
     /// Defines a base emitter
     /// </summary>
-    public class Emitter : MonoBehaviour, IEmitter
+    public class Emitter : GridEntity, IEmitter
     {
         /// <summary>
         /// A list of outputs
