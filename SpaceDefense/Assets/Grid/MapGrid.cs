@@ -16,8 +16,13 @@ namespace Assets.Grid
     /// <summary>
     /// A grid for the big map
     /// </summary>
-    public class Grid : MonoBehaviour
+    public class MapGrid : MonoBehaviour
     {
+        /// <summary>
+        /// Prefab for the grid cell
+        /// </summary>
+        public GameObject GridCellPrefab;
+            
         /// <summary>
         /// Width of the grid
         /// </summary>
@@ -27,6 +32,11 @@ namespace Assets.Grid
         /// Height of the grid
         /// </summary>
         public int SizeY;
+
+        /// <summary>
+        /// Gets the current instance of the <see cref="MapGrid"/> class
+        /// </summary>
+        public static MapGrid CurrentInstance { get; private set; }
 
         /// <summary>
         /// The world position of the top left corner pixel  of the top left cell
@@ -39,6 +49,11 @@ namespace Assets.Grid
         private Dictionary<GridCoordinate, GridEntity> _map = new Dictionary<GridCoordinate, GridEntity>();
 
         /// <summary>
+        /// The gameobject containing all of the cells
+        /// </summary>
+        private GameObject _cells;
+
+        /// <summary>
         /// See if the new entity can be added at the target coordinate (Using top left of entity as index)
         /// </summary>
         /// <param name="newEntity">new entity to be added</param>
@@ -48,6 +63,17 @@ namespace Assets.Grid
         {
             var neededCoordinates = _getNeededCoordinates(newEntity, coordiante);
             return _canAddEntity(newEntity, neededCoordinates);
+        }
+
+        /// <summary>
+        /// Try to add the given entity
+        /// </summary>
+        /// <param name="newEntity">New entity to be added</param>
+        /// <param name="mousePos">The mouse position in world space</param>
+        /// <returns>True if the entity was added</returns>
+        public bool TryAddEntity(GridEntity newEntity, Vector2 mousePos)
+        {
+            return this.TryAddEntity(newEntity, this.GetMouseHoveringCoordinate(mousePos));
         }
 
         /// <summary>
@@ -76,7 +102,7 @@ namespace Assets.Grid
         /// <summary>
         /// Gets the coordinate that the mouse is currently hovering over
         /// </summary>
-        /// <param name="mousepos">The current mouse pos in world space</param>
+        /// <param name="mousepos">The current mouse position in world space</param>
         /// <returns>The result</returns>
         public GridCoordinate GetMouseHoveringCoordinate(Vector2 mousepos)
         {
@@ -84,10 +110,14 @@ namespace Assets.Grid
             return new GridCoordinate((int)(diff.x / GeneralSettings.GridSize), (int)(diff.y / GeneralSettings.GridSize));
         }
 
+        /// <summary>
+        /// Gets the world position of the given cell
+        /// </summary>
+        /// <param name="coordinate">coordinate of the given cell</param>
+        /// <returns>The world position of the cell</returns>
         public Vector2 GetCellWorldPosition(GridCoordinate coordinate)
         {
-            var diff = coordinate.ToVector2() * GeneralSettings.GridSize;
-            return this._topLeftCornerWorldPosition + diff + coordinate.ToVector2() * 0.5f;
+            return (Vector2)(this.transform.position) + coordinate.ToVector2() * GeneralSettings.GridSize;
         }
 
         /// <summary>
@@ -149,7 +179,26 @@ namespace Assets.Grid
         /// </summary>
         protected void Start()
         {
-            this._topLeftCornerWorldPosition = this.transform.position - new Vector3(this.SizeX, this.SizeY) / 2 * GeneralSettings.GridSize;
+            this._topLeftCornerWorldPosition = this.transform.position - new Vector3(GeneralSettings.GridSize / 2, GeneralSettings.GridSize / 2);
+            var _boxCollider = this.GetComponent<BoxCollider2D>();
+            _boxCollider.size = new Vector2(this.SizeX * GeneralSettings.GridSize, this.SizeY * GeneralSettings.GridSize);
+            _boxCollider.offset = new Vector2((0.5f * this.SizeX - 0.5f) * GeneralSettings.GridSize, (0.5f * this.SizeY - 0.5f) * GeneralSettings.GridSize);
+
+            var cells = new GameObject("Cells");
+            cells.transform.parent = this.transform;
+            cells.transform.localPosition = Vector3.zero;
+
+            for (int x = 0; x < this.SizeX; x++)
+            {
+                for (int y = 0; y < this.SizeY; y++)
+                {
+                    var newGridCell = Instantiate(this.GridCellPrefab, cells.transform);
+                    newGridCell.transform.localPosition = new Vector3(x, y) * GeneralSettings.GridSize;
+                }
+            }
+            this._cells = cells;
+
+            MapGrid.CurrentInstance = this;
         }
     }
 }

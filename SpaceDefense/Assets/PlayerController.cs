@@ -13,6 +13,7 @@ namespace Assets
     using UnityEngine;
     using Wiring;
     using Wiring.Emitters;
+    using Grid;
 
     /// <summary>
     /// The player controller class
@@ -20,14 +21,35 @@ namespace Assets
     public class PlayerController : MonoBehaviour
     {
         /// <summary>
+        /// Gets the current instance of the <see cref="PlayerController"/> class
+        /// </summary>
+        public static PlayerController CurrentInstancce { get; private set; }
+
+        /// <summary>
+        /// If the player can purchase things right now
+        /// </summary>
+        public static bool CanPurchase
+        {
+            get
+            {
+                return PlayerController.CurrentInstancce._holdingGridEntity == null;
+            }
+        }
+
+        /// <summary>
+        /// The grid entity that's being held right now
+        /// </summary>
+        private GridEntity _holdingGridEntity;
+
+        /// <summary>
         /// The socket clicked on when the mouse was down
         /// </summary>
         private ISocket _mouseDownSocket;
 
         /// <summary>
-        /// handles all mouse actions
+        /// handles all socket interactions
         /// </summary>
-        private void HandleMouse()
+        private void HandleSocketInteraction()
         {
             var mouseDown = Input.GetMouseButtonDown(0);
             var mouseUp = Input.GetMouseButtonUp(0);
@@ -91,6 +113,48 @@ namespace Assets
             #endregion
         }
 
+        /// <summary>
+        /// Handles all entity placements
+        /// </summary>
+        private void HandlePlaceEntity()
+        {
+            var mouseDown = Input.GetMouseButtonDown(0);
+            var mouseUp = Input.GetMouseButtonUp(0);
+
+            if (mouseDown)
+            {
+                var hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 15);
+                if (hits.Length == 0)
+                {
+                    return;
+                }
+
+                MapGrid grid = null;
+                Vector2 mousePos = new Vector2();
+                foreach (var hit in hits)
+                {
+                    var tryGrid = hit.collider.gameObject.GetComponent<MapGrid>();
+                    if (tryGrid)
+                    {
+                        grid = tryGrid;
+                        mousePos = hit.point;
+                    }
+                }
+
+                if (grid != null)
+                {
+                    grid.TryAddEntity(this._holdingGridEntity, mousePos);
+                    this._holdingGridEntity = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the item in the list of hits from a raycast that contains the target component
+        /// </summary>
+        /// <typeparam name="T">Target component</typeparam>
+        /// <param name="hits">List of raycast hits</param>
+        /// <returns>The first component hit</returns>
         private static T GetFirstHitWithComponent<T>(RaycastHit2D[] hits)
         {
             if (hits == null || hits.Length == 0)
@@ -111,11 +175,35 @@ namespace Assets
         }
 
         /// <summary>
+        /// Called when a purchase is complete
+        /// </summary>
+        /// <param name="purchased">The item purchased</param>
+        public void OnCompletingPurchase(GridEntity purchased)
+        {
+            this._holdingGridEntity = purchased;
+        }
+
+        /// <summary>
         /// Called once per frame
         /// </summary>
         protected void Update()
         {
-            this.HandleMouse();
+            if (this._holdingGridEntity != null)
+            {
+                this.HandlePlaceEntity();
+            }
+            else
+            {
+                this.HandleSocketInteraction();
+            }
+        }
+
+        /// <summary>
+        /// Used for initialization
+        /// </summary>
+        protected void Start()
+        {
+            PlayerController.CurrentInstancce = this;
         }
     }
 }

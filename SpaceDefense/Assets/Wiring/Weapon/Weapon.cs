@@ -11,12 +11,34 @@ namespace Assets.Wiring.Weapon
     using System.Linq;
     using System.Text;
     using Grid;
+    using UnityEngine;
 
     /// <summary>
     /// Defines a base weapon class
     /// </summary>
     public abstract class Weapon : GridEntity, IReceiver
     {
+        /// <summary>
+        /// Cooldown for the weapon
+        /// </summary>
+        public float Cooldown;
+
+        /// <summary>
+        /// Amount of time left until the weapon can be fired again
+        /// </summary>
+        private float _cooldownLeft;
+
+        /// <summary>
+        /// Returns a state indicating whether or not this weapon is in the middle of cooling down after firing
+        /// </summary>
+        private bool InCooldown
+        {
+            get
+            {
+                return this._cooldownLeft > 0;
+            }
+        }
+
         /// <summary>
         /// A collection of input sockets
         /// </summary>
@@ -33,5 +55,32 @@ namespace Assets.Wiring.Weapon
         /// Called when any of the input changes
         /// </summary>
         public abstract void OnInputChange();
+
+        /// <summary>
+        /// Called when the cooldown of the weapon starts
+        /// </summary>
+        protected abstract void OnCooldownEnd();
+
+        /// <summary>
+        /// Called once per frame
+        /// </summary>
+        protected virtual void Update()
+        {
+            if (this._cooldownLeft > 0)
+            {
+                this._cooldownLeft -= Time.deltaTime;
+                if (this._cooldownLeft <= 0)
+                {
+                    this.OnCooldownEnd();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Called when initializing
+        /// </summary>
+        protected virtual void Start()
+        {
+        }
     }
 }
