@@ -16,5 +16,22 @@ namespace Assets.Wiring.Transformers
     /// </summary>
     public class Toggle : Transformer
     {
+        private bool _currentInputState;
+        private bool _currentOutputState;
+
+        /// <summary>
+        /// Called when the input changes
+        /// </summary>
+        public override void OnInputChange()
+        {
+            var isOn = this.Inputs.Any(input => input.IsOn);
+            if (isOn && !this._currentInputState)
+            {
+                this._currentOutputState = !this._currentOutputState;
+                this.Trigger(this._currentOutputState);
+            }
+
+            this._currentInputState = isOn;
+        }
     }
 }
