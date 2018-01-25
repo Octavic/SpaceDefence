@@ -41,7 +41,7 @@ namespace Assets.Grid
         /// <summary>
         /// The world position of the top left corner pixel  of the top left cell
         /// </summary>
-        private Vector2 _topLeftCornerWorldPosition;
+        private Vector2 _bottomLeftWorldPosition;
 
         /// <summary>
         /// A collection of coordinate => what is on that coordinate
@@ -106,7 +106,7 @@ namespace Assets.Grid
         /// <returns>The result</returns>
         public GridCoordinate GetMouseHoveringCoordinate(Vector2 mousepos)
         {
-            var diff = mousepos - this._topLeftCornerWorldPosition;
+            var diff = mousepos - this._bottomLeftWorldPosition;
             return new GridCoordinate((int)(diff.x / GeneralSettings.GridSize), (int)(diff.y / GeneralSettings.GridSize));
         }
 
@@ -156,17 +156,13 @@ namespace Assets.Grid
         private List<GridCoordinate> _getNeededCoordinates(GridEntity newEntity, GridCoordinate index)
         {
             List<GridCoordinate> result = new List<GridCoordinate>();
-            if (newEntity.SizeOffsetX == 0 || newEntity.SizeOffsetY == 0)
-            {
-                return result;
-            }
 
-            int signX = newEntity.SizeOffsetX > 0 ? 1 : -1;
-            int signY = newEntity.SizeOffsetY > 0 ? 1 : -1;
+            int signX = newEntity.ExtrudeX > 0 ? 1 : -1;
+            int signY = newEntity.ExtrudeY > 0 ? 1 : -1;
 
-            for (int x = 0; x < Math.Abs( newEntity.SizeOffsetX); x+=signX)
+            for (int x = 0; x <= Math.Abs(newEntity.ExtrudeX); x += signX)
             {
-                for (int y = 0; y < Math.Abs( newEntity.SizeOffsetY); y+=signY)
+                for (int y = 0; y <= Math.Abs(newEntity.ExtrudeY); y += signY)
                 {
                     result.Add(index + new GridCoordinate(x * signX, y * signY));
                 }
@@ -179,7 +175,7 @@ namespace Assets.Grid
         /// </summary>
         protected void Start()
         {
-            this._topLeftCornerWorldPosition = this.transform.position - new Vector3(GeneralSettings.GridSize / 2, GeneralSettings.GridSize / 2);
+            this._bottomLeftWorldPosition = this.transform.position - new Vector3(GeneralSettings.GridSize / 2, GeneralSettings.GridSize / 2);
             var _boxCollider = this.GetComponent<BoxCollider2D>();
             _boxCollider.size = new Vector2(this.SizeX * GeneralSettings.GridSize, this.SizeY * GeneralSettings.GridSize);
             _boxCollider.offset = new Vector2((0.5f * this.SizeX - 0.5f) * GeneralSettings.GridSize, (0.5f * this.SizeY - 0.5f) * GeneralSettings.GridSize);

@@ -16,6 +16,7 @@ namespace Assets
     /// </summary>
     public enum EffectEnum
     {
+        None,
         Slow,
         Freeze,
         Poison,

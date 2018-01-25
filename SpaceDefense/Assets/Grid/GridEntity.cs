@@ -20,7 +20,7 @@ namespace Assets.Grid
         /// <summary>
         /// The width of the entity
         /// </summary>
-        public virtual int SizeOffsetX
+        public virtual int ExtrudeX
         {
             get
             {
@@ -31,7 +31,7 @@ namespace Assets.Grid
         /// <summary>
         /// The width of the entity
         /// </summary>
-        public virtual int SizeOffsetY
+        public virtual int ExtrudeY
         {
             get
             {

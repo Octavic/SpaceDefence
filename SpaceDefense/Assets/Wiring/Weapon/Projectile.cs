@@ -13,27 +13,30 @@ namespace Assets.Wiring.Weapon
     using UnityEngine;
 
     /// <summary>
-    /// Defines a projectile
+    /// The projectile fired
     /// </summary>
     public class Projectile : MonoBehaviour
     {
         /// <summary>
-        /// the effect that's carried
+        /// The shell that fired  this projectile
         /// </summary>
-        public EffectEnum CarriedEffect;
+        public ProjectileShell Shell;
 
         /// <summary>
-        /// Gets or sets the damage for the projectile
+        /// Called once per frame
         /// </summary>
-        public float Damage;
+        protected void Update()
+        {
+            this.transform.localPosition += new Vector3(this.Shell.Velocity * Time.deltaTime, 0);
+        }
 
         /// <summary>
-        /// Called when the projectile hits an enemy
+        /// Called when hits an enemy
         /// </summary>
-        /// <param name="hitEnemy">The enemy that was hit</param>
+        /// <param name="hitEnemy">Enemy hit</param>
         public void OnHittingEnemy(Enemy hitEnemy)
         {
-            hitEnemy.TakeDamage(this.Damage, this.CarriedEffect);
+            this.Shell.OnHittingEnemy(hitEnemy);
         }
     }
 }

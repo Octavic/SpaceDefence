@@ -41,7 +41,6 @@ namespace Assets.Wiring.Emitters
         /// <param name="newState">The new state of the emitter</param>
         public void Trigger(bool newState)
         {
-            Debug.Log("TRIGGERED");
             if (this._oldState == newState)
             {
                 return;

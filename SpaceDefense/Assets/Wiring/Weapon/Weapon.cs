@@ -31,7 +31,7 @@ namespace Assets.Wiring.Weapon
         /// <summary>
         /// Returns a state indicating whether or not this weapon is in the middle of cooling down after firing
         /// </summary>
-        private bool InCooldown
+        protected bool InCooldown
         {
             get
             {
@@ -57,9 +57,16 @@ namespace Assets.Wiring.Weapon
         public abstract void OnInputChange();
 
         /// <summary>
+        /// Called when the weapon fires
+        /// </summary>
+        protected abstract void OnFire();
+
+        /// <summary>
         /// Called when the cooldown of the weapon starts
         /// </summary>
-        protected abstract void OnCooldownEnd();
+        protected virtual void OnCooldownEnd()
+        {
+        }
 
         /// <summary>
         /// Called once per frame
@@ -81,6 +88,10 @@ namespace Assets.Wiring.Weapon
         /// </summary>
         protected virtual void Start()
         {
+            foreach (var input in this.Inputs)
+            {
+                input.Receiver = this;
+            }
         }
     }
 }

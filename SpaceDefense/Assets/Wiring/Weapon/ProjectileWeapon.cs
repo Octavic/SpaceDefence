@@ -15,16 +15,30 @@ namespace Assets.Wiring.Weapon
     /// <summary>
     /// Defines a projectile weapon
     /// </summary>
-    public abstract class ProjectileWeapon : Weapon
+    public class ProjectileWeapon : Weapon
     {
         /// <summary>
         /// The projectile that will be fired when the weapon fires
         /// </summary>
-        public Projectile FiredProjectile;
+        public ProjectileShell ProjectilePrefab;
 
         /// <summary>
         /// Mode of fire
         /// </summary>
         public ProjectileWeaponFireMode FireMode;
+
+        protected override void OnFire()
+        {
+            Instantiate(this.ProjectilePrefab);
+        }
+
+        public override void OnInputChange()
+        {
+            var fired = this.Inputs.Any(input => input.IsOn);
+            if (fired && !this.InCooldown)
+            {
+                this.OnFire();
+            }
+        }
     }
 }
