@@ -32,6 +32,9 @@ namespace Assets.Wiring.Weapon
             Instantiate(this.ProjectilePrefab);
         }
 
+        /// <summary>
+        /// Called when there was a change in input
+        /// </summary>
         public override void OnInputChange()
         {
             var fired = this.Inputs.Any(input => input.IsOn);

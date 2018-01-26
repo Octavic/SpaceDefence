@@ -160,9 +160,9 @@ namespace Assets.Grid
             int signX = newEntity.ExtrudeX > 0 ? 1 : -1;
             int signY = newEntity.ExtrudeY > 0 ? 1 : -1;
 
-            for (int x = 0; x <= Math.Abs(newEntity.ExtrudeX); x += signX)
+            for (int x = 0; x <= Math.Abs(newEntity.ExtrudeX); x ++)
             {
-                for (int y = 0; y <= Math.Abs(newEntity.ExtrudeY); y += signY)
+                for (int y = 0; y <= Math.Abs(newEntity.ExtrudeY); y ++)
                 {
                     result.Add(index + new GridCoordinate(x * signX, y * signY));
                 }

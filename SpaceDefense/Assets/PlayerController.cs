@@ -143,8 +143,10 @@ namespace Assets
 
                 if (grid != null)
                 {
-                    grid.TryAddEntity(this._holdingGridEntity, mousePos);
-                    this._holdingGridEntity = null;
+                    if (grid.TryAddEntity(this._holdingGridEntity, mousePos))
+                    {
+                        this._holdingGridEntity = null;
+                    }
                 }
             }
         }

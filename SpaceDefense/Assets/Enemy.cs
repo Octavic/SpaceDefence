@@ -23,7 +23,6 @@ namespace Assets
         /// </summary>
         public EnemyHealthBar HealthBar;
 
-        
         /// <summary>
         /// How fast the enemy moves per frame
         /// </summary>

@@ -24,7 +24,7 @@ namespace Assets.Grid
         {
             get
             {
-                return 1;
+                return 0;
             }
         }
 
@@ -35,7 +35,7 @@ namespace Assets.Grid
         {
             get
             {
-                return 1;
+                return 0;
             }
         }
     }

@@ -22,6 +22,14 @@ namespace Assets.Wiring.Emitters
         /// </summary>
         public Emitter Source;
 
+        public Sprite InactiveSprite;
+        public Sprite ActiveSprite;
+
+        /// <summary>
+        /// The sprite renederer component
+        /// </summary>
+        private SpriteRenderer _renderer;
+
         /// <summary>
         /// The number of enemies currently in detection
         /// </summary>
@@ -41,10 +49,12 @@ namespace Assets.Wiring.Emitters
 
                 if (this._currentlyInValue == 0 && value > 0)
                 {
+                    this._renderer.sprite = this.ActiveSprite;
                     Source.Trigger(true);
                 }
                 else if (this._currentlyInValue > 0 && value == 0)
                 {
+                    this._renderer.sprite = this.InactiveSprite;
                     Source.Trigger(false);
                 }
 
@@ -59,7 +69,7 @@ namespace Assets.Wiring.Emitters
         /// <param name="collision">The collision that occurred</param>
         protected void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.otherCollider.gameObject.tag != Tags.Enemy)
+            if (collision.collider.gameObject.tag != Tags.Enemy)
             {
                 // Not an enemy, do nothing
                 return;
@@ -81,6 +91,14 @@ namespace Assets.Wiring.Emitters
             }
 
             this._currentlyIn--;
+        }
+
+        /// <summary>
+        /// Used for initialization
+        /// </summary>
+        protected void Start()
+        {
+            this._renderer = this.GetComponent<SpriteRenderer>();
         }
     }
 }

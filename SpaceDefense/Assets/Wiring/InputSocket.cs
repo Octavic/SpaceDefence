@@ -85,7 +85,7 @@ namespace Assets.Wiring
                 return;
             }
 
-            // Possible change  of state, recalculate
+            // Possible change of state, recalculate
             var newCurrentState = this.ConnectedOutputs.Any(output => output.Value);
 
             // Re-evaluate
