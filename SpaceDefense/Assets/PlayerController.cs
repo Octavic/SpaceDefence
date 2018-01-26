@@ -192,7 +192,7 @@ namespace Assets
         {
             if (this._holdingGridEntity != null)
             {
-                this._holdingGridEntity.Rotate();
+                this._holdingGridEntity.RotateClockwise();
             }
         }
 

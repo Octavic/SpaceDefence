@@ -52,13 +52,13 @@ namespace Assets.Grid
         /// <summary>
         /// Rotates the object
         /// </summary>
-        public void Rotate()
+        public void RotateClockwise()
         {
             var newExtrudeX = this.ExtrudeY;
             var newExtrudeY = this.ExtrudeX * -1;
             this._extrudeX = newExtrudeX;
             this._extrudeY = newExtrudeY;
-            this.transform.localEulerAngles += new Vector3(0, 0, 90);
+            this.transform.localEulerAngles += new Vector3(0, 0, -90);
         }
     }
 }

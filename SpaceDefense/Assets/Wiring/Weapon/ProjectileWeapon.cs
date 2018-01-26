@@ -20,7 +20,7 @@ namespace Assets.Wiring.Weapon
         /// <summary>
         /// The projectile that will be fired when the weapon fires
         /// </summary>
-        public ProjectileShell ProjectilePrefab;
+        public GameObject ProjectileShellPrefab;
 
         /// <summary>
         /// Mode of fire
@@ -29,7 +29,9 @@ namespace Assets.Wiring.Weapon
 
         protected override void OnFire()
         {
-            Instantiate(this.ProjectilePrefab);
+            var newshell = Instantiate(this.ProjectileShellPrefab);
+            newshell.transform.eulerAngles = this.transform.eulerAngles;
+            newshell.transform.position = this.transform.position;
         }
 
         /// <summary>
