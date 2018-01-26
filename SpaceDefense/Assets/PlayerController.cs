@@ -186,6 +186,17 @@ namespace Assets
         }
 
         /// <summary>
+        /// Rotates the holding item
+        /// </summary>
+        public void RotateHolding()
+        {
+            if (this._holdingGridEntity != null)
+            {
+                this._holdingGridEntity.Rotate();
+            }
+        }
+
+        /// <summary>
         /// Called once per frame
         /// </summary>
         protected void Update()

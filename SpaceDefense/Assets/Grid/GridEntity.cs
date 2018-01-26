@@ -24,9 +24,14 @@ namespace Assets.Grid
         {
             get
             {
-                return 0;
+                return this._extrudeX;
+            }
+            protected set
+            {
+                this._extrudeX = value;
             }
         }
+        private int _extrudeX =0;
 
         /// <summary>
         /// The width of the entity
@@ -35,8 +40,25 @@ namespace Assets.Grid
         {
             get
             {
-                return 0;
+                return this._extrudeY;
             }
+            protected set
+            {
+                this._extrudeY = value;
+            }
+        }
+        private int _extrudeY = 0;
+
+        /// <summary>
+        /// Rotates the object
+        /// </summary>
+        public void Rotate()
+        {
+            var newExtrudeX = this.ExtrudeY;
+            var newExtrudeY = this.ExtrudeX * -1;
+            this._extrudeX = newExtrudeX;
+            this._extrudeY = newExtrudeY;
+            this.transform.localEulerAngles += new Vector3(0, 0, 90);
         }
     }
 }
