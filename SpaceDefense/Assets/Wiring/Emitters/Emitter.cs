@@ -16,7 +16,7 @@ namespace Assets.Wiring.Emitters
     /// <summary>
     /// Defines a base emitter
     /// </summary>
-    public class Emitter : GridEntity, IEmitter
+    public abstract class Emitter : GridEntity, IEmitter
     {
         /// <summary>
         /// A list of outputs

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Wiring.Emitters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,32 @@ namespace Assets
         protected void Update()
         {
             this._rgbd.MovePosition(this.transform.position + new Vector3(this.Speed * Time.deltaTime, 0));
+        }
+
+        /// <summary>
+        /// Called when trigger enters
+        /// </summary>
+        /// <param name="collision">The collision that happened</param>
+        protected virtual void OnTriggerEnter2D(Collider2D collision)
+        {
+            var detector = collision.gameObject.GetComponent<DetectorArea>();
+            if (detector != null)
+            {
+                detector.OnEnemyEnter();
+            }
+        }
+
+        /// <summary>
+        /// Called when trigger enters
+        /// </summary>
+        /// <param name="collision">The collision that happened</param>
+        protected virtual void OnTriggerExit2D(Collider2D collision)
+        {
+            var detector = collision.gameObject.GetComponent<DetectorArea>();
+            if (detector != null)
+            {
+                detector.OnEnemyExit();
+            }
         }
     }
 }

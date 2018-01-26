@@ -12,6 +12,7 @@ namespace Assets
     using System.Text;
     using UnityEngine;
     using Settings;
+    using Wiring.Emitters;
 
     /// <summary>
     /// Describes an enemy entity
@@ -169,6 +170,32 @@ namespace Assets
                 {
                     this.EffectResistance[key] -= decay;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Called when trigger enters
+        /// </summary>
+        /// <param name="collision">The collision that happened</param>
+        protected virtual void OnTriggerEnter2D(Collider2D collision)
+        {
+            var detector = collision.gameObject.GetComponent<DetectorArea>();
+            if (detector != null)
+            {
+                detector.OnEnemyEnter();
+            }
+        }
+
+        /// <summary>
+        /// Called when trigger enters
+        /// </summary>
+        /// <param name="collision">The collision that happened</param>
+        protected virtual void OnTriggerExit2D(Collider2D collision)
+        {
+            var detector = collision.gameObject.GetComponent<DetectorArea>();
+            if (detector != null)
+            {
+                detector.OnEnemyExit();
             }
         }
     }
