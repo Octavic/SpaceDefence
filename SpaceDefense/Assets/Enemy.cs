@@ -1,5 +1,5 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="IEnemy.cs">
+//  <copyright file="Enemy.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ namespace Assets
         /// <summary>
         /// The node in the route that the enemy is trying to reach
         /// </summary>
-        private int _currentPathNodeIndex;
+        private int _currentPathNodeIndex = 0;
 
         /// <summary>
         /// The rigidbody component
@@ -133,7 +133,7 @@ namespace Assets
             var movementThisFrame = this.Speed * Time.deltaTime;
             if (diff.magnitude < movementThisFrame)
             {
-                // Can reach destination this frame, proceed to 
+                // Can reach destination this frame, proceed to next node as goal
                 this._currentPathNodeIndex++;
                 if (this._currentPathNodeIndex >= this.Path.Count)
                 {
