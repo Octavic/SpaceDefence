@@ -76,7 +76,7 @@ namespace Assets
         /// </summary>
         /// <param name="damage">How much damage to take</param>
         /// <param name="carriedEffect">The effect carried</param>
-        public void TakeDamage(float damage, EffectEnum carriedEffect)
+        public void TakeDamage(float damage, EffectEnum carriedEffect = EffectEnum.None)
         {
             this.CurrentHealth -= damage;
             if (this.CurrentHealth <= 0)
@@ -87,18 +87,22 @@ namespace Assets
             }
 
             this.HealthBar.UpdateHealth(this);
-            float oldValue;
-            if (!this.EffectResistance.TryGetValue(carriedEffect, out oldValue))
-            {
-                oldValue = 0;
-            }
 
-            this.EffectResistance[carriedEffect] = oldValue + damage;
-
-            if (this.EffectResistance[carriedEffect] > 0)
+            if (carriedEffect != EffectEnum.None)
             {
-                this.ApplyEffect(carriedEffect);
-                this.EffectResistance[carriedEffect] = GeneralSettings.EffectResistance;
+                float oldValue;
+                if (!this.EffectResistance.TryGetValue(carriedEffect, out oldValue))
+                {
+                    oldValue = 0;
+                }
+
+                this.EffectResistance[carriedEffect] = oldValue + damage;
+
+                if (this.EffectResistance[carriedEffect] > 0)
+                {
+                    this.ApplyEffect(carriedEffect);
+                    this.EffectResistance[carriedEffect] = GeneralSettings.EffectResistance;
+                }
             }
         }
 
@@ -181,6 +185,19 @@ namespace Assets
         }
 
         /// <summary>
+        /// Called when a collider stays within detection
+        /// </summary>
+        /// <param name="collision">The collision</param>
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            var beamObject = collision.gameObject.GetComponent<BeamWeaponObject>();
+            if (beamObject != null)
+            {
+                beamObject.OnHitEnemy(this);
+            }
+        }
+
+        /// <summary>
         /// Called when trigger enters
         /// </summary>
         /// <param name="collision">The collision that happened</param>
@@ -190,12 +207,14 @@ namespace Assets
             if (detector != null)
             {
                 detector.OnEnemyEnter();
+                return;
             }
 
             var projectile = collision.gameObject.GetComponent<Projectile>();
             if (projectile != null)
             {
                 projectile.OnHittingEnemy(this);
+                return;
             }
         }
 

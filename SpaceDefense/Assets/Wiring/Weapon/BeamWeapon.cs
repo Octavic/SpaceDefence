@@ -17,14 +17,30 @@ namespace Assets.Wiring.Weapon
     /// </summary>
     public class BeamWeapon : Weapon
     {
+        /// <summary>
+        /// The actual weapon beam
+        /// </summary>
+        public BeamWeaponObject Beam;
+
+        /// <summary>
+        /// Called when the input changes
+        /// </summary>
         public override void OnInputChange()
         {
-            throw new NotImplementedException();
+            var newState = this.Inputs.Any(input => input.IsOn);
+            if (newState)
+            {
+                this.Beam.OnFire();
+            }
+            else
+            {
+                this.Beam.OnCeaseFire();
+            }
         }
 
         protected override void OnFire()
         {
-            throw new NotImplementedException();
+            this.Beam.OnFire();
         }
     }
 }

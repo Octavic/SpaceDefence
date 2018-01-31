@@ -120,6 +120,7 @@
     <Compile Include="Assets\Wiring\Transformers\Toggle.cs" />
     <Compile Include="Assets\Wiring\Transformers\Transformer.cs" />
     <Compile Include="Assets\Wiring\Weapon\BeamWeapon.cs" />
+    <Compile Include="Assets\Wiring\Weapon\BeamWeaponObject.cs" />
     <Compile Include="Assets\Wiring\Weapon\Projectile.cs" />
     <Compile Include="Assets\Wiring\Weapon\ProjectileShell.cs" />
     <Compile Include="Assets\Wiring\Weapon\ProjectileWeapon.cs" />
