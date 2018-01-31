@@ -23,23 +23,44 @@ namespace Assets.Wiring.Weapon
         public BeamWeaponObject Beam;
 
         /// <summary>
+        /// The old fire state
+        /// </summary>
+        private bool _wasFiring = false;
+
+        /// <summary>
         /// Called when the input changes
         /// </summary>
         public override void OnInputChange()
         {
             var newState = this.Inputs.Any(input => input.IsOn);
-            if (newState)
+
+            if (newState && !this.InCooldown)
             {
-                this.Beam.OnFire();
+                this.OnFire();
             }
             else
             {
-                this.Beam.OnCeaseFire();
+                if (this._wasFiring)
+                {
+                    this.ApplyCooldown();
+                    this.Beam.OnCeaseFire();
+                }
+
+                this._wasFiring = false;
             }
         }
 
+        protected override void OnCooldownEnd()
+        {
+            this.OnInputChange();
+        }
+
+        /// <summary>
+        /// Called when the weapon is fired
+        /// </summary>
         protected override void OnFire()
         {
+            this._wasFiring = true;
             this.Beam.OnFire();
         }
     }

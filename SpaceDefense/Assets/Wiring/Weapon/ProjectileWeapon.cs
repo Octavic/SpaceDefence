@@ -32,6 +32,7 @@ namespace Assets.Wiring.Weapon
             var newshell = Instantiate(this.ProjectileShellPrefab);
             newshell.transform.eulerAngles = this.transform.eulerAngles;
             newshell.transform.position = this.transform.position;
+            this.ApplyCooldown();
         }
 
         /// <summary>

@@ -69,6 +69,14 @@ namespace Assets.Wiring.Weapon
         }
 
         /// <summary>
+        /// Apply the cooldown
+        /// </summary>
+        protected void ApplyCooldown()
+        {
+            this._cooldownLeft = this.Cooldown;
+        }
+
+        /// <summary>
         /// Called once per frame
         /// </summary>
         protected virtual void Update()
