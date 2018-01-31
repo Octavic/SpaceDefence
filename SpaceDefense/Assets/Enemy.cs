@@ -13,6 +13,7 @@ namespace Assets
     using UnityEngine;
     using Settings;
     using Wiring.Emitters;
+    using Wiring.Weapon;
 
     /// <summary>
     /// Describes an enemy entity
@@ -78,7 +79,7 @@ namespace Assets
         public void TakeDamage(float damage, EffectEnum carriedEffect)
         {
             this.CurrentHealth -= damage;
-            if (this.CurrentHealth < 0)
+            if (this.CurrentHealth <= 0)
             {
                 Destroy(this.HealthBar.gameObject);
                 Destroy(this.gameObject);
@@ -86,7 +87,13 @@ namespace Assets
             }
 
             this.HealthBar.UpdateHealth(this);
-            this.EffectResistance[carriedEffect] += damage;
+            float oldValue;
+            if (!this.EffectResistance.TryGetValue(carriedEffect, out oldValue))
+            {
+                oldValue = 0;
+            }
+
+            this.EffectResistance[carriedEffect] = oldValue + damage;
 
             if (this.EffectResistance[carriedEffect] > 0)
             {
@@ -183,6 +190,12 @@ namespace Assets
             if (detector != null)
             {
                 detector.OnEnemyEnter();
+            }
+
+            var projectile = collision.gameObject.GetComponent<Projectile>();
+            if (projectile != null)
+            {
+                projectile.OnHittingEnemy(this);
             }
         }
 

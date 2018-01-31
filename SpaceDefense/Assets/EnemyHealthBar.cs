@@ -29,7 +29,7 @@ namespace Assets
         public void UpdateHealth(Enemy targetEnemy)
         {
             var ratio = targetEnemy.CurrentHealth / targetEnemy.TotalHealth;
-            Bar.transform.localScale = new Vector3(ratio, 1);
+            Bar.transform.localScale = new Vector3(ratio, 1, 1);
             Bar.transform.localPosition = new Vector3(ratio / 2 - 0.5f, 0);
         }
     }

@@ -1,5 +1,5 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="Utils.cs">
+//  <copyright file="GameObjectExtensions.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
@@ -13,25 +13,17 @@ namespace Assets
     using UnityEngine;
 
     /// <summary>
-    /// A collection of util functions
+    /// Extends gameobject functionality
     /// </summary>
-    public static class Utils
+    public static class GameObjectExtensions
     {
-        public static Dictionary<T, G> ConvertListToDictionary<T, G>(IList<T> keys, IList<G> values)
+        public static void DestroyAllChildren(this GameObject gameobject)
         {
-            var keyCount = keys.Count;
-            if (keyCount != values.Count)
+            var children = gameobject.transform.childCount;
+            for (int i = 0; i < children; i++)
             {
-                throw new ArgumentException("Lists must be equal length");
+                GameObject.Destroy(gameobject.transform.GetChild(i));
             }
-
-            var result = new Dictionary<T, G>();
-            for (int i = 0; i < keyCount; i++)
-            {
-                result[keys[i]] = values[i];
-            }
-
-            return result;
         }
     }
 }

@@ -88,6 +88,7 @@
     <Compile Include="Assets\EnemyHealthBar.cs" />
     <Compile Include="Assets\EnemyType.cs" />
     <Compile Include="Assets\GameController.cs" />
+    <Compile Include="Assets\GameObjectExtensions.cs" />
     <Compile Include="Assets\GamePhases.cs" />
     <Compile Include="Assets\Grid\MapGrid.cs" />
     <Compile Include="Assets\Grid\GridCoordinate.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Assets\Wiring\Transformers\ORGate.cs" />
     <Compile Include="Assets\Wiring\Transformers\Toggle.cs" />
     <Compile Include="Assets\Wiring\Transformers\Transformer.cs" />
+    <Compile Include="Assets\Wiring\Weapon\BeamWeapon.cs" />
     <Compile Include="Assets\Wiring\Weapon\Projectile.cs" />
     <Compile Include="Assets\Wiring\Weapon\ProjectileShell.cs" />
     <Compile Include="Assets\Wiring\Weapon\ProjectileWeapon.cs" />

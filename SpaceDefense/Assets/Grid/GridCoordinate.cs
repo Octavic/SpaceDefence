@@ -63,5 +63,26 @@ namespace Assets.Grid
         {
             return new GridCoordinate(c.X / i, c.Y / i);
         }
+
+        public override bool Equals(object obj)
+        {
+            var otherCoordinate = obj as GridCoordinate;
+            if (otherCoordinate != null && otherCoordinate.X == this.X && otherCoordinate.Y == this.Y)
+            {
+                return true;
+            }
+            
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.X * this.X + this.Y;
+        }
+
+        public override string ToString()
+        {
+            return "(" + this.X + ", " + this.Y + ")";
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace Assets
     /// Defines a path for an enemy
     /// </summary>
     [Serializable]
-    public struct Path
+    public class Path
     {
         /// <summary>
         /// A collection of enemy type => time in between spawns
@@ -70,7 +70,7 @@ namespace Assets
         protected void Start()
         {
             LevelManager.CurrntInstance = this;
-            for (int i =0;i<this.Paths.Count;i++)
+            for (int i = 0; i < this.Paths.Count; i++)
             {
                 var path = this.Paths[i];
                 if (path.SpawnEnemies.Count != path.SpawnInterval.Count)
