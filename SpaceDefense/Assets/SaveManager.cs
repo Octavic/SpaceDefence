@@ -1,5 +1,5 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="Tags.cs">
+//  <copyright file="SaveManager.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
@@ -10,12 +10,12 @@ namespace Assets
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using UnityEngine;
 
-    public static class Tags
+    /// <summary>
+    /// Describes a save manager
+    /// </summary>
+    public class SaveManager : MonoBehaviour
     {
-        public static string Enemy = "Enemy";
-        public static string PlayerController = "PlayerController";
-        public static string GameController = "GameController";
-        public static string PrefabManager = "PrefabManager";
     }
 }

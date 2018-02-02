@@ -15,8 +15,32 @@ namespace Assets.Grid
     /// <summary>
     /// Defines an entity on the grid
     /// </summary>
-    public class GridEntity : MonoBehaviour
+    public abstract class GridEntity : MonoBehaviour
     {
+        /// <summary>
+        /// Gets the unique ID for the grid entity
+        /// </summary>
+        public int ID;
+
+        /// <summary>
+        /// how many times this entity was rotated
+        /// </summary>
+        public int Rotation
+        {
+            get
+            {
+                return this._rotation;
+            }
+            set
+            {
+                this._rotation = value % 4;
+            }
+        }
+        /// <summary>
+        /// The rotation of the GridEntity
+        /// </summary>
+        private int _rotation;
+
         /// <summary>
         /// The width of the entity
         /// </summary>
@@ -59,6 +83,7 @@ namespace Assets.Grid
             this._extrudeX = newExtrudeX;
             this._extrudeY = newExtrudeY;
             this.transform.localEulerAngles += new Vector3(0, 0, -90);
+            this.Rotation++;
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Assets.Grid
     using System.Text;
     using UnityEngine;
     using Settings;
+    using Wiring.Emitters;
 
     /// <summary>
     /// A grid for the big map
@@ -47,6 +48,11 @@ namespace Assets.Grid
         /// A collection of coordinate => what is on that coordinate
         /// </summary>
         private Dictionary<GridCoordinate, GridEntity> _map = new Dictionary<GridCoordinate, GridEntity>();
+
+        /// <summary>
+        /// A collection of grid entity => their index coordinate
+        /// </summary>
+        private Dictionary<GridEntity, GridCoordinate> _entities = new Dictionary<GridEntity, GridCoordinate>();
 
         /// <summary>
         /// The gameobject containing all of the cells
@@ -96,6 +102,7 @@ namespace Assets.Grid
             }
 
             newEntity.transform.position = this.GetCellWorldPosition(coordinate);
+            this._entities[newEntity] = coordinate;
             return true;
         }
 
@@ -118,6 +125,63 @@ namespace Assets.Grid
         public Vector2 GetCellWorldPosition(GridCoordinate coordinate)
         {
             return (Vector2)(this.transform.position) + coordinate.ToVector2() * GeneralSettings.GridSize;
+        }
+
+        /// <summary>
+        /// Saves the current state of the board into a map state
+        /// </summary>
+        /// <returns>The resulting mapgrid state, null if failed</returns>
+        public MapGridState SaveState()
+        {
+            var result = new MapGridState();
+            result.SizeX = this.SizeX;
+            result.SizeY = this.SizeY;
+            foreach (var item in this._entities)
+            {
+                var entity = item.Key;
+                var position = item.Value;
+
+                // Construct information about the entity
+                var entityState = new GridEntityState();
+                entityState.EntityID = entity.ID;
+                entityState.PosX = position.X;
+                entityState.PosY = position.Y;
+                entityState.Rotation = entity.Rotation;
+
+                // Construct the connected outputs
+                IEmitter emitter = entity as IEmitter;
+                if (emitter != null)
+                {
+                    foreach (var output in emitter.Outputs)
+                    {
+                        var outputState = new OutputSocketState();
+                        foreach (var connection in output.ConnectedInputs)
+                        {
+                            var input = connection.Key;
+                            var inputSource = input.Receiver;
+                            var connectionState = new OutputConnectionState();
+                            GridCoordinate pos;
+                            if (!this._entities.TryGetValue(inputSource as GridEntity, out pos))
+                            {
+                                Debug.LogWarning("Output connected to item not registered on map");
+                                return null;
+                            }
+
+                            connectionState.ConnectedX = pos.X;
+                            connectionState.ConnectedY = pos.Y;
+                            connectionState.InputSocketIndex = inputSource.Inputs.IndexOf(input);
+
+                            outputState.Connections.Add(connectionState);
+                        }
+
+                        entityState.Outputs.Add(outputState);
+                    }
+                }
+
+                result.GridEntities.Add(entityState);
+            }
+
+            return result;
         }
 
         /// <summary>

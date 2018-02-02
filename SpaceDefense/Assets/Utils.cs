@@ -17,6 +17,14 @@ namespace Assets
     /// </summary>
     public static class Utils
     {
+        /// <summary>
+        /// Turns a key list and a value list into a dictionary
+        /// </summary>
+        /// <typeparam name="T">Type of key</typeparam>
+        /// <typeparam name="G">Type of value</typeparam>
+        /// <param name="keys">The list of keys</param>
+        /// <param name="values">The list of values</param>
+        /// <returns>A dictionary with key type of T and value type of G</returns>
         public static Dictionary<T, G> ConvertListToDictionary<T, G>(IList<T> keys, IList<G> values)
         {
             var keyCount = keys.Count;

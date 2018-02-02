@@ -93,9 +93,12 @@
     <Compile Include="Assets\Grid\MapGrid.cs" />
     <Compile Include="Assets\Grid\GridCoordinate.cs" />
     <Compile Include="Assets\Grid\GridEntity.cs" />
+    <Compile Include="Assets\Grid\MapGridState.cs" />
     <Compile Include="Assets\IRotatable.cs" />
     <Compile Include="Assets\LevelManager.cs" />
     <Compile Include="Assets\PlayerController.cs" />
+    <Compile Include="Assets\PrefabManager.cs" />
+    <Compile Include="Assets\SaveManager.cs" />
     <Compile Include="Assets\Settings\GeneralSettings.cs" />
     <Compile Include="Assets\SimpleEnemy.cs" />
     <Compile Include="Assets\Tags.cs" />
