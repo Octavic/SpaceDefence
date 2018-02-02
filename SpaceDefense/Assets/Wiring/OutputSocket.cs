@@ -80,7 +80,11 @@ namespace Assets.Wiring
                 return;
             }
 
-            Destroy(beam.gameObject);
+            if (beam != null)
+            {
+                Destroy(beam.gameObject);
+            }
+
             input.DisconnectOutput(this);
             this.ConnectedInputs.Remove(input);
         }
@@ -97,6 +101,19 @@ namespace Assets.Wiring
             {
                 input.Key.Trigger(this, newState);
                 input.Value.Trigger(newState);
+            }
+        }
+
+        /// <summary>
+        /// Called  when the output socket is destroyed
+        /// </summary>
+        protected void OnDestroy()
+        {
+            var inputs = this.ConnectedInputs.Keys;
+            for (int i = 0; i < inputs.Count; i++)
+            {
+                var input = inputs.ElementAt(i);
+                this.DisconnectInputSocket(input);
             }
         }
     }

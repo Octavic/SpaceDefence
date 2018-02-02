@@ -13,6 +13,7 @@ namespace Assets.Grid
     using UnityEngine;
     using Settings;
     using Wiring.Emitters;
+    using Wiring;
 
     /// <summary>
     /// A grid for the big map
@@ -23,7 +24,7 @@ namespace Assets.Grid
         /// Prefab for the grid cell
         /// </summary>
         public GameObject GridCellPrefab;
-            
+
         /// <summary>
         /// Width of the grid
         /// </summary>
@@ -185,6 +186,106 @@ namespace Assets.Grid
         }
 
         /// <summary>
+        /// Try to load the grid from the given state
+        /// </summary>
+        /// <param name="state">Target state</param>
+        /// <returns>True if operation succeed</returns>
+        public bool TryLoadFromState(MapGridState state)
+        {
+            if (state.SizeX != this.SizeX || state.SizeY != this.SizeY)
+            {
+                return false;
+            }
+
+            var stateToObject = new Dictionary<GridEntityState, GridEntity>();
+
+            // First place all  of the entities
+            var prefabs = PrefabManager.CurrentInstance;
+            foreach (var entity in state.GridEntities)
+            {
+                var prefab = prefabs.GetEntityPrefab(entity.EntityID);
+                if (!prefab)
+                {
+                    Debug.Log("Entity id not found: " + entity.EntityID);
+                    this.ResetBoard();
+                    return false;
+                }
+
+                var newEntity = Instantiate(prefab);
+                var newCoor = new GridCoordinate(entity.PosX, entity.PosY);
+
+                for (int i = 0; i < entity.Rotation; i++)
+                {
+                    newEntity.RotateClockwise();
+                }
+
+                if (!this.TryAddEntity(newEntity, newCoor))
+                {
+                    Debug.Log("Failed to add entity at " + newCoor);
+                    this.ResetBoard();
+                    return false;
+                }
+
+                stateToObject[entity] = newEntity;
+            }
+
+            // Then connect all of the outputs to input
+            foreach (var entity in state.GridEntities)
+            {
+                var emitter = stateToObject[entity] as IEmitter;
+                for (int i = 0; i < entity.Outputs.Count; i++)
+                {
+                    var outputState = entity.Outputs[i];
+                    var outputObj = emitter.Outputs[i];
+
+                    foreach (var connection in outputState.Connections)
+                    {
+                        GridEntity connectedEntity;
+                        var targetCoordinate = new GridCoordinate(connection.ConnectedX, connection.ConnectedY);
+                        if (!this._map.TryGetValue(targetCoordinate, out connectedEntity))
+                        {
+
+                            Debug.Log("No entity at coordinate to connect to: "+ targetCoordinate);
+                            this.ResetBoard();
+                            return false;
+                        }
+
+                        var receiver = connectedEntity as IReceiver;
+                        if (receiver == null)
+                        {
+                            Debug.Log("Entity at coordinate is not a receiver: " + targetCoordinate);
+                            this.ResetBoard();
+                            return false;
+                        }
+
+                        var targetInput = receiver.Inputs[connection.InputSocketIndex];
+                        if (!outputObj.TryAddInputSocket(targetInput))
+                        {
+                            Debug.Log("Failed to connect output socket to" + targetCoordinate);
+                            this.ResetBoard();
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Reset the board
+        /// </summary>
+        public void ResetBoard()
+        {
+            foreach (var entity in this._entities)
+            {
+                Destroy(entity.Key.gameObject);
+            }
+
+            this._entities = new Dictionary<GridEntity, GridCoordinate>();
+            this._map = new Dictionary<GridCoordinate, GridEntity>();
+        }
+
+        /// <summary>
         /// Calculates if a new entity can be added
         /// </summary>
         /// <param name="newEntity"></param>
@@ -224,9 +325,9 @@ namespace Assets.Grid
             int signX = newEntity.ExtrudeX > 0 ? 1 : -1;
             int signY = newEntity.ExtrudeY > 0 ? 1 : -1;
 
-            for (int x = 0; x <= Math.Abs(newEntity.ExtrudeX); x ++)
+            for (int x = 0; x <= Math.Abs(newEntity.ExtrudeX); x++)
             {
-                for (int y = 0; y <= Math.Abs(newEntity.ExtrudeY); y ++)
+                for (int y = 0; y <= Math.Abs(newEntity.ExtrudeY); y++)
                 {
                     result.Add(index + new GridCoordinate(x * signX, y * signY));
                 }

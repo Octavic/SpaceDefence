@@ -61,6 +61,13 @@ namespace Assets.Wiring
         public void DisconnectOutput(OutputSocket output)
         {
             this.ConnectedOutputs.Remove(output);
+
+            if (!this.IsOn)
+            {
+                return;
+            }
+
+            this.Evaluate();
         }
 
         /// <summary>
@@ -85,6 +92,14 @@ namespace Assets.Wiring
                 return;
             }
 
+            this.Evaluate();
+        }
+
+        /// <summary>
+        /// See if there was a change in input state and notify receciver
+        /// </summary>
+        private void Evaluate()
+        {
             // Possible change of state, recalculate
             var newCurrentState = this.ConnectedOutputs.Any(output => output.Value);
 
@@ -97,6 +112,19 @@ namespace Assets.Wiring
                 {
                     this.Receiver.OnInputChange();
                 }
+            }
+        }
+   
+        /// <summary>
+        /// Called  when the input socket is destroyed
+        /// </summary>
+        protected void OnDestroy()
+        {
+            var outputs = this.ConnectedOutputs.Keys;
+            for (int i = 0; i < outputs.Count; i++)
+            {
+                var output = outputs.ElementAt(i);
+                output.DisconnectInputSocket(this);
             }
         }
     }
