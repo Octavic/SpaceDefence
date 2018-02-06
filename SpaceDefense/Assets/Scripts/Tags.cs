@@ -17,5 +17,6 @@ namespace Assets.Scripts
         public static string PlayerController = "PlayerController";
         public static string GameController = "GameController";
         public static string PrefabManager = "PrefabManager";
+        public static string SaveManager = "SaveManager";
     }
 }
