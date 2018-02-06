@@ -25,11 +25,6 @@ namespace Assets.Scripts
         public MapGrid Grid;
 
         /// <summary>
-        /// A saved state of the grid
-        /// </summary>
-        private MapGridState _gridState;
-
-        /// <summary>
         /// The current singleton instance of the <see cref="GameController"/> class
         /// </summary>
         public static GameController CurrentInstance
@@ -47,13 +42,17 @@ namespace Assets.Scripts
 
         public void Save()
         {
-            this._gridState = Grid.SaveState();
+            SaveManager.CurrentInstance.SaveData(Grid.SaveState());
         }
 
         public void Load()
         {
             this.Grid.ResetBoard();
-            this.Grid.TryLoadFromState(this._gridState);
+            var savedState = SaveManager.CurrentInstance.LoadState();
+            if (savedState != null)
+            {
+                this.Grid.TryLoadFromState(savedState);
+            }
         }
 
         /// <summary>

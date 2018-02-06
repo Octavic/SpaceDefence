@@ -10,7 +10,10 @@ namespace Assets.Scripts
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
     using UnityEngine;
+    using Grid;
 
     /// <summary>
     /// Describes a save manager
@@ -33,5 +36,53 @@ namespace Assets.Scripts
             }
         }
         private static SaveManager _currentInstance;
+
+        /// <summary>
+        /// The save path
+        /// </summary>
+        private string _savePath;
+
+        /// <summary>
+        /// Save the state into a file
+        /// </summary>
+        /// <param name="state">Target state to save</param>
+        public void SaveData(MapGridState state)
+        {
+            var formatter = new BinaryFormatter();
+            var targetFile = File.Open(this._savePath, FileMode.Create);
+
+            formatter.Serialize(targetFile, state);
+            targetFile.Close();
+        }
+
+        /// <summary>
+        /// Loads the saved state from data
+        /// </summary>
+        /// <returns>The save state, null if inone</returns>
+        public MapGridState LoadState()
+        {
+            try
+            {
+                var formatter = new BinaryFormatter();
+                var targetFile = File.Open(this._savePath, FileMode.Open);
+
+                var result = (MapGridState)formatter.Deserialize(targetFile);
+                targetFile.Close();
+                return result;
+            }
+            catch
+            {
+                Debug.Log("No save data");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Used for initialization
+        /// </summary>
+        protected void Start()
+        {
+            this._savePath = Application.persistentDataPath + "/save.dat";
+        }
     }
 }
