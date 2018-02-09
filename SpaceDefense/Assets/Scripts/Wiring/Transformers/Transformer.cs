@@ -49,6 +49,24 @@ namespace Assets.Scripts.Wiring.Transformers
             }
         }
 
+        public InputSocket GetInputSocket(int index)
+        {
+            return this.Inputs[index];
+        }
+        public int IndexOf(InputSocket input)
+        {
+            return this.Inputs.IndexOf(input);
+        }
+        public int IndexOf(OutputSocket output)
+        {
+            return this.Outputs.IndexOf(output);
+        }
+
+        public OutputSocket GetOutputSocket(int index)
+        {
+            return this.Outputs[index];
+        }
+
         /// <summary>
         /// A collection of outputs
         /// </summary>

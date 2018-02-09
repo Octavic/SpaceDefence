@@ -11,6 +11,7 @@ namespace Assets.Scripts.Grid
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using Wiring;
 
     /// <summary>
     /// Defines an entity on the grid
@@ -36,6 +37,7 @@ namespace Assets.Scripts.Grid
                 this._rotation = value % 4;
             }
         }
+
         /// <summary>
         /// The rotation of the GridEntity
         /// </summary>
@@ -76,7 +78,7 @@ namespace Assets.Scripts.Grid
         /// <summary>
         /// Rotates the object
         /// </summary>
-        public void RotateClockwise()
+        public virtual void RotateClockwise()
         {
             var newExtrudeX = this.ExtrudeY;
             var newExtrudeY = this.ExtrudeX * -1;

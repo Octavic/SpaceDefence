@@ -30,6 +30,15 @@ namespace Assets.Scripts.Wiring.Emitters
             }
         }
 
+        public int IndexOf(OutputSocket output)
+        {
+            return this.OutputSockets.IndexOf(output);
+        }
+        public OutputSocket GetOutputSocket(int index)
+        {
+            return this.OutputSockets[index];
+        }
+
         /// <summary>
         /// The old state
         /// </summary>

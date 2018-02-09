@@ -34,6 +34,15 @@ namespace Assets.Scripts.Wiring
         private bool _currentState = false;
 
         /// <summary>
+        /// Redraw the beam to the target input socket
+        /// </summary>
+        /// <param name="targetSockets">input socket that were moved</param>
+        public void RedrawBeamToSocket(InputSocket targetSocket)
+        {
+            this.ConnectedInputs[targetSocket].Attach(this.transform.position, targetSocket.transform.position);
+        }
+
+        /// <summary>
         /// Try to add another input socket onto the list of subscribers
         /// </summary>
         /// <param name="newInput">New input socket</param>

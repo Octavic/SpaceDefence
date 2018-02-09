@@ -14,6 +14,7 @@ namespace Assets.Scripts.Grid
     using Settings;
     using Wiring.Emitters;
     using Wiring;
+    using States;
 
     /// <summary>
     /// A grid for the big map
@@ -61,6 +62,11 @@ namespace Assets.Scripts.Grid
         private GameObject _cells;
 
         /// <summary>
+        /// The current prefab manager instance
+        /// </summary>
+        private PrefabManager prefabs = PrefabManager.CurrentInstance;
+        
+        /// <summary>
         /// See if the new entity can be added at the target coordinate (Using top left of entity as index)
         /// </summary>
         /// <param name="newEntity">new entity to be added</param>
@@ -69,7 +75,8 @@ namespace Assets.Scripts.Grid
         public bool CanAddEntity(GridEntity newEntity, GridCoordinate coordiante)
         {
             var neededCoordinates = _getNeededCoordinates(newEntity, coordiante);
-            return _canAddEntity(newEntity, neededCoordinates);
+            GridEntityContainer c;
+            return _canAddEntity(newEntity, neededCoordinates, out c);
         }
 
         /// <summary>
@@ -92,19 +99,33 @@ namespace Assets.Scripts.Grid
         public bool TryAddEntity(GridEntity newEntity, GridCoordinate coordinate)
         {
             var neededCoordinates = _getNeededCoordinates(newEntity, coordinate);
-            if (!this._canAddEntity(newEntity, neededCoordinates))
+            GridEntityContainer container;
+            if (!this._canAddEntity(newEntity, neededCoordinates, out container))
             {
                 return false;
             }
 
-            foreach (var coor in neededCoordinates)
+            if (container != null)
             {
-                this._map[coor] = newEntity;
-            }
+                if (!container.TryAddEntity(newEntity))
+                {
+                    Debug.Log("Error when adding entity to container");
+                    return false;
+                }
 
-            newEntity.transform.position = this.GetCellWorldPosition(coordinate);
-            this._entities[newEntity] = coordinate;
-            return true;
+                return true;
+            }
+            else
+            {
+                foreach (var coor in neededCoordinates)
+                {
+                    this._map[coor] = newEntity;
+                }
+
+                newEntity.transform.position = this.GetCellWorldPosition(coordinate);
+                this._entities[newEntity] = coordinate;
+                return true;
+            }
         }
 
         /// <summary>
@@ -186,6 +207,31 @@ namespace Assets.Scripts.Grid
         }
 
         /// <summary>
+        /// Try to load an entity from state
+        /// </summary>
+        /// <param name="entityState">Target entity state</param>
+        /// <returns>The resulting entity object</returns>
+        private GridEntity TryInstantiateEntityFromState(GridEntityState entityState)
+        {
+            var prefab = prefabs.GetEntityPrefab(entityState.EntityID);
+            if (!prefab)
+            {
+                Debug.Log("Entity id not found: " + entityState.EntityID);
+                this.ResetBoard();
+                return null;
+            }
+
+            var newEntity = Instantiate(prefab);
+
+            for (int i = 0; i < entityState.Rotation; i++)
+            {
+                newEntity.RotateClockwise();
+            }
+
+            return newEntity;
+        }
+
+        /// <summary>
         /// Try to load the grid from the given state
         /// </summary>
         /// <param name="state">Target state</param>
@@ -200,33 +246,28 @@ namespace Assets.Scripts.Grid
             var stateToObject = new Dictionary<GridEntityState, GridEntity>();
 
             // First place all  of the entities
-            var prefabs = PrefabManager.CurrentInstance;
-            foreach (var entity in state.GridEntities)
+            foreach (var entityState in state.GridEntities)
             {
-                var prefab = prefabs.GetEntityPrefab(entity.EntityID);
-                if (!prefab)
+                // Try to instantiate the entities
+                var entityObject = this.TryInstantiateEntityFromState(entityState);
+                if (entityObject == null)
                 {
-                    Debug.Log("Entity id not found: " + entity.EntityID);
-                    this.ResetBoard();
                     return false;
                 }
-
-                var newEntity = Instantiate(prefab);
-                var newCoor = new GridCoordinate(entity.PosX, entity.PosY);
-
-                for (int i = 0; i < entity.Rotation; i++)
+                else 
                 {
-                    newEntity.RotateClockwise();
+                    // Try to place the entity on board
+                    var newCoor = new GridCoordinate(entityState.PosX, entityState.PosY);
+                    if (!this.TryAddEntity(entityObject, newCoor))
+                    {
+                        Debug.Log("Failed to add entity at " + newCoor);
+                        this.ResetBoard();
+                        return false;
+                    }
                 }
 
-                if (!this.TryAddEntity(newEntity, newCoor))
-                {
-                    Debug.Log("Failed to add entity at " + newCoor);
-                    this.ResetBoard();
-                    return false;
-                }
-
-                stateToObject[entity] = newEntity;
+                // Hash result for the connecting part
+                stateToObject[entityState] = entityObject;
             }
 
             // Then connect all of the outputs to input
@@ -244,7 +285,6 @@ namespace Assets.Scripts.Grid
                         var targetCoordinate = new GridCoordinate(connection.ConnectedX, connection.ConnectedY);
                         if (!this._map.TryGetValue(targetCoordinate, out connectedEntity))
                         {
-
                             Debug.Log("No entity at coordinate to connect to: "+ targetCoordinate);
                             this.ResetBoard();
                             return false;
@@ -291,8 +331,10 @@ namespace Assets.Scripts.Grid
         /// <param name="newEntity"></param>
         /// <param name="neededCoordinates">All of the coordinates that the new entity will take up</param>
         /// <returns>True if possible</returns>
-        private bool _canAddEntity(GridEntity newEntity, List<GridCoordinate> neededCoordinates)
+        private bool _canAddEntity(GridEntity newEntity, List<GridCoordinate> neededCoordinates, out GridEntityContainer container)
         {
+            container = null;
+
             foreach (var checkCoor in neededCoordinates)
             {
                 // If a space that needs to be available is outside the map
@@ -305,7 +347,21 @@ namespace Assets.Scripts.Grid
 
                 if (this._map.TryGetValue(checkCoor, out occupied) && occupied != newEntity)
                 {
-                    return false;
+                    var checkContainer = occupied as GridEntityContainer;
+                    if (checkContainer)
+                    {
+                        if (container.TryAddEntity(newEntity))
+                        {
+                            container = checkContainer;
+                            return true;
+                        }
+
+                        return false;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
 

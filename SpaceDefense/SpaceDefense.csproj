@@ -92,8 +92,14 @@
     <Compile Include="Assets\Scripts\GamePhases.cs" />
     <Compile Include="Assets\Scripts\Grid\GridCoordinate.cs" />
     <Compile Include="Assets\Scripts\Grid\GridEntity.cs" />
+    <Compile Include="Assets\Scripts\Grid\GridEntityContainer.cs" />
+    <Compile Include="Assets\Scripts\Grid\GridRotator.cs" />
     <Compile Include="Assets\Scripts\Grid\MapGrid.cs" />
-    <Compile Include="Assets\Scripts\Grid\MapGridState.cs" />
+    <Compile Include="Assets\Scripts\Grid\States\GridEntityContainerState.cs" />
+    <Compile Include="Assets\Scripts\Grid\States\GridEntityState.cs" />
+    <Compile Include="Assets\Scripts\Grid\States\MapGridState.cs" />
+    <Compile Include="Assets\Scripts\Grid\States\OutputConnectionState.cs" />
+    <Compile Include="Assets\Scripts\Grid\States\OutputSocketState.cs" />
     <Compile Include="Assets\Scripts\IRotatable.cs" />
     <Compile Include="Assets\Scripts\SpawnManager.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />

@@ -51,6 +51,15 @@ namespace Assets.Scripts.Wiring.Weapon
             }
         }
 
+        public InputSocket GetInputSocket(int index)
+        {
+            return this.InputSockets[index];
+        }
+        public int IndexOf(InputSocket input)
+        {
+            return this.InputSockets.IndexOf(input);
+        }
+
         /// <summary>
         /// Called when any of the input changes
         /// </summary>
