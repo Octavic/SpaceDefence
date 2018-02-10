@@ -62,10 +62,10 @@ namespace Assets.Scripts.Grid
         private GameObject _cells;
 
         /// <summary>
-        /// The current prefab manager instance
+        /// The current instance  of the PrefabManager class
         /// </summary>
-        private PrefabManager prefabs = PrefabManager.CurrentInstance;
-        
+        private PrefabManager prefabManager;
+
         /// <summary>
         /// See if the new entity can be added at the target coordinate (Using top left of entity as index)
         /// </summary>
@@ -150,6 +150,55 @@ namespace Assets.Scripts.Grid
         }
 
         /// <summary>
+        /// Saves the target entity into a state
+        /// </summary>
+        /// <param name="entity">Target entity</param>
+        /// <returns>Static state of the entity, null if unavailable</returns>
+        private GridEntityState SaveEntityToState(GridEntity entity)
+        {
+            var position = this._entities[entity];
+
+            // Construct information about the entity
+            var entityState = new GridEntityState();
+            entityState.EntityID = entity.ID;
+            entityState.PosX = position.X;
+            entityState.PosY = position.Y;
+            entityState.Rotation = entity.Rotation;
+
+            // Construct the connected outputs
+            IEmitter emitter = entity as IEmitter;
+            if (emitter != null)
+            {
+                foreach (var output in emitter.Outputs)
+                {
+                    var outputState = new OutputSocketState();
+                    foreach (var connection in output.ConnectedInputs)
+                    {
+                        var input = connection.Key;
+                        var inputSource = input.Receiver;
+                        var connectionState = new OutputConnectionState();
+                        GridCoordinate pos;
+                        if (!this._entities.TryGetValue(inputSource as GridEntity, out pos))
+                        {
+                            Debug.LogWarning("Output connected to item not registered on map");
+                            return null;
+                        }
+
+                        connectionState.ConnectedX = pos.X;
+                        connectionState.ConnectedY = pos.Y;
+                        connectionState.InputSocketIndex = inputSource.Inputs.IndexOf(input);
+
+                        outputState.Connections.Add(connectionState);
+                    }
+
+                    entityState.Outputs.Add(outputState);
+                }
+            }
+
+            return entityState;
+        }
+
+        /// <summary>
         /// Saves the current state of the board into a map state
         /// </summary>
         /// <returns>The resulting mapgrid state, null if failed</returns>
@@ -158,46 +207,12 @@ namespace Assets.Scripts.Grid
             var result = new MapGridState();
             result.SizeX = this.SizeX;
             result.SizeY = this.SizeY;
-            foreach (var item in this._entities)
+            foreach (var entity in this._entities.Keys)
             {
-                var entity = item.Key;
-                var position = item.Value;
-
-                // Construct information about the entity
-                var entityState = new GridEntityState();
-                entityState.EntityID = entity.ID;
-                entityState.PosX = position.X;
-                entityState.PosY = position.Y;
-                entityState.Rotation = entity.Rotation;
-
-                // Construct the connected outputs
-                IEmitter emitter = entity as IEmitter;
-                if (emitter != null)
+                var entityState = this.SaveEntityToState(entity);
+                if (entityState == null)
                 {
-                    foreach (var output in emitter.Outputs)
-                    {
-                        var outputState = new OutputSocketState();
-                        foreach (var connection in output.ConnectedInputs)
-                        {
-                            var input = connection.Key;
-                            var inputSource = input.Receiver;
-                            var connectionState = new OutputConnectionState();
-                            GridCoordinate pos;
-                            if (!this._entities.TryGetValue(inputSource as GridEntity, out pos))
-                            {
-                                Debug.LogWarning("Output connected to item not registered on map");
-                                return null;
-                            }
-
-                            connectionState.ConnectedX = pos.X;
-                            connectionState.ConnectedY = pos.Y;
-                            connectionState.InputSocketIndex = inputSource.Inputs.IndexOf(input);
-
-                            outputState.Connections.Add(connectionState);
-                        }
-
-                        entityState.Outputs.Add(outputState);
-                    }
+                    return null;
                 }
 
                 result.GridEntities.Add(entityState);
@@ -211,9 +226,9 @@ namespace Assets.Scripts.Grid
         /// </summary>
         /// <param name="entityState">Target entity state</param>
         /// <returns>The resulting entity object</returns>
-        private GridEntity TryInstantiateEntityFromState(GridEntityState entityState)
+        private GridEntity InstantiateEntityFromState(GridEntityState entityState)
         {
-            var prefab = prefabs.GetEntityPrefab(entityState.EntityID);
+            var prefab = PrefabManager.CurrentInstance.GetEntityPrefab(entityState.EntityID);
             if (!prefab)
             {
                 Debug.Log("Entity id not found: " + entityState.EntityID);
@@ -228,6 +243,25 @@ namespace Assets.Scripts.Grid
                 newEntity.RotateClockwise();
             }
 
+            var containerState = entityState as GridEntityContainerState;
+            if (containerState != null)
+            {
+                var containerdEntity = this.InstantiateEntityFromState(containerState.HoldingEntity);
+
+                var newEntityContainer = newEntity as GridEntityContainer;
+                if (newEntityContainer == null)
+                {
+                    Debug.LogError("Instance of state is not a container");
+                    return null;
+                }
+
+                if (!newEntityContainer.TryAddEntity(containerdEntity))
+                {
+                    Debug.LogError("Failed to add contained entity to instantiated object");
+                    return null;
+                }
+            }
+
             return newEntity;
         }
 
@@ -238,6 +272,8 @@ namespace Assets.Scripts.Grid
         /// <returns>True if operation succeed</returns>
         public bool TryLoadFromState(MapGridState state)
         {
+            this.prefabManager = PrefabManager.CurrentInstance;
+
             if (state.SizeX != this.SizeX || state.SizeY != this.SizeY)
             {
                 return false;
@@ -249,7 +285,7 @@ namespace Assets.Scripts.Grid
             foreach (var entityState in state.GridEntities)
             {
                 // Try to instantiate the entities
-                var entityObject = this.TryInstantiateEntityFromState(entityState);
+                var entityObject = this.InstantiateEntityFromState(entityState);
                 if (entityObject == null)
                 {
                     return false;
@@ -277,7 +313,7 @@ namespace Assets.Scripts.Grid
                 for (int i = 0; i < entity.Outputs.Count; i++)
                 {
                     var outputState = entity.Outputs[i];
-                    var outputObj = emitter.Outputs[i];
+                    var outputObj = emitter.GetOutputSocket(i);
 
                     foreach (var connection in outputState.Connections)
                     {
@@ -298,7 +334,7 @@ namespace Assets.Scripts.Grid
                             return false;
                         }
 
-                        var targetInput = receiver.Inputs[connection.InputSocketIndex];
+                        var targetInput = receiver.GetInputSocket(connection.InputSocketIndex);
                         if (!outputObj.TryAddInputSocket(targetInput))
                         {
                             Debug.Log("Failed to connect output socket to" + targetCoordinate);
