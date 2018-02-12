@@ -40,7 +40,7 @@ namespace Assets.Scripts.Grid
         /// </summary>
         /// <param name="newEntity">New entity to be added</param>
         /// <returns>True if operation succed</returns>
-        protected bool CanAddEntity(GridEntity newEntity)
+        public bool CanAddEntity(GridEntity newEntity)
         {
             // New entity must be 1 x 1
             if (newEntity.ExtrudeX > 0 || newEntity.ExtrudeY > 0)

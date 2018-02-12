@@ -107,13 +107,7 @@ namespace Assets.Scripts.Grid
 
             if (container != null)
             {
-                if (!container.TryAddEntity(newEntity))
-                {
-                    Debug.Log("Error when adding entity to container");
-                    return false;
-                }
-
-                return true;
+                return container.TryAddEntity(newEntity);
             }
             else
             {
@@ -386,7 +380,7 @@ namespace Assets.Scripts.Grid
                     var checkContainer = occupied as GridEntityContainer;
                     if (checkContainer)
                     {
-                        if (container.TryAddEntity(newEntity))
+                        if (checkContainer.CanAddEntity(newEntity))
                         {
                             container = checkContainer;
                             return true;

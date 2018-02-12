@@ -47,7 +47,7 @@ namespace Assets.Scripts.Grid
 
             this.CurrentlyHolding = newEntity;
             newEntity.transform.parent = this.RotatorBase.transform;
-            newEntity.transform.position = Vector3.zero;
+            newEntity.transform.localPosition = Vector3.zero;
             return true;
         }
 
