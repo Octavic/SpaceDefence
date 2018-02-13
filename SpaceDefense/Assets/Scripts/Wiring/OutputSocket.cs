@@ -64,7 +64,7 @@ namespace Assets.Scripts.Wiring
                 return false;
             }
 
-            var newBeam = Instantiate(this.BeamPrefab.gameObject).GetComponent<AttachedBeam>();
+            var newBeam = Instantiate(this.BeamPrefab.gameObject, this.transform).GetComponent<AttachedBeam>();
             newBeam.Attach(this.transform.position, newInput.transform.position);
             this.ConnectedInputs[newInput] = newBeam;
             newInput.Trigger(this, this._currentState);
@@ -110,19 +110,6 @@ namespace Assets.Scripts.Wiring
             {
                 input.Key.Trigger(this, newState);
                 input.Value.Trigger(newState);
-            }
-        }
-
-        /// <summary>
-        /// Called  when the output socket is destroyed
-        /// </summary>
-        protected void OnDestroy()
-        {
-            var inputs = this.ConnectedInputs.Keys;
-            for (int i = 0; i < inputs.Count; i++)
-            {
-                var input = inputs.ElementAt(i);
-                this.DisconnectInputSocket(input);
             }
         }
     }
