@@ -46,34 +46,12 @@ namespace Assets.Scripts.Grid
         /// <summary>
         /// The width of the entity
         /// </summary>
-        public virtual int ExtrudeX
-        {
-            get
-            {
-                return this._extrudeX;
-            }
-            protected set
-            {
-                this._extrudeX = value;
-            }
-        }
-        private int _extrudeX =0;
+        public int ExtrudeX;
 
         /// <summary>
         /// The width of the entity
         /// </summary>
-        public virtual int ExtrudeY
-        {
-            get
-            {
-                return this._extrudeY;
-            }
-            protected set
-            {
-                this._extrudeY = value;
-            }
-        }
-        private int _extrudeY = 0;
+        public int ExtrudeY;
 
         /// <summary>
         /// Rotates the object
@@ -82,8 +60,8 @@ namespace Assets.Scripts.Grid
         {
             var newExtrudeX = this.ExtrudeY;
             var newExtrudeY = this.ExtrudeX * -1;
-            this._extrudeX = newExtrudeX;
-            this._extrudeY = newExtrudeY;
+            this.ExtrudeX = newExtrudeX;
+            this.ExtrudeY = newExtrudeY;
             this.transform.localEulerAngles += new Vector3(0, 0, -90);
             this.Rotation++;
         }

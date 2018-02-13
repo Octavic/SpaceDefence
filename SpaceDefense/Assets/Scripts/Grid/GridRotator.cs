@@ -78,8 +78,6 @@ namespace Assets.Scripts.Grid
         /// </summary>
         protected override void Start()
         {
-            this.ExtrudeX = 1;
-            this.ExtrudeY = 1;
             base.Start();
         }
 

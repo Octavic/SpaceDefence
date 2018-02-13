@@ -106,16 +106,23 @@ namespace Assets.Scripts.Grid
             var holdingReceiver = this.CurrentlyHolding as IReceiver;
             return holdingReceiver.GetInputSocket(index - this.Inputs.Count);
         }
+
         public int IndexOf(InputSocket input)
         {
+            // If the input belong to the container
             var result = this.Inputs.IndexOf(input);
-            if (result > 0)
+            if (result >= 0)
             {
                 return result;
             }
 
-
+            // Check if currently holding a receiver. If not, then the input doesn't belong to this
             var holdingReceiver = this.CurrentlyHolding as IReceiver;
+            if (holdingReceiver == null)
+            {
+                return -1;
+            }
+
             return holdingReceiver.IndexOf(input) + this.Inputs.Count;
         }
 

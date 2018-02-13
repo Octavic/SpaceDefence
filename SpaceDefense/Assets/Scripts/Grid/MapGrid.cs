@@ -146,21 +146,47 @@ namespace Assets.Scripts.Grid
         /// <summary>
         /// Saves the target entity into a state
         /// </summary>
-        /// <param name="entity">Target entity</param>
+        /// <param name="targetEntity">Target entity</param>
         /// <returns>Static state of the entity, null if unavailable</returns>
-        private GridEntityState SaveEntityToState(GridEntity entity)
+        private GridEntityState SaveEntityToState(GridEntity targetEntity)
         {
-            var position = this._entities[entity];
+            GridCoordinate position;
+            this._entities.TryGetValue(targetEntity, out position);
+            if (position == null)
+            {
+                position = new GridCoordinate(-1, -1);
+            }
+
+            // Check if the target entity is a container
+            var containerEntity = targetEntity as GridEntityContainer;
+            GridEntityState entityState = null;
+
+            if (containerEntity == null)
+            {
+                entityState = new GridEntityState();
+            }
+            else 
+            {
+                var containerState = new GridEntityContainerState();
+
+                if (containerEntity.CurrentlyHolding != null)
+                {
+                    var holdingEntityState = this.SaveEntityToState(containerEntity.CurrentlyHolding);
+                    containerState.HoldingEntity = holdingEntityState;
+                }
+
+                entityState = containerState;
+            }
 
             // Construct information about the entity
-            var entityState = new GridEntityState();
-            entityState.EntityID = entity.ID;
+
+            entityState.EntityID = targetEntity.ID;
             entityState.PosX = position.X;
             entityState.PosY = position.Y;
-            entityState.Rotation = entity.Rotation;
+            entityState.Rotation = targetEntity.Rotation;
 
             // Construct the connected outputs
-            IEmitter emitter = entity as IEmitter;
+            IEmitter emitter = targetEntity as IEmitter;
             if (emitter != null)
             {
                 foreach (var output in emitter.Outputs)
@@ -169,18 +195,28 @@ namespace Assets.Scripts.Grid
                     foreach (var connection in output.ConnectedInputs)
                     {
                         var input = connection.Key;
-                        var inputSource = input.Receiver;
                         var connectionState = new OutputConnectionState();
-                        GridCoordinate pos;
-                        if (!this._entities.TryGetValue(inputSource as GridEntity, out pos))
+                        GridCoordinate pos = this.GetMouseHoveringCoordinate(input.transform.position);
+                        GridEntity entityAtPos;
+
+                        if (!this._map.TryGetValue(pos, out entityAtPos))
                         {
-                            Debug.LogWarning("Output connected to item not registered on map");
+                            Debug.LogError("Nothing at position: " + pos.ToString());
+                            return null;
+                        }
+
+                        var receiver = entityAtPos as IReceiver;
+                        if (receiver == null)
+                        {
+                            Debug.LogError("Item at " + pos.ToString() + " is not a receiver");
                             return null;
                         }
 
                         connectionState.ConnectedX = pos.X;
                         connectionState.ConnectedY = pos.Y;
-                        connectionState.InputSocketIndex = inputSource.Inputs.IndexOf(input);
+
+                        
+                        connectionState.InputSocketIndex = receiver.IndexOf(input);
 
                         outputState.Connections.Add(connectionState);
                     }
@@ -238,7 +274,7 @@ namespace Assets.Scripts.Grid
             }
 
             var containerState = entityState as GridEntityContainerState;
-            if (containerState != null)
+            if (containerState != null && containerState.HoldingEntity != null)
             {
                 var containerdEntity = this.InstantiateEntityFromState(containerState.HoldingEntity);
 

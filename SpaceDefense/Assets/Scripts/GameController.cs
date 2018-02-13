@@ -61,7 +61,6 @@ namespace Assets.Scripts
         /// <param name="enemy">Target enemy</param>
         public void OnEnemyReachEnd(Enemy enemy)
         {
-            Debug.Log("Enemy reached end!");
             Destroy(enemy.gameObject);
         }
 
