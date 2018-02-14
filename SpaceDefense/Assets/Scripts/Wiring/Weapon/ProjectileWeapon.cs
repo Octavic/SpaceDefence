@@ -27,6 +27,9 @@ namespace Assets.Scripts.Wiring.Weapon
         /// </summary>
         public ProjectileWeaponFireMode FireMode;
 
+        /// <summary>
+        /// Called when the weapon is fired
+        /// </summary>
         protected override void OnFire()
         {
             var newshell = Instantiate(this.ProjectileShellPrefab);

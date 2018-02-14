@@ -17,6 +17,17 @@ namespace Assets.Scripts.Settings
     public static class GeneralSettings
     {
         /// <summary>
+        /// A collection of weapon related settings
+        /// </summary>
+        public static class Weapon
+        {
+            /// <summary>
+            /// How many live grenades the detonator can have
+            /// </summary>
+            public const int DetonatorMaxProjectilCount = 5;
+        }
+
+        /// <summary>
         /// The maximum amount of connection that can exist at the same time on an input/output socket
         /// </summary>
         public const int MaxConnectionPerSocket = 5;
