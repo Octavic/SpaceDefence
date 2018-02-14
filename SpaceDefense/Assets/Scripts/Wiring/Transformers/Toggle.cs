@@ -36,15 +36,16 @@ namespace Assets.Scripts.Wiring.Transformers
         /// </summary>
         public override void OnInputChange()
         {
-            var isOn = this.Inputs.Any(input => input.IsOn);
-            if (isOn && !this._currentInputState)
+            var newState = this.Inputs.Any(input => input.IsOn);
+
+            if (newState && !this._currentInputState)
             {
                 this._currentOutputState = !this._currentOutputState;
-                this._renderer.sprite = isOn ? OnSprite : OffSprite;
+                this._renderer.sprite = this._currentOutputState ? this.OnSprite : this.OffSprite;
                 this.Trigger(this._currentOutputState);
             }
 
-            this._currentInputState = isOn;
+            this._currentInputState = newState;
         }
 
         /// <summary>

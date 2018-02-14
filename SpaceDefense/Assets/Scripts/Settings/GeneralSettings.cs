@@ -61,5 +61,10 @@ namespace Assets.Scripts.Settings
         /// The size  of the grid blocks
         /// </summary>
         public const float GridSize = 0.32f;
+
+        /// <summary>
+        /// How many steps we can step back to
+        /// </summary>
+        public const int GridUndoSteps = 10;
     }
 }

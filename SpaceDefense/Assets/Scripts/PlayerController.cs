@@ -83,7 +83,13 @@ namespace Assets.Scripts
 
                         if (output != null && input != null)
                         {
-                            output.TryAddInputSocket(input);
+                            MapGrid.CurrentInstance.OnStateChange();
+
+                            if (!output.TryAddInputSocket(input))
+                            {
+                                MapGrid.CurrentInstance.Undo();
+                            }
+
                             return;
                         }
 

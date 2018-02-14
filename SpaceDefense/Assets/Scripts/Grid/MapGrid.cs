@@ -67,6 +67,40 @@ namespace Assets.Scripts.Grid
         private PrefabManager prefabManager;
 
         /// <summary>
+        /// A stack of states that's been executed
+        /// </summary>
+        private List<MapGridState> _undoStack = new List<MapGridState>();
+
+        /// <summary>
+        /// Called when the state of the grid changes
+        /// </summary>
+        public void OnStateChange()
+        {
+            var newState = this.SaveState();
+            this._undoStack.Add(newState);
+            while (this._undoStack.Count > GeneralSettings.GridUndoSteps)
+            {
+                this._undoStack.RemoveAt(0);
+            }
+        }
+
+        /// <summary>
+        /// Undoes the last state
+        /// </summary>
+        public void Undo()
+        {
+            if (this._undoStack.Count == 0)
+            {
+                return;
+            }
+
+            var lastState = this._undoStack.Last();
+            this.ResetBoard();
+            this._undoStack.RemoveAt(this._undoStack.Count - 1);
+            this.TryLoadFromState(lastState);
+        }
+
+        /// <summary>
         /// See if the new entity can be added at the target coordinate (Using top left of entity as index)
         /// </summary>
         /// <param name="newEntity">new entity to be added</param>
@@ -111,6 +145,8 @@ namespace Assets.Scripts.Grid
             }
             else
             {
+                this.OnStateChange();
+
                 foreach (var coor in neededCoordinates)
                 {
                     this._map[coor] = newEntity;
