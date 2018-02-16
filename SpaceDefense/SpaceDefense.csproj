@@ -120,6 +120,7 @@
     <Compile Include="Assets\Scripts\Wiring\IReceiver.cs" />
     <Compile Include="Assets\Scripts\Wiring\ISocket.cs" />
     <Compile Include="Assets\Scripts\Wiring\InputSocket.cs" />
+    <Compile Include="Assets\Scripts\Wiring\Light.cs" />
     <Compile Include="Assets\Scripts\Wiring\OutputSocket.cs" />
     <Compile Include="Assets\Scripts\Wiring\Transformers\ANDGate.cs" />
     <Compile Include="Assets\Scripts\Wiring\Transformers\Delayer.cs" />
@@ -130,6 +131,8 @@
     <Compile Include="Assets\Scripts\Wiring\Transformers\Transformer.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\BeamWeapon.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\BeamWeaponObject.cs" />
+    <Compile Include="Assets\Scripts\Wiring\Weapon\DetonateProjectile.cs" />
+    <Compile Include="Assets\Scripts\Wiring\Weapon\DetonatorWeapon.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\Projectile.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\ProjectileShell.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\ProjectileWeapon.cs" />

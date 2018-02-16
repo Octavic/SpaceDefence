@@ -72,13 +72,23 @@ namespace Assets.Scripts.Grid
         private List<MapGridState> _undoStack = new List<MapGridState>();
 
         /// <summary>
+        /// A stack of states that's been undid
+        /// </summary>
+        private List<MapGridState> _redoStack = new List<MapGridState>();
+
+        /// <summary>
         /// Called when the state of the grid changes
         /// </summary>
         public void OnStateChange()
         {
             var newState = this.SaveState();
+            if (this._redoStack.Count > 0)
+            {
+                this._redoStack = new List<MapGridState>();
+            }
+
             this._undoStack.Add(newState);
-            while (this._undoStack.Count > GeneralSettings.GridUndoSteps)
+            while(this._undoStack.Count > GeneralSettings.GridUndoSteps)
             {
                 this._undoStack.RemoveAt(0);
             }
@@ -89,15 +99,33 @@ namespace Assets.Scripts.Grid
         /// </summary>
         public void Undo()
         {
-            if (this._undoStack.Count == 0)
+            if (this._undoStack.Count > 0)
             {
-                return;
-            }
+                this.ResetBoard();
+                var dropped = this._undoStack.Last();
+                this._redoStack.Add(dropped);
+                this._undoStack.RemoveAt(this._undoStack.Count - 1);
 
-            var lastState = this._undoStack.Last();
-            this.ResetBoard();
-            this._undoStack.RemoveAt(this._undoStack.Count - 1);
-            this.TryLoadFromState(lastState);
+                if (this._undoStack.Count > 0)
+                {
+                    this.TryLoadFromState(this._undoStack.Last());
+                }
+            }
+        }
+
+        /// <summary>
+        /// Redoes the last state
+        /// </summary>
+        public void Redo()
+        {
+            if (this._redoStack.Count > 0)
+            {
+                this.ResetBoard();
+                var dropped = this._redoStack.Last();
+                this._undoStack.Add(dropped);
+                this._redoStack.RemoveAt(this._redoStack.Count - 1);
+                this.TryLoadFromState(dropped);
+            }
         }
 
         /// <summary>
@@ -118,10 +146,11 @@ namespace Assets.Scripts.Grid
         /// </summary>
         /// <param name="newEntity">New entity to be added</param>
         /// <param name="mousePos">The mouse position in world space</param>
+        /// <param name="addToUndoStack">If the action should be added to the save state</param>
         /// <returns>True if the entity was added</returns>
-        public bool TryAddEntity(GridEntity newEntity, Vector2 mousePos)
+        public bool TryAddEntity(GridEntity newEntity, Vector2 mousePos, bool addToUndoStack = true)
         {
-            return this.TryAddEntity(newEntity, this.GetMouseHoveringCoordinate(mousePos));
+            return this.TryAddEntity(newEntity, this.GetMouseHoveringCoordinate(mousePos), addToUndoStack);
         }
 
         /// <summary>
@@ -129,8 +158,9 @@ namespace Assets.Scripts.Grid
         /// </summary>
         /// <param name="newEntity">The new entity to be added</param>
         /// <param name="coordinate">Target coordinate index</param>
+        /// <param name="addToUndoStack">If the action should be added to the save state</param>
         /// <returns>True if operation succeed</returns>
-        public bool TryAddEntity(GridEntity newEntity, GridCoordinate coordinate)
+        public bool TryAddEntity(GridEntity newEntity, GridCoordinate coordinate, bool addToUndoStack = true)
         {
             var neededCoordinates = _getNeededCoordinates(newEntity, coordinate);
             GridEntityContainer container;
@@ -145,8 +175,6 @@ namespace Assets.Scripts.Grid
             }
             else
             {
-                this.OnStateChange();
-
                 foreach (var coor in neededCoordinates)
                 {
                     this._map[coor] = newEntity;
@@ -154,6 +182,12 @@ namespace Assets.Scripts.Grid
 
                 newEntity.transform.position = this.GetCellWorldPosition(coordinate);
                 this._entities[newEntity] = coordinate;
+
+                if (addToUndoStack)
+                {
+                    this.OnStateChange();
+                }
+
                 return true;
             }
         }
@@ -338,6 +372,11 @@ namespace Assets.Scripts.Grid
         /// <returns>True if operation succeed</returns>
         public bool TryLoadFromState(MapGridState state)
         {
+            if (state == null)
+            {
+                return false;
+            }
+
             this.prefabManager = PrefabManager.CurrentInstance;
 
             if (state.SizeX != this.SizeX || state.SizeY != this.SizeY)
@@ -360,7 +399,7 @@ namespace Assets.Scripts.Grid
                 {
                     // Try to place the entity on board
                     var newCoor = new GridCoordinate(entityState.PosX, entityState.PosY);
-                    if (!this.TryAddEntity(entityObject, newCoor))
+                    if (!this.TryAddEntity(entityObject, newCoor, false))
                     {
                         Debug.Log("Failed to add entity at " + newCoor);
                         this.ResetBoard();
