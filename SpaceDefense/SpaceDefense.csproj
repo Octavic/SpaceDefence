@@ -90,9 +90,11 @@
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\GameObjectExtensions.cs" />
     <Compile Include="Assets\Scripts\GamePhases.cs" />
+    <Compile Include="Assets\Scripts\Grid\Grid2DPlatformMover.cs" />
     <Compile Include="Assets\Scripts\Grid\GridCoordinate.cs" />
     <Compile Include="Assets\Scripts\Grid\GridEntity.cs" />
     <Compile Include="Assets\Scripts\Grid\GridEntityContainer.cs" />
+    <Compile Include="Assets\Scripts\Grid\GridPlatform.cs" />
     <Compile Include="Assets\Scripts\Grid\GridRotator.cs" />
     <Compile Include="Assets\Scripts\Grid\MapGrid.cs" />
     <Compile Include="Assets\Scripts\Grid\States\GridEntityContainerState.cs" />
@@ -109,7 +111,8 @@
     <Compile Include="Assets\Scripts\SimpleEnemy.cs" />
     <Compile Include="Assets\Scripts\Tags.cs" />
     <Compile Include="Assets\Scripts\UI\EntityPurchaseButton.cs" />
-    <Compile Include="Assets\Scripts\Utils.cs" />
+    <Compile Include="Assets\Scripts\Utils\LimitedStack.cs" />
+    <Compile Include="Assets\Scripts\Utils\Utils.cs" />
     <Compile Include="Assets\Scripts\Wiring\AttachedBeam.cs" />
     <Compile Include="Assets\Scripts\Wiring\Emitters\Detector.cs" />
     <Compile Include="Assets\Scripts\Wiring\Emitters\DetectorArea.cs" />
@@ -139,6 +142,7 @@
     <Compile Include="Assets\Scripts\Wiring\Weapon\ProjectileWeaponFireMode.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\Weapon.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>

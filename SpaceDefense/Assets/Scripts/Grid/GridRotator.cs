@@ -65,11 +65,11 @@ namespace Assets.Scripts.Grid
             }
             else if (leftOn)
             {
-                this._turnDirection = 1;
+                this._turnDirection = -1;
             }
             else if (rightOn)
             {
-                this._turnDirection = -1;
+                this._turnDirection = 1;
             }
         }
 
@@ -86,7 +86,11 @@ namespace Assets.Scripts.Grid
         /// </summary>
         protected override void Update()
         {
-            this.RotatorBase.transform.localEulerAngles += new Vector3(0, 0, this.TurnSpeed * this._turnDirection);
+            if (this._turnDirection != 0)
+            {
+                this.RotatorBase.transform.localEulerAngles += new Vector3(0, 0, this.TurnSpeed * this._turnDirection * Time.deltaTime);    
+            }
+
             base.Update();
         }
     }

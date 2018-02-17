@@ -1,5 +1,5 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="Grid.cs">
+//  <copyright file="MapGrid.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
@@ -15,6 +15,7 @@ namespace Assets.Scripts.Grid
     using Wiring.Emitters;
     using Wiring;
     using States;
+    using Utils;
 
     /// <summary>
     /// A grid for the big map
@@ -69,12 +70,12 @@ namespace Assets.Scripts.Grid
         /// <summary>
         /// A stack of states that's been executed
         /// </summary>
-        private List<MapGridState> _undoStack = new List<MapGridState>();
+        private LimitedStack<MapGridState> _undoStack = new LimitedStack<MapGridState>(GeneralSettings.GridUndoSteps);
 
         /// <summary>
         /// A stack of states that's been undid
         /// </summary>
-        private List<MapGridState> _redoStack = new List<MapGridState>();
+        private LimitedStack<MapGridState> _redoStack = new LimitedStack<MapGridState>(GeneralSettings.GridUndoSteps);
 
         /// <summary>
         /// Called when the state of the grid changes
@@ -84,14 +85,10 @@ namespace Assets.Scripts.Grid
             var newState = this.SaveState();
             if (this._redoStack.Count > 0)
             {
-                this._redoStack = new List<MapGridState>();
+                this._redoStack = new LimitedStack<MapGridState>(GeneralSettings.GridUndoSteps);
             }
 
-            this._undoStack.Add(newState);
-            while(this._undoStack.Count > GeneralSettings.GridUndoSteps)
-            {
-                this._undoStack.RemoveAt(0);
-            }
+            this._undoStack.Push(newState);
         }
 
         /// <summary>
@@ -99,18 +96,9 @@ namespace Assets.Scripts.Grid
         /// </summary>
         public void Undo()
         {
-            if (this._undoStack.Count > 0)
-            {
-                this.ResetBoard();
-                var dropped = this._undoStack.Last();
-                this._redoStack.Add(dropped);
-                this._undoStack.RemoveAt(this._undoStack.Count - 1);
-
-                if (this._undoStack.Count > 0)
-                {
-                    this.TryLoadFromState(this._undoStack.Last());
-                }
-            }
+            this.ResetBoard();
+            this._redoStack.Push(this._undoStack.Pop());
+            this.TryLoadFromState(this._undoStack.Peek());
         }
 
         /// <summary>
@@ -120,11 +108,10 @@ namespace Assets.Scripts.Grid
         {
             if (this._redoStack.Count > 0)
             {
+                var item = this._redoStack.Pop();
+                this._undoStack.Push(item);
                 this.ResetBoard();
-                var dropped = this._redoStack.Last();
-                this._undoStack.Add(dropped);
-                this._redoStack.RemoveAt(this._redoStack.Count - 1);
-                this.TryLoadFromState(dropped);
+                this.TryLoadFromState(item);
             }
         }
 
