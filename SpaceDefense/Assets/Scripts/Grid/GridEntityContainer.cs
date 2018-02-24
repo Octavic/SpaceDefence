@@ -12,6 +12,7 @@ namespace Assets.Scripts.Grid
     using System.Text;
     using UnityEngine;
     using Wiring;
+    using Utils;
 
     /// <summary>
     /// A container that can hold one grid entity on the map
@@ -124,6 +125,14 @@ namespace Assets.Scripts.Grid
             }
 
             return holdingReceiver.IndexOf(input) + this.Inputs.Count;
+        }
+
+        /// <summary>
+        /// Called when the entity moves
+        /// </summary>
+        public override void OnMove()
+        {
+            Utils.UpdateAllBeams(this.Inputs);
         }
 
         /// <summary>

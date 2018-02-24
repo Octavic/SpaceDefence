@@ -112,5 +112,31 @@ namespace Assets.Scripts.Wiring
                 input.Value.Trigger(newState);
             }
         }
+
+        /// <summary>
+        /// Update a beam between the output and input socket
+        /// </summary>
+        /// <param name="socket">Targe socket. Null if update all</param>
+        public void UpdateBeam(InputSocket socket = null)
+        {
+            List<KeyValuePair<InputSocket, AttachedBeam>> allBeams = null;
+            if (socket == null)
+            {
+                allBeams = this.ConnectedInputs.ToList();
+            }
+            else
+            {
+                AttachedBeam beam = null;
+                if (this.ConnectedInputs.TryGetValue(socket, out beam))
+                {
+                    allBeams = new List<KeyValuePair<InputSocket, AttachedBeam>> () { new KeyValuePair<InputSocket, AttachedBeam>(socket, beam )};
+                }
+            }
+
+            foreach (var pairs in allBeams)
+            {
+                pairs.Value.Attach(pairs.Key.transform.position, this.transform.position);
+            }
+        }
     }
 }

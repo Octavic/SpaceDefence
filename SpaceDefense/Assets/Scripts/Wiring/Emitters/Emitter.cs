@@ -12,6 +12,7 @@ namespace Assets.Scripts.Wiring.Emitters
     using System.Text;
     using UnityEngine;
     using Grid;
+    using Utils;
 
     /// <summary>
     /// Defines a base emitter
@@ -60,6 +61,11 @@ namespace Assets.Scripts.Wiring.Emitters
             {
                 outputsocket.Trigger(newState);
             }
+        }
+
+        public override void OnMove()
+        {
+            Utils.UpdateAllBeams(this.Outputs); ;
         }
     }
 }

@@ -65,6 +65,11 @@ namespace Assets.Scripts.Wiring.Weapon
         /// </summary>
         public abstract void OnInputChange();
 
+        public override void OnMove()
+        {
+            Utils.Utils.UpdateAllBeams(this.Inputs);
+        }
+
         /// <summary>
         /// Called when the weapon fires
         /// </summary>

@@ -65,5 +65,10 @@ namespace Assets.Scripts.Grid
             this.transform.localEulerAngles += new Vector3(0, 0, -90);
             this.Rotation++;
         }
+
+        /// <summary>
+        /// Called when the entity moves to update the attached beams
+        /// </summary>
+        public abstract void OnMove();
     }
 }

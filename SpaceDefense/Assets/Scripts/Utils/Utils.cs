@@ -11,6 +11,7 @@ namespace Assets.Scripts.Utils
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using Wiring;
 
     /// <summary>
     /// A collection of util functions
@@ -40,6 +41,33 @@ namespace Assets.Scripts.Utils
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Updates all of the beams connected to the given inputs
+        /// </summary>
+        /// <param name="inputs">Target inputs</param>
+        public static void UpdateAllBeams(IList<InputSocket> inputs)
+        {
+            foreach (var input in inputs)
+            {
+                foreach (var connectedOutput in input.ConnectedOutputs)
+                {
+                    connectedOutput.Key.UpdateBeam(input);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates all of the beams connected to the given outputs
+        /// </summary>
+        /// <param name="outputs">Target ouputs</param>
+        public static void UpdateAllBeams(IList<OutputSocket> outputs)
+        {
+            foreach (var output in outputs)
+            {
+                output.UpdateBeam();
+            }
         }
     }
 }

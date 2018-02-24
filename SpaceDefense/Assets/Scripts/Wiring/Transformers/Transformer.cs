@@ -13,6 +13,7 @@ namespace Assets.Scripts.Wiring.Transformers
     using UnityEngine;
     using Settings;
     using Grid;
+    using Utils;
 
     /// <summary>
     /// Implements basic functionality for transformer
@@ -97,6 +98,12 @@ namespace Assets.Scripts.Wiring.Transformers
 
             this._oldState = newState;
             this._triggerDelay = this.TotalTriggerDelay;
+        }
+
+        public override void OnMove()
+        {
+            Utils.UpdateAllBeams(this.Inputs);
+            Utils.UpdateAllBeams(this.Outputs);
         }
 
         /// <summary>

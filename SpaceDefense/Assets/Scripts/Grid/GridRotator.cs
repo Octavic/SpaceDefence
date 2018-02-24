@@ -88,7 +88,8 @@ namespace Assets.Scripts.Grid
         {
             if (this._turnDirection != 0)
             {
-                this.RotatorBase.transform.localEulerAngles += new Vector3(0, 0, this.TurnSpeed * this._turnDirection * Time.deltaTime);    
+                this.RotatorBase.transform.localEulerAngles += new Vector3(0, 0, this.TurnSpeed * this._turnDirection * Time.deltaTime);
+                this.CurrentlyHolding.OnMove();
             }
 
             base.Update();

@@ -105,6 +105,7 @@ namespace Assets.Scripts.Grid
                 newX = Math.Max(newX, this._minX);
                 newX = Math.Min(newX, this._maxX);
                 this.Platform.transform.localPosition = new Vector3(newX, 0);
+                this.CurrentlyHolding.OnMove();
             }
 
             base.Update();
