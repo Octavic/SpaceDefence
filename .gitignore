@@ -7,6 +7,9 @@
 SpaceDefense/Library
 *.meta
 SpaceDefense/.vs
+SpaceDefense/Temp
+SpaceDefenseTests/obj
+SpaceDefenseTests/bin
 
 # Visual Studio 2015 cache directory
 /.vs/
