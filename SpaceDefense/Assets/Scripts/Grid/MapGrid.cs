@@ -58,7 +58,7 @@ namespace Assets.Scripts.Grid
         private Dictionary<GridEntity, GridCoordinate> _entities = new Dictionary<GridEntity, GridCoordinate>();
 
         /// <summary>
-        /// The gameobject containing all of the cells
+        /// The game object containing all of the cells
         /// </summary>
         private GameObject _cells;
 

@@ -13,12 +13,16 @@ namespace Assets.Scripts
     using UnityEngine;
     using Wiring;
     using Grid;
+    using UI.Graph;
 
     /// <summary>
     /// Controls the overall game flow
     /// </summary>
     public class GameController : MonoBehaviour
     {
+        public LineGraph graphA;
+        public LineGraph graphB;
+
         /// <summary>
         /// The current grid object
         /// </summary>
@@ -70,6 +74,8 @@ namespace Assets.Scripts
         protected void Start()
         {
             _currentInstane = this;
+            this.graphA.DrawGraph(new List<float>() { 0, 1, 2, 3, 4, 5, 4.5f });
+            this.graphB.DrawGraph(new List<float>() { 3, 1, 2, 4.5f, 3, 1, 2.5f });
         }
 
         /// <summary>

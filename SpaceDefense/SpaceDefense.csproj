@@ -111,6 +111,8 @@
     <Compile Include="Assets\Scripts\SimpleEnemy.cs" />
     <Compile Include="Assets\Scripts\Tags.cs" />
     <Compile Include="Assets\Scripts\UI\EntityPurchaseButton.cs" />
+    <Compile Include="Assets\Scripts\UI\Graph\LineGraph.cs" />
+    <Compile Include="Assets\Scripts\UI\Graph\UILine.cs" />
     <Compile Include="Assets\Scripts\Utils\LimitedStack.cs" />
     <Compile Include="Assets\Scripts\Utils\Utils.cs" />
     <Compile Include="Assets\Scripts\Wiring\AttachedBeam.cs" />
