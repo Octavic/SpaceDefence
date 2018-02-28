@@ -16,23 +16,8 @@ namespace Assets.Scripts.UI.Graph
     /// <summary>
     /// Describes a line graph
     /// </summary>
-    public class LineGraph : MonoBehaviour
+    public class LineGraph : BaseGraph
     {
-        /// <summary>
-        /// Height of the graph
-        /// </summary>
-        public float Height;
-
-        /// <summary>
-        /// Width of the graph
-        /// </summary>
-        public float Width;
-
-        /// <summary>
-        /// Color of the graph
-        /// </summary>
-        public Color LineColor;
-
         /// <summary>
         /// Prefab for the lines
         /// </summary>
@@ -52,12 +37,12 @@ namespace Assets.Scripts.UI.Graph
         private GameObject PlotNewDot(float posX, float posY, GameObject prevDot = null)
         {
             var newDot = Instantiate(this.DotPrefab, this.transform);
-            newDot.GetComponent<Image>().color = this.LineColor;
+            newDot.GetComponent<Image>().color = this.GraphColor;
             newDot.transform.localPosition = new Vector3(posX, posY);
             if (prevDot)
             {
                 var newLine = Instantiate(this.LinePrefab, this.transform);
-                newLine.GetComponent<Image>().color = this.LineColor;
+                newLine.GetComponent<Image>().color = this.GraphColor;
                 newLine.Connect(prevDot.transform.position, newDot.transform.position);
             }
 
@@ -68,7 +53,7 @@ namespace Assets.Scripts.UI.Graph
         /// Draws the graph
         /// </summary>
         /// <param name="data">target data to be represented</param>
-        public void DrawGraph(IList<float> data)
+        public override void DrawGraph(IList<float> data)
         {
             // Nothing to plot
             if (data.Count == 0)

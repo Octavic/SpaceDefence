@@ -22,6 +22,7 @@ namespace Assets.Scripts
     {
         public LineGraph graphA;
         public LineGraph graphB;
+        public BarGraph bar;
 
         /// <summary>
         /// The current grid object
@@ -76,6 +77,7 @@ namespace Assets.Scripts
             _currentInstane = this;
             this.graphA.DrawGraph(new List<float>() { 0, 1, 2, 3, 4, 5, 4.5f });
             this.graphB.DrawGraph(new List<float>() { 3, 1, 2, 4.5f, 3, 1, 2.5f });
+            this.bar.DrawGraph(new List<float>() { 2, 1, 2, 4, 5, 6, 7, 2 });
         }
 
         /// <summary>
