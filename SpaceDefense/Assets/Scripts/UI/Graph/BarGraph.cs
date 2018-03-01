@@ -27,7 +27,7 @@ namespace Assets.Scripts.UI.Graph
         /// Draws the graph
         /// </summary>
         /// <param name="data">target data to be represented</param>
-        public override void DrawGraph(IList<float> data)
+        public override void DrawGraph(IList<float> data, float? min = null, float? max = null)
         {
             this.ClearDrawnGraph();
 
@@ -40,18 +40,22 @@ namespace Assets.Scripts.UI.Graph
             // use 1.1x max as the top
             // pixel height of each data point = data / max * height
             // pixel / data = height / max
-            var max = data.Max();
-            if (max == 0)
+            if (!max.HasValue)
             {
-                max = 1;
+                max = this.GetMax(data);
             }
-            var heightPerPoint = this.Height / (data.Max() * 1.1f);
-            var count = data.Count > 1 ? data.Count : 2;
-            var widthEach = this.Width / (count - 1);
+
+            if (!min.HasValue)
+            {
+                min = this.GetMin(data);
+            }
+
+            float pixelPerPoint = this.Height / (max.Value - min.Value);
+            float widthEach = this.Width / data.Count;
 
             for (int i = 0; i < data.Count; i++)
             {
-                var dataPoint = data[i];
+                var dataPoint = data[i] - min.Value;
                 if (dataPoint == 0)
                 {
                     continue;
@@ -59,7 +63,7 @@ namespace Assets.Scripts.UI.Graph
 
                 var newBar = Instantiate(this.BarPrefab, this.transform);
                 newBar.GetComponent<Image>().color = this.GraphColor;
-                var barHeight = heightPerPoint * dataPoint;
+                var barHeight = pixelPerPoint * dataPoint;
                 newBar.GetComponent<RectTransform>().localScale = new Vector3(widthEach / 100, barHeight / 100);
                 newBar.transform.localPosition = new Vector3(widthEach * i + widthEach / 2, barHeight / 2);
             }

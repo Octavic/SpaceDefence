@@ -132,7 +132,7 @@ namespace Assets.Scripts
                 this._costData.Add(this._curCost);
                 this._scoreData.Add(this._curIncome - this._curCost);
 
-                if (this._incomeData.Count > 20)
+                if (this._incomeData.Count > 10)
                 {
                     this._incomeData.RemoveAt(0);
                     this._costData.RemoveAt(0);
