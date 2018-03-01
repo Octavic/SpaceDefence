@@ -55,6 +55,8 @@ namespace Assets.Scripts.UI.Graph
         /// <param name="data">target data to be represented</param>
         public override void DrawGraph(IList<float> data)
         {
+            this.ClearDrawnGraph();
+
             // Nothing to plot
             if (data.Count == 0)
             {
@@ -62,15 +64,21 @@ namespace Assets.Scripts.UI.Graph
             }
 
             // Single dot graph
-            if (data.Count < 1)
+            if (data.Count == 1)
             {
                 this.PlotNewDot(this.Width / 2, this.Height * 0.8f);
+                return;
             }
 
             // use 1.1x max as the top
             // pixel height of each data point = data / max * height
             // pixel / data = height / max
-            var pixelPerPoint = this.Height / (data.Max() * 1.1f);
+            var max = data.Max();
+            if (max == 0)
+            {
+                max = 1;
+            }
+            var pixelPerPoint = this.Height / (max * 1.1f);
             var widthEach = this.Width / (data.Count - 1);
 
             GameObject prevDot = null;
@@ -78,7 +86,7 @@ namespace Assets.Scripts.UI.Graph
             for (int i = 0; i < data.Count; i++)
             {
                 var curData = data[i];
-                prevDot = this.PlotNewDot(i * widthEach, curData * pixelPerPoint, prevDot);
+                prevDot = this.PlotNewDot(widthEach * i, curData * pixelPerPoint, prevDot);
             }
         }
     }

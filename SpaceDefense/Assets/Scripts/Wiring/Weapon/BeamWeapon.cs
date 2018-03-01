@@ -63,5 +63,15 @@ namespace Assets.Scripts.Wiring.Weapon
             this._wasFiring = true;
             this.Beam.OnFire();
         }
+
+        protected override void Update()
+        {
+            if (this._wasFiring)
+            {
+                GameController.CurrentInstance.AddCost(this.Cost * Time.deltaTime);
+            }
+
+            base.Update();
+        }
     }
 }

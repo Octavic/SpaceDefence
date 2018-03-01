@@ -37,5 +37,46 @@ namespace Assets.Scripts.UI.Graph
         /// </summary>
         /// <param name="data">target data to be represented</param>
         public abstract void DrawGraph(IList<float> data);
+
+        /// <summary>
+        /// Removes all items inside the graph
+        /// </summary>
+        protected void ClearDrawnGraph()
+        {
+            for (int i = this.transform.childCount - 1; i >= 0; i--)
+            {
+                Destroy(this.transform.GetChild(i).gameObject);
+            }
+        }
+
+        /// <summary>
+        /// Gets the max data point
+        /// </summary>
+        /// <param name="data">Data points</param>
+        /// <returns>The max data point</returns>
+        protected float GetMax(List<float> data)
+        {
+            if (data.Count == 0)
+            {
+                return 1;
+            }
+
+            return data.Max();
+        }
+
+        /// <summary>
+        /// Gets the  min data point
+        /// </summary>
+        /// <param name="data">Data points</param>
+        /// <returns>The min data point</returns>
+        protected float GetMin(List<float> data)
+        {
+            if (data.Count == 0)
+            {
+                return 0;
+            }
+
+            return data.Max();
+        }
     }
 }

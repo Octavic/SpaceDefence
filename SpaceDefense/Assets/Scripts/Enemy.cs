@@ -36,6 +36,11 @@ namespace Assets.Scripts
         public float Speed;
 
         /// <summary>
+        /// How much the enemy is worth
+        /// </summary>
+        public float Worth;
+
+        /// <summary>
         /// The amount of total hit points for the enemy
         /// </summary>
         public float TotalHealth;
@@ -86,6 +91,7 @@ namespace Assets.Scripts
             this.CurrentHealth -= damage;
             if (this.CurrentHealth <= 0)
             {
+                GameController.CurrentInstance.AddIncome(this.Worth);
                 Destroy(this.HealthBar.gameObject);
                 Destroy(this.gameObject);
                 return;

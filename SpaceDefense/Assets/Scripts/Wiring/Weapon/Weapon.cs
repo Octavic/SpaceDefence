@@ -24,6 +24,11 @@ namespace Assets.Scripts.Wiring.Weapon
         public float Cooldown;
 
         /// <summary>
+        /// How much it costs to fire this weapon
+        /// </summary>
+        public float Cost;
+
+        /// <summary>
         /// Amount of time left until the weapon can be fired again
         /// </summary>
         private float _cooldownLeft;

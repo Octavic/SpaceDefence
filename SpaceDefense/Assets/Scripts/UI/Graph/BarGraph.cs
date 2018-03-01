@@ -29,6 +29,8 @@ namespace Assets.Scripts.UI.Graph
         /// <param name="data">target data to be represented</param>
         public override void DrawGraph(IList<float> data)
         {
+            this.ClearDrawnGraph();
+
             // Nothing to plot
             if (data.Count == 0)
             {
@@ -38,18 +40,28 @@ namespace Assets.Scripts.UI.Graph
             // use 1.1x max as the top
             // pixel height of each data point = data / max * height
             // pixel / data = height / max
+            var max = data.Max();
+            if (max == 0)
+            {
+                max = 1;
+            }
             var heightPerPoint = this.Height / (data.Max() * 1.1f);
-            var widthEach = this.Width / (data.Count - 1);
+            var count = data.Count > 1 ? data.Count : 2;
+            var widthEach = this.Width / (count - 1);
 
-            for(int i =0;i<data.Count;i++)
+            for (int i = 0; i < data.Count; i++)
             {
                 var dataPoint = data[i];
+                if (dataPoint == 0)
+                {
+                    continue;
+                }
 
                 var newBar = Instantiate(this.BarPrefab, this.transform);
                 newBar.GetComponent<Image>().color = this.GraphColor;
                 var barHeight = heightPerPoint * dataPoint;
                 newBar.GetComponent<RectTransform>().localScale = new Vector3(widthEach / 100, barHeight / 100);
-                newBar.transform.localPosition = new Vector3(widthEach * i + widthEach / 2, barHeight/2);
+                newBar.transform.localPosition = new Vector3(widthEach * i + widthEach / 2, barHeight / 2);
             }
         }
     }
