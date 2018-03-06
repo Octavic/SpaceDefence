@@ -66,5 +66,10 @@ namespace Assets.Scripts.Settings
         /// How many steps we can step back to
         /// </summary>
         public const int GridUndoSteps = 10;
+
+        /// <summary>
+        /// How much x enemy worth the player will be punished if they let an enemy through
+        /// </summary>
+        public const float EnemySurvivalPenaltyMultiplier = 5;
     }
 }

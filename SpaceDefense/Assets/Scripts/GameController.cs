@@ -41,9 +41,6 @@ namespace Assets.Scripts
         private List<float> _costData = new List<float>();
         private List<float> _scoreData = new List<float>();
 
-        private float _prevIncome = 0;
-        private float _prevCost = 0;
-
         private float _curIncome = 0;
         private float _curCost = 0;
 
@@ -108,6 +105,7 @@ namespace Assets.Scripts
         public void OnEnemyReachEnd(Enemy enemy)
         {
             Destroy(enemy.gameObject);
+            this._curCost += enemy.Worth * Settings.GeneralSettings.EnemySurvivalPenaltyMultiplier;
         }
 
         /// <summary>
@@ -124,6 +122,8 @@ namespace Assets.Scripts
         protected void Update()
         {
             this._timeSinceCollect += Time.deltaTime;
+
+            // Collect data every x seconds
             if (this._timeSinceCollect >= this.CollectDataInterval)
             {
                 this._timeSinceCollect -= this.CollectDataInterval;
@@ -142,9 +142,6 @@ namespace Assets.Scripts
                 this.IncomeGraph.DrawGraph(this._incomeData);
                 this.CostGraph.DrawGraph(this._costData);
                 this.ScoreBar.DrawGraph(this._scoreData);
-
-                this._prevCost = this._curCost;
-                this._prevIncome = this._curIncome;
             }
         }
     }
