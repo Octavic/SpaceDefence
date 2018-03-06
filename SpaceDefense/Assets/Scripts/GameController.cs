@@ -11,6 +11,7 @@ namespace Assets.Scripts
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using UnityEngine.UI;
     using Wiring;
     using Grid;
     using UI.Graph;
@@ -26,6 +27,11 @@ namespace Assets.Scripts
         public LineGraph CostGraph;
         public LineGraph IncomeGraph;
         public BarGraph ScoreBar;
+
+        /// <summary>
+        /// Text for the score number
+        /// </summary>
+        public Text ScoreText;
 
         /// <summary>
         /// How often data is collected
@@ -87,6 +93,7 @@ namespace Assets.Scripts
         public void AddCost(float cost)
         {
             this._curCost += cost;
+            this.UpdateScore();
         }
 
         /// <summary>
@@ -96,6 +103,7 @@ namespace Assets.Scripts
         public void AddIncome(float income)
         {
             this._curIncome += income;
+            this.UpdateScore();
         }
 
         /// <summary>
@@ -106,6 +114,12 @@ namespace Assets.Scripts
         {
             Destroy(enemy.gameObject);
             this._curCost += enemy.Worth * Settings.GeneralSettings.EnemySurvivalPenaltyMultiplier;
+            this.UpdateScore();
+        }
+
+        private void UpdateScore()
+        {
+            this.ScoreText.text = ((int)(this._curIncome - this._curCost)).ToString();
         }
 
         /// <summary>
