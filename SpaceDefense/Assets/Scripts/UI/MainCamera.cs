@@ -28,6 +28,12 @@ namespace Assets.Scripts.UI
         public float ZoomSpeed;
 
         /// <summary>
+        /// Min and max zoom distance
+        /// </summary>
+        public float MinZoom;
+        public float MaxZoom;
+
+        /// <summary>
         /// The attached camera component
         /// </summary>
         private Camera _camera;
@@ -35,7 +41,7 @@ namespace Assets.Scripts.UI
         /// <summary>
         /// The old mouse position
         /// </summary>
-        private Vector2? _oldMousePos;
+        private Vector2? _oldPos;
 
         /// <summary>
         /// The old distance between two fingers (Mobile touch only)
@@ -59,6 +65,40 @@ namespace Assets.Scripts.UI
             if (GameController.CurrentInstance.CurrentPhasee == GamePhases.Build)
             {
                 return;
+            }
+
+            // Zoom
+            if (Input.touchCount == 2)
+            {
+                var newDistance = (Input.GetTouch(0).position - Input.GetTouch(1).position).magnitude;
+                if (this._oldDistance.HasValue)
+                {
+                    Debug.Log(this._camera.orthographicSize);
+                    var newSize = this._camera.orthographicSize * newDistance / this._oldDistance.Value / 100;
+                    newSize = Mathf.Max(newSize, this.MinZoom);
+                    newSize = Mathf.Min(newSize, this.MaxZoom);
+                    this._camera.orthographicSize = newSize;
+                }
+
+                this._oldDistance = newDistance;
+            }
+            // Pan
+            else if (Input.touchCount == 1)
+            {
+                var newPos = Input.GetTouch(0).position;
+                if (this._oldPos.HasValue)
+                {
+                    Debug.Log(this._camera.orthographicSize);
+                    var diff = (newPos - this._oldPos.Value) * this._camera.orthographicSize;
+                    this.transform.position -= new Vector3(diff.x, diff.y) * this.PanSpeed;
+                }
+                this._oldPos = newPos;
+            }
+            // Reset
+            else if (Input.touchCount == 0)
+            {
+                this._oldPos = null;
+                this._oldDistance = null;
             }
         }
     }
