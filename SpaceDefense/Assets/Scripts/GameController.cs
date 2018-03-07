@@ -21,6 +21,7 @@ namespace Assets.Scripts
     /// </summary>
     public class GameController : MonoBehaviour
     {
+        #region Unity object links
         /// <summary>
         /// Graphs
         /// </summary>
@@ -32,6 +33,45 @@ namespace Assets.Scripts
         /// Text for the score number
         /// </summary>
         public Text ScoreText;
+
+        /// <summary>
+        /// The item shop game object
+        /// </summary>
+        public GameObject ItemShop;
+
+        public GameObject SetLookModeButton;
+        public GameObject SetBuildModeButton;
+        public GameObject SetFightModeButton;
+        #endregion
+
+        /// <summary>
+        /// Gets the current game phase
+        /// </summary>
+        public GamePhases CurrentPhasee
+        {
+            get
+            {
+                return this._currentPhase ;
+            }
+            set
+            {
+                var isBuild = value == GamePhases.Build;
+                var isLook = value == GamePhases.Look;
+                this.ItemShop.SetActive(isBuild);
+                this.SetLookModeButton.SetActive(isBuild);
+                this.SetBuildModeButton.SetActive(isLook);
+                this.SetFightModeButton.SetActive(value != GamePhases.Fight);
+
+                SpawnManager.CurrntInstance.OnGamePhaseChange(value);
+
+                this._currentPhase = value;
+            }
+        }
+
+        /// <summary>
+        /// The current game phase
+        /// </summary>
+        private GamePhases _currentPhase;
 
         /// <summary>
         /// How often data is collected
@@ -70,6 +110,19 @@ namespace Assets.Scripts
             }
         }
         private static GameController _currentInstane;
+
+        public void SetLookPhase()
+        {
+            this.CurrentPhasee = GamePhases.Look;
+        }
+        public void SetBuildPhase()
+        {
+            this.CurrentPhasee = GamePhases.Build;
+        }
+        public void SetFightPhase()
+        {
+            this.CurrentPhasee = GamePhases.Fight;
+        }
 
         public void Save()
         {
@@ -128,6 +181,7 @@ namespace Assets.Scripts
         protected void Start()
         {
             _currentInstane = this;
+            this._currentPhase = GamePhases.Look;
         }
 
         /// <summary>

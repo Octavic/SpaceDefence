@@ -11,7 +11,9 @@ namespace Assets.Scripts
     /// </summary>
     public enum GamePhases
     {
+        Look,
         Build,
-        Fight
+        Fight,
+        GameOver
     }
 }

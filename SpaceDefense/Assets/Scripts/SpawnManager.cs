@@ -57,6 +57,34 @@ namespace Assets.Scripts
         public List<Path> Paths;
 
         /// <summary>
+        /// A list of enemies
+        /// </summary>
+        public List<Enemy> CurrentEnemies = new List<Enemy>();
+
+        /// <summary>
+        /// Should enemies spawn
+        /// </summary>
+        private bool _shouldSpawn;
+
+        /// <summary>
+        /// called when the gamephase changes
+        /// </summary>
+        /// <param name="newPhase">The new  phase</param>
+        public void OnGamePhaseChange(GamePhases newPhase)
+        {
+            var isFight = newPhase == GamePhases.Fight;
+            if (!isFight)
+            {
+                for (int i = this.CurrentEnemies.Count - 1; i >= 0; i--)
+                {
+                    Destroy(this.CurrentEnemies[i].gameObject);
+                }
+            }
+
+            this._shouldSpawn = isFight;
+        }
+
+        /// <summary>
         /// Used for initialization
         /// </summary>
         protected void Start()
@@ -67,7 +95,7 @@ namespace Assets.Scripts
                 var path = this.Paths[i];
                 if (path.SpawnEnemies.Count != path.SpawnInterval.Count)
                 {
-                    Debug.LogError("Invalid path in level manager");
+                    Debug.LogError("Invalid path in spawn manager");
                 }
                 else
                 {
@@ -81,33 +109,37 @@ namespace Assets.Scripts
         /// </summary>
         protected void Update()
         {
-            var timePassed = Time.deltaTime;
-
-            var prefabManager = PrefabManager.CurrentInstance;
-
-            // Update each path
-            foreach (var path in this.Paths)
+            if (this._shouldSpawn)
             {
-                // Decay time
-                var timeUntilSpawn = path.TimeUntilSpawn;
-                for (int i = 0; i < timeUntilSpawn.Count; i++)
-                {
-                    timeUntilSpawn[i] -= timePassed;
-                    if (timeUntilSpawn[i] < 0)
-                    {
-                        timeUntilSpawn[i] = path.SpawnInterval[i];
+                var timePassed = Time.deltaTime;
 
-                        var newEnemyType = path.SpawnEnemies[i];
-                        var newEnemyPrefab = prefabManager.GetEnemyPrefab(newEnemyType);
-                        if (newEnemyPrefab == null)
+                var prefabManager = PrefabManager.CurrentInstance;
+
+                // Update each path
+                foreach (var path in this.Paths)
+                {
+                    // Decay time
+                    var timeUntilSpawn = path.TimeUntilSpawn;
+                    for (int i = 0; i < timeUntilSpawn.Count; i++)
+                    {
+                        timeUntilSpawn[i] -= timePassed;
+                        if (timeUntilSpawn[i] < 0)
                         {
-                            Debug.LogError("Prefab for enemy not found: " + newEnemyType);
-                        }
-                        else
-                        {
-                            var newEnemy = Instantiate(newEnemyPrefab);
-                            newEnemy.transform.position = path.SpawnPos;
-                            newEnemy.Path = path.Nodes;
+                            timeUntilSpawn[i] = path.SpawnInterval[i];
+
+                            var newEnemyType = path.SpawnEnemies[i];
+                            var newEnemyPrefab = prefabManager.GetEnemyPrefab(newEnemyType);
+                            if (newEnemyPrefab == null)
+                            {
+                                Debug.LogError("Prefab for enemy not found: " + newEnemyType);
+                            }
+                            else
+                            {
+                                var newEnemy = Instantiate(newEnemyPrefab);
+                                this.CurrentEnemies.Add(newEnemy);
+                                newEnemy.transform.position = path.SpawnPos;
+                                newEnemy.Path = path.Nodes;
+                            }
                         }
                     }
                 }

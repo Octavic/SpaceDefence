@@ -115,6 +115,7 @@
     <Compile Include="Assets\Scripts\UI\Graph\BaseGraph.cs" />
     <Compile Include="Assets\Scripts\UI\Graph\LineGraph.cs" />
     <Compile Include="Assets\Scripts\UI\Graph\UILine.cs" />
+    <Compile Include="Assets\Scripts\UI\MainCamera.cs" />
     <Compile Include="Assets\Scripts\Utils\LimitedStack.cs" />
     <Compile Include="Assets\Scripts\Utils\Utils.cs" />
     <Compile Include="Assets\Scripts\Wiring\AttachedBeam.cs" />

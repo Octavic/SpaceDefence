@@ -64,7 +64,7 @@ namespace Assets.Scripts.UI.Graph
                 var newBar = Instantiate(this.BarPrefab, this.transform);
                 newBar.GetComponent<Image>().color = this.GraphColor;
                 var barHeight = pixelPerPoint * dataPoint;
-                newBar.GetComponent<RectTransform>().localScale = new Vector3(widthEach / 100, barHeight / 100);
+                newBar.transform.localScale = new Vector3(widthEach, barHeight);
                 newBar.transform.localPosition = new Vector3(widthEach * i + widthEach / 2, barHeight / 2);
             }
         }

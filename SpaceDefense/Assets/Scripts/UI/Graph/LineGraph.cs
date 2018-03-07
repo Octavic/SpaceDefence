@@ -82,7 +82,13 @@ namespace Assets.Scripts.UI.Graph
                 min = this.GetMin(data);
             }
 
-            var pixelPerPoint = this.Height / (max.Value - min.Value);
+            var focusHeight = max.Value - min.Value;
+            if (focusHeight == 0)
+            {
+                focusHeight = 1;
+            }
+
+            var pixelPerPoint = this.Height / focusHeight;
             var widthEach = this.Width / (data.Count - 1);
 
             GameObject prevDot = null;

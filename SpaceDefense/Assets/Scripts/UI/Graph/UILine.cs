@@ -11,6 +11,7 @@ namespace Assets.Scripts.UI.Graph
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using UnityEngine.UI;
 
     /// <summary>
     /// A single line that can be draw between two points
@@ -25,7 +26,8 @@ namespace Assets.Scripts.UI.Graph
         public void Connect(Vector2 pos1, Vector2 pos2)
         {
             var diff = pos2 - pos1;
-            this.transform.localScale = new Vector3(diff.magnitude, 1, 1);
+            var rect = this.GetComponent<RectTransform>();
+            this.transform.localScale = new Vector3(diff.magnitude * 1.7f, 1, 1);
             this.transform.localEulerAngles = new Vector3(0, 0, Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg);
             this.transform.position = (pos1 + pos2) / 2;
         }
