@@ -71,5 +71,10 @@ namespace Assets.Scripts.Settings
         /// How much x enemy worth the player will be punished if they let an enemy through
         /// </summary>
         public const float EnemySurvivalPenaltyMultiplier = 5;
+
+        /// <summary>
+        /// How many seconds the player must defend to complete a level
+        /// </summary>
+        public const float TotalDefendDuration = 180;
     }
 }

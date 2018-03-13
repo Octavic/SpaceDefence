@@ -15,6 +15,7 @@ namespace Assets.Scripts
     using Wiring;
     using Grid;
     using UI.Graph;
+    using Settings;
 
     /// <summary>
     /// Controls the overall game flow
@@ -42,7 +43,13 @@ namespace Assets.Scripts
         public GameObject SetLookModeButton;
         public GameObject SetBuildModeButton;
         public GameObject SetFightModeButton;
+        public GameObject AbortFightButton;
         #endregion
+
+        /// <summary>
+        /// How many seconds has passed since the fighting started
+        /// </summary>
+        public float TimeSinceFightStart { get; private set; }
 
         /// <summary>
         /// Gets the current game phase
@@ -55,13 +62,27 @@ namespace Assets.Scripts
             }
             set
             {
+                // Cache state
                 var isBuild = value == GamePhases.Build;
                 var isLook = value == GamePhases.Look;
+                var isFight = value == GamePhases.Fight;
+
+                // Toggle visibility
                 this.ItemShop.SetActive(isBuild);
                 this.SetLookModeButton.SetActive(isBuild);
                 this.SetBuildModeButton.SetActive(isLook);
-                this.SetFightModeButton.SetActive(value != GamePhases.Fight);
+                this.SetFightModeButton.SetActive(!isFight);
+                this.AbortFightButton.SetActive(isFight);
 
+                // Reset score
+                this._curIncome = 0;
+                this._curCost = 0;
+                this.UpdateScore();
+
+                // Reset timer
+                this.TimeSinceFightStart = 0;
+
+                // Update spawn manager
                 SpawnManager.CurrntInstance.OnGamePhaseChange(value);
 
                 this._currentPhase = value;
@@ -146,7 +167,6 @@ namespace Assets.Scripts
         public void AddCost(float cost)
         {
             this._curCost += cost;
-            this.UpdateScore();
         }
 
         /// <summary>
@@ -156,7 +176,6 @@ namespace Assets.Scripts
         public void AddIncome(float income)
         {
             this._curIncome += income;
-            this.UpdateScore();
         }
 
         /// <summary>
@@ -166,8 +185,7 @@ namespace Assets.Scripts
         public void OnEnemyReachEnd(Enemy enemy)
         {
             Destroy(enemy.gameObject);
-            this._curCost += enemy.Worth * Settings.GeneralSettings.EnemySurvivalPenaltyMultiplier;
-            this.UpdateScore();
+            this._curCost += enemy.Worth * GeneralSettings.EnemySurvivalPenaltyMultiplier;
         }
 
         private void UpdateScore()
@@ -189,6 +207,16 @@ namespace Assets.Scripts
         /// </summary>
         protected void Update()
         {
+            if (this.CurrentPhasee == GamePhases.Fight)
+            {
+                this.TimeSinceFightStart += Time.deltaTime;
+                if (this.TimeSinceFightStart > GeneralSettings.TotalDefendDuration)
+                {
+                    this.OnGameOver();
+                }
+                this.UpdateScore();
+            }
+
             this._timeSinceCollect += Time.deltaTime;
 
             // Collect data every x seconds
@@ -211,6 +239,13 @@ namespace Assets.Scripts
                 this.CostGraph.DrawGraph(this._costData);
                 this.ScoreBar.DrawGraph(this._scoreData);
             }
+        }
+
+        /// <summary>
+        /// Called when the game is over
+        /// </summary>
+        private void OnGameOver()
+        {
         }
     }
 }
