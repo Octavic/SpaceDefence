@@ -11,6 +11,7 @@ namespace Assets.Scripts
     /// </summary>
     public enum EnemyType
     {
-        Locust
+        Locust,
+        Phalanx
     }
 }

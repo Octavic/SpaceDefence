@@ -27,6 +27,19 @@ namespace Assets.Scripts.Settings
             public const int DetonatorMaxProjectilCount = 5;
         }
 
+        public static class Enemy
+        {
+            /// <summary>
+            /// How long after hit does shield start regenerating
+            /// </summary>
+            public const float ShieldRegenDelay = 1.0f;
+
+            /// <summary>
+            /// How many shield points is regained per second
+            /// </summary>
+            public const float ShieldRegenSpeed = 3.0f;
+        }
+
         /// <summary>
         /// The maximum amount of connection that can exist at the same time on an input/output socket
         /// </summary>

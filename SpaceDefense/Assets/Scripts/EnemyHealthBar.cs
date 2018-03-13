@@ -18,19 +18,32 @@ namespace Assets.Scripts
     public class EnemyHealthBar : MonoBehaviour
     {
         /// <summary>
-        /// The object of the actual bar
+        /// The target enemy
         /// </summary>
-        public GameObject Bar;
+        public Enemy TargetEnemy;
 
         /// <summary>
-        /// Called when the health bar needs to be updated
+        /// The object of the actual bar
         /// </summary>
-        /// <param name="targetEnemy">The enemy that this bar represents</param>
-        public void UpdateHealth(Enemy targetEnemy)
+        public GameObject HealthBar;
+        public GameObject ShieldBar;
+
+        private static void _updateBar(GameObject bar, float newRatio)
         {
-            var ratio = targetEnemy.CurrentHealth / targetEnemy.TotalHealth;
-            Bar.transform.localScale = new Vector3(ratio, 1, 1);
-            Bar.transform.localPosition = new Vector3(ratio / 2 - 0.5f, 0);
+            bar.transform.localScale = new Vector3(newRatio, 1, 1);
+            bar.transform.localPosition = new Vector3(newRatio / 2 - 0.5f, 0);
+        }
+
+        /// <summary>
+        /// Called once per frame
+        /// </summary>
+        protected void Update()
+        {
+            var curHealth = this.TargetEnemy.CurrentHealth;
+            var curShield = this.TargetEnemy.CurrentShield;
+
+            _updateBar(this.HealthBar, curHealth == 0 ? 0 : curHealth / this.TargetEnemy.TotalHealth);
+            _updateBar(this.ShieldBar, curShield == 0 ? 0 : curShield / this.TargetEnemy.TotalShield);
         }
     }
 }

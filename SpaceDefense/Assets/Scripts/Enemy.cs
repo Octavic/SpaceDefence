@@ -26,11 +26,6 @@ namespace Assets.Scripts
         public EnemyType Type;
 
         /// <summary>
-        /// The health bar component 
-        /// </summary>
-        public EnemyHealthBar HealthBar;
-
-        /// <summary>
         /// How fast the enemy moves per frame
         /// </summary>
         public float Speed;
@@ -46,9 +41,19 @@ namespace Assets.Scripts
         public float TotalHealth;
 
         /// <summary>
+        /// THe amount of total shields for the enemy
+        /// </summary>
+        public float TotalShield;
+
+        /// <summary>
         /// Gets the current health level of the enemy
         /// </summary>
         public float CurrentHealth { get; private set; }
+
+        /// <summary>
+        /// The amount of shield that's currently present
+        /// </summary>
+        public float CurrentShield { get; private set; }
 
         /// <summary>
         /// Gets or sets the route that the enemy will take
@@ -71,6 +76,11 @@ namespace Assets.Scripts
         private int _currentPathNodeIndex = 0;
 
         /// <summary>
+        /// How long after hit does the shield start regenerating
+        /// </summary>
+        private float _shieldRegenDelay = 0;
+
+        /// <summary>
         /// The rigidbody component
         /// </summary>
         protected Rigidbody2D _rigidbody
@@ -88,16 +98,30 @@ namespace Assets.Scripts
         /// <param name="carriedEffect">The effect carried</param>
         public void TakeDamage(float damage, EffectEnum carriedEffect = EffectEnum.None)
         {
-            this.CurrentHealth -= damage;
+            if (this.CurrentShield > 0)
+            {
+                if (this.CurrentShield >= damage)
+                {
+                    this.CurrentShield -= damage;
+                }
+                else
+                {
+                    this.CurrentHealth -= (damage - this.CurrentShield);
+                    this.CurrentShield = 0;
+                }
+            } else
+            {
+                this.CurrentHealth -= damage;
+            }
+
+            this._shieldRegenDelay = GeneralSettings.Enemy.ShieldRegenDelay;
+
             if (this.CurrentHealth <= 0)
             {
                 GameController.CurrentInstance.AddIncome(this.Worth);
-                Destroy(this.HealthBar.gameObject);
                 Destroy(this.gameObject);
                 return;
             }
-
-            this.HealthBar.UpdateHealth(this);
 
             if (carriedEffect != EffectEnum.None)
             {
@@ -142,6 +166,7 @@ namespace Assets.Scripts
         protected virtual void Start()
         {
             this.CurrentHealth = this.TotalHealth;
+            this.CurrentShield = this.TotalShield;
         }
 
         /// <summary>
@@ -149,6 +174,7 @@ namespace Assets.Scripts
         /// </summary>
         protected virtual void Update()
         {
+            // Movement
             Vector2 curPos = this.transform.position;
             Vector2 curGoal = this.Path[this._currentPathNodeIndex];
             Vector2 diff = curGoal - curPos;
@@ -192,6 +218,16 @@ namespace Assets.Scripts
                 {
                     this.EffectResistance[key] -= decay;
                 }
+            }
+
+            // Shield regeneration
+            if (this._shieldRegenDelay > 0)
+            {
+                this._shieldRegenDelay -= Time.deltaTime;
+            }
+            else if(this.CurrentShield < this.TotalShield)
+            {
+                this.CurrentShield = Mathf.Min(this.TotalShield, this.CurrentShield + Time.deltaTime * GeneralSettings.Enemy.ShieldRegenSpeed);
             }
         }
 

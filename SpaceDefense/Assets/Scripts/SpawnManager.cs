@@ -77,7 +77,11 @@ namespace Assets.Scripts
             {
                 for (int i = this.CurrentEnemies.Count - 1; i >= 0; i--)
                 {
-                    Destroy(this.CurrentEnemies[i].gameObject);
+                    var targetEnemy = this.CurrentEnemies[i];
+                    if (targetEnemy != null)
+                    {
+                        Destroy(targetEnemy.gameObject);
+                    }
                 }
             }
 
