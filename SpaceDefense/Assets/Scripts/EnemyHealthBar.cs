@@ -30,8 +30,11 @@ namespace Assets.Scripts
 
         private static void _updateBar(GameObject bar, float newRatio)
         {
-            bar.transform.localScale = new Vector3(newRatio, 1, 1);
-            bar.transform.localPosition = new Vector3(newRatio / 2 - 0.5f, 0);
+            var oldScale = bar.transform.localScale;
+            bar.transform.localScale = new Vector3(newRatio, oldScale.y, oldScale.z);
+
+            var oldPos = bar.transform.localPosition;
+            bar.transform.localPosition = new Vector3(newRatio / 2 - 0.5f, oldPos.y, oldPos.z);
         }
 
         /// <summary>
