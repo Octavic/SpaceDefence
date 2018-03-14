@@ -33,10 +33,55 @@ namespace Assets.Scripts.UI.Graph
         public Color GraphColor;
 
         /// <summary>
+        /// How much time to wait between drawing
+        /// </summary>
+        public float DrawInterval;
+
+        /// <summary>
+        /// How much time has passed since the last time the graph was drawn
+        /// </summary>
+        private float _timeSinceDraw = 0;
+
+        /// <summary>
+        /// If the graph is done rendering
+        /// </summary>
+        protected bool _doneDrawing = true;
+
+        /// <summary>
+        /// The data to be drawn
+        /// </summary>
+        protected IList<float> _data;
+
+        /// <summary>
+        /// Index of next point to be drawn
+        /// </summary>
+        protected int _nextIndex;
+
+        /// <summary>
+        /// Min and max for the data
+        /// </summary>
+        protected float _minData;
+        protected float _maxData;
+
+        /// <summary>
         /// Draws the graph
         /// </summary>
         /// <param name="data">target data to be represented</param>
-        public abstract void DrawGraph(IList<float> data, float? min = null, float? max = null);
+        public virtual void DrawGraph(IList<float> data, float? min = null, float? max = null)
+        {
+            this.ClearDrawnGraph();
+            this._data = data;
+            this._doneDrawing = false;
+            this._timeSinceDraw = 0;
+            this._nextIndex = 0;
+            this._minData = min ?? this.GetMin(data);
+            this._maxData = max ?? this.GetMax(data);
+        }
+
+        /// <summary>
+        /// Draw the next item
+        /// </summary>
+        protected abstract void DrawNext();
 
         /// <summary>
         /// Removes all items inside the graph
@@ -79,6 +124,22 @@ namespace Assets.Scripts.UI.Graph
             }
 
             return data.Min();
+        }
+
+        /// <summary>
+        /// Called once per frame
+        /// </summary>
+        protected void Update()
+        {
+            if (!this._doneDrawing)
+            {
+                this._timeSinceDraw += Time.deltaTime;
+                if (this._timeSinceDraw > this.DrawInterval)
+                {
+                    this.DrawNext();
+                    this._timeSinceDraw -= this.DrawInterval;
+                }
+            }
         }
     }
 }

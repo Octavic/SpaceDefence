@@ -30,7 +30,8 @@ namespace Assets.Scripts.UI.Graph
 
         private float _widthEach;
         private float _heightPerPoint;
-        private int _currentIndex;
+
+        private GameObject _lastDot;
 
         /// <summary>
         /// Adds a new dot 
@@ -57,51 +58,47 @@ namespace Assets.Scripts.UI.Graph
         /// Draws the graph
         /// </summary>
         /// <param name="data">target data to be represented</param>
+        /// <param name="min">override min point of data</param>
+        /// <param name="max">override max point of data</param>
         public override void DrawGraph(IList<float> data, float? min = null, float? max = null)
         {
-            this.ClearDrawnGraph();
+            base.DrawGraph(data, min, max);
 
-            // Nothing to plot
-            if (data.Count == 0)
+            var dataCount = data.Count;
+            if (dataCount == 0)
             {
-                return;
+                this._doneDrawing = true;
             }
-
-            // Single dot graph
-            if (data.Count == 1)
+            else if (dataCount == 1)
             {
                 this.PlotNewDot(this.Width / 2, this.Height * 0.8f);
+                this._doneDrawing = true;
+            }
+            else
+            {
+                this._widthEach = this.Width / (dataCount - 1);
+                this._heightPerPoint = this.Height / (this._maxData - this._minData) ;
+            }
+        }
+
+
+        /// <summary>
+        /// Draws the graph
+        /// </summary>
+        /// <param name="data">target data to be represented</param>
+        protected override void DrawNext()
+        {
+            // Check if the end has been reached
+            if (this._nextIndex >= this._data.Count)
+            {
+                this._doneDrawing = true;
                 return;
             }
 
-            // use 1.1x max as the top
-            // pixel height of each data point = data / max * height
-            // pixel / data = height / max
-            if (!max.HasValue)
-            {
-                max = this.GetMax(data);
-            }
-            if (!min.HasValue)
-            {
-                min = this.GetMin(data);
-            }
-
-            var focusHeight = max.Value - min.Value;
-            if (focusHeight == 0)
-            {
-                focusHeight = 1;
-            }
-
-            var pixelPerPoint = this.Height / focusHeight;
-            var widthEach = this.Width / (data.Count - 1);
-
-            GameObject prevDot = null;
-
-            for (int i = 0; i < data.Count; i++)
-            {
-                var curData = data[i] - min.Value;
-                prevDot = this.PlotNewDot(widthEach * i, curData * pixelPerPoint, prevDot);
-            }
+            var newData = this._data[this._nextIndex] - this._minData;
+            var newDot = this.PlotNewDot(this._nextIndex * this._widthEach, newData * this._heightPerPoint, this._lastDot);
+            this._lastDot = newDot;
+            this._nextIndex++;
         }
     }
 }

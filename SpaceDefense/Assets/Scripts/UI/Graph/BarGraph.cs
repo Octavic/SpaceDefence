@@ -23,49 +23,50 @@ namespace Assets.Scripts.UI.Graph
         /// </summary>
         public GameObject BarPrefab;
 
+        private float _widthEach;
+        private float _heightPerPoint;
+        
+        /// <summary>
+        /// Draws the next bar
+        /// </summary>
+        protected override void DrawNext()
+        {
+            if (this._nextIndex >= this._data.Count)
+            {
+                this._doneDrawing = true;
+                return;
+            }
+
+            var dataPoint = this._data[this._nextIndex] - this._minData;
+            if (dataPoint != 0)
+            {
+                var newBar = Instantiate(this.BarPrefab, this.transform);
+                var barHeight = this._heightPerPoint * dataPoint;
+                newBar.transform.GetChild(0).GetComponent<Image>().color = this.GraphColor;
+                newBar.transform.localScale = new Vector3(this._widthEach, barHeight);
+                newBar.transform.localPosition = new Vector3(this._widthEach * this._nextIndex + this._widthEach / 2, barHeight / 2);
+            }
+
+            this._nextIndex++;
+        }
+
         /// <summary>
         /// Draws the graph
         /// </summary>
         /// <param name="data">target data to be represented</param>
         public override void DrawGraph(IList<float> data, float? min = null, float? max = null)
         {
-            this.ClearDrawnGraph();
+            base.DrawGraph(data, min, max);
 
-            // Nothing to plot
-            if (data.Count == 0)
+            var dataCount = data.Count;
+            if (dataCount == 0)
             {
-                return;
+                this._doneDrawing = true;
             }
-
-            // use 1.1x max as the top
-            // pixel height of each data point = data / max * height
-            // pixel / data = height / max
-            if (!max.HasValue)
+            else
             {
-                max = this.GetMax(data);
-            }
-
-            if (!min.HasValue)
-            {
-                min = this.GetMin(data);
-            }
-
-            float pixelPerPoint = this.Height / (max.Value - min.Value);
-            float widthEach = this.Width / data.Count;
-
-            for (int i = 0; i < data.Count; i++)
-            {
-                var dataPoint = data[i] - min.Value;
-                if (dataPoint == 0)
-                {
-                    continue;
-                }
-
-                var newBar = Instantiate(this.BarPrefab, this.transform);
-                var barHeight = pixelPerPoint * dataPoint;
-                newBar.transform.GetChild(0).GetComponent<Image>().color = this.GraphColor;
-                newBar.transform.localScale = new Vector3(widthEach, barHeight);
-                newBar.transform.localPosition = new Vector3(widthEach * i + widthEach / 2, barHeight / 2);
+                this._heightPerPoint = this.Height / (this._maxData - this._minData);
+                this._widthEach = this.Width / data.Count;
             }
         }
     }
