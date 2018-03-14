@@ -28,6 +28,10 @@ namespace Assets.Scripts.UI.Graph
         /// </summary>
         public GameObject DotPrefab;
 
+        private float _widthEach;
+        private float _heightPerPoint;
+        private int _currentIndex;
+
         /// <summary>
         /// Adds a new dot 
         /// </summary>
@@ -37,12 +41,12 @@ namespace Assets.Scripts.UI.Graph
         private GameObject PlotNewDot(float posX, float posY, GameObject prevDot = null)
         {
             var newDot = Instantiate(this.DotPrefab, this.transform);
-            newDot.GetComponent<Image>().color = this.GraphColor;
+            newDot.transform.GetChild(0).GetComponent<Image>().color = this.GraphColor;
             newDot.transform.localPosition = new Vector3(posX, posY);
             if (prevDot)
             {
                 var newLine = Instantiate(this.LinePrefab, this.transform);
-                newLine.GetComponent<Image>().color = this.GraphColor;
+                newLine.transform.GetChild(0).GetComponent<Image>().color = this.GraphColor;
                 newLine.Connect(prevDot.transform.position, newDot.transform.position);
             }
 

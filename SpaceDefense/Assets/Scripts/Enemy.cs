@@ -109,7 +109,8 @@ namespace Assets.Scripts
                     this.CurrentHealth -= (damage - this.CurrentShield);
                     this.CurrentShield = 0;
                 }
-            } else
+            }
+            else
             {
                 this.CurrentHealth -= damage;
             }
@@ -225,7 +226,7 @@ namespace Assets.Scripts
             {
                 this._shieldRegenDelay -= Time.deltaTime;
             }
-            else if(this.CurrentShield < this.TotalShield)
+            else if (this.CurrentShield < this.TotalShield)
             {
                 this.CurrentShield = Mathf.Min(this.TotalShield, this.CurrentShield + Time.deltaTime * GeneralSettings.Enemy.ShieldRegenSpeed);
             }

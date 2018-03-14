@@ -96,7 +96,7 @@ namespace Assets.Scripts.Wiring
         }
 
         /// <summary>
-        /// See if there was a change in input state and notify receciver
+        /// See if there was a change in input state and notify receiver
         /// </summary>
         private void Evaluate()
         {
