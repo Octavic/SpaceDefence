@@ -88,6 +88,6 @@ namespace Assets.Scripts.Settings
         /// <summary>
         /// How many seconds the player must defend to complete a level
         /// </summary>
-        public const float TotalDefendDuration = 180;
+        public const float TotalDefendDuration = 60;
     }
 }

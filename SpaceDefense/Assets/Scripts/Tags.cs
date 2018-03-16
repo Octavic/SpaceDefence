@@ -13,10 +13,10 @@ namespace Assets.Scripts
 
     public static class Tags
     {
-        public static string Enemy = "Enemy";
-        public static string PlayerController = "PlayerController";
-        public static string GameController = "GameController";
-        public static string PrefabManager = "PrefabManager";
-        public static string SaveManager = "SaveManager";
+        public const string Enemy = "Enemy";
+        public const string PlayerController = "PlayerController";
+        public const string GameController = "GameController";
+        public const string PrefabManager = "PrefabManager";
+        public const string SaveManager = "SaveManager";
     }
 }

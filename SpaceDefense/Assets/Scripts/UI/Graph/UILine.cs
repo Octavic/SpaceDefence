@@ -27,7 +27,7 @@ namespace Assets.Scripts.UI.Graph
         {
             var diff = pos2 - pos1;
             var rect = this.GetComponent<RectTransform>();
-            this.transform.localScale = new Vector3(diff.magnitude * 1.7f, 1, 1);
+            this.transform.localScale = new Vector3(diff.magnitude, 1, 1);
             this.transform.localEulerAngles = new Vector3(0, 0, Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg);
             this.transform.position = (pos1 + pos2) / 2;
         }

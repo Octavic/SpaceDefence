@@ -70,7 +70,7 @@ namespace Assets.Scripts.UI.Graph
         public virtual void DrawGraph(IList<float> data, float? min = null, float? max = null)
         {
             this.ClearDrawnGraph();
-            this._data = data;
+            this._data = new List<float>(data);
             this._doneDrawing = false;
             this._timeSinceDraw = 0;
             this._nextIndex = 0;

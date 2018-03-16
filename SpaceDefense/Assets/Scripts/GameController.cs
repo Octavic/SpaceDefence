@@ -24,13 +24,6 @@ namespace Assets.Scripts
     {
         #region Unity object links
         /// <summary>
-        /// Graphs
-        /// </summary>
-        public LineGraph CostGraph;
-        public LineGraph IncomeGraph;
-        public BarGraph ScoreBar;
-
-        /// <summary>
         /// Text for the score number
         /// </summary>
         public Text ScoreText;
@@ -44,7 +37,33 @@ namespace Assets.Scripts
         public GameObject SetBuildModeButton;
         public GameObject SetFightModeButton;
         public GameObject AbortFightButton;
+
+        /// <summary>
+        /// The game over screen 
+        /// </summary>
+        public GameOverScreen GameOverScreenObject;
         #endregion
+
+        public float TotalCoreHealth;
+
+        public float CurrentCoreHealth
+        {
+            get
+            {
+                return this._currentCoreHealth;
+            }
+            private set
+            {
+                if (value <= 0)
+                {
+                    value = 0;
+                }
+
+                this._currentCoreHealth = value;
+            }
+        }
+
+        private float _currentCoreHealth;
 
         /// <summary>
         /// How many seconds has passed since the fighting started
@@ -69,7 +88,7 @@ namespace Assets.Scripts
 
                 // Toggle visibility
                 this.ItemShop.SetActive(isBuild);
-                this.SetLookModeButton.SetActive(isBuild);
+                //this.SetLookModeButton.SetActive(isBuild);
                 this.SetBuildModeButton.SetActive(isLook);
                 this.SetFightModeButton.SetActive(!isFight);
                 this.AbortFightButton.SetActive(isFight);
@@ -81,6 +100,9 @@ namespace Assets.Scripts
 
                 // Reset timer
                 this.TimeSinceFightStart = 0;
+
+                // Reset core health
+                this.CurrentCoreHealth = this.TotalCoreHealth;
 
                 // Update spawn manager
                 SpawnManager.CurrntInstance.OnGamePhaseChange(value);
@@ -107,9 +129,12 @@ namespace Assets.Scripts
         private List<float> _incomeData = new List<float>();
         private List<float> _costData = new List<float>();
         private List<float> _scoreData = new List<float>();
+        private List<float> _coreHealthData = new List<float>();
 
         private float _curIncome = 0;
         private float _curCost = 0;
+
+        private bool isGameOver = false;
 
         /// <summary>
         /// The current grid object
@@ -185,7 +210,7 @@ namespace Assets.Scripts
         public void OnEnemyReachEnd(Enemy enemy)
         {
             Destroy(enemy.gameObject);
-            this._curCost += enemy.Worth * GeneralSettings.EnemySurvivalPenaltyMultiplier;
+            this.CurrentCoreHealth -= enemy.Worth;
         }
 
         private void UpdateScore()
@@ -199,6 +224,7 @@ namespace Assets.Scripts
         protected void Start()
         {
             _currentInstane = this;
+            this.CurrentCoreHealth = this.TotalCoreHealth;
             this._currentPhase = GamePhases.Look;
         }
 
@@ -207,13 +233,14 @@ namespace Assets.Scripts
         /// </summary>
         protected void Update()
         {
-            if (this.CurrentPhasee == GamePhases.Fight)
+            if (this.CurrentPhasee == GamePhases.Fight && !this.isGameOver)
             {
                 this.TimeSinceFightStart += Time.deltaTime;
                 if (this.TimeSinceFightStart > GeneralSettings.TotalDefendDuration)
                 {
-                    this.OnGameOver();
+                    this.OnGameOver(true);
                 }
+
                 this.UpdateScore();
             }
 
@@ -226,26 +253,20 @@ namespace Assets.Scripts
 
                 this._incomeData.Add(this._curIncome);
                 this._costData.Add(this._curCost);
-                this._scoreData.Add(this._curIncome - this._curCost);
-
-                if (this._incomeData.Count > 10)
-                {
-                    this._incomeData.RemoveAt(0);
-                    this._costData.RemoveAt(0);
-                    this._scoreData.RemoveAt(0);
-                }
-
-                this.IncomeGraph.DrawGraph(this._incomeData);
-                this.CostGraph.DrawGraph(this._costData);
-                this.ScoreBar.DrawGraph(this._scoreData);
+                this._coreHealthData.Add(this.CurrentCoreHealth);
             }
         }
 
         /// <summary>
         /// Called when the game is over
         /// </summary>
-        private void OnGameOver()
+        private void OnGameOver(bool didWin)
         {
+            this.isGameOver = true;
+            this.GameOverScreenObject.gameObject.SetActive(true);
+            var enemyPassPenalty = (this.TotalCoreHealth - this._coreHealthData.Last()) * GeneralSettings.EnemySurvivalPenaltyMultiplier;
+            this.GameOverScreenObject.OnGameOver(didWin, enemyPassPenalty, this._incomeData, this._costData, this._coreHealthData);
+            this.SetBuildPhase();
         }
     }
 }

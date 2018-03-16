@@ -41,6 +41,7 @@ namespace Assets.Scripts.UI.Graph
         /// <param name="prevDot">The previous position</param>
         private GameObject PlotNewDot(float posX, float posY, GameObject prevDot = null)
         {
+            Debug.Log(posX);
             var newDot = Instantiate(this.DotPrefab, this.transform);
             newDot.transform.GetChild(0).GetComponent<Image>().color = this.GraphColor;
             newDot.transform.localPosition = new Vector3(posX, posY);
@@ -71,7 +72,7 @@ namespace Assets.Scripts.UI.Graph
             }
             else if (dataCount == 1)
             {
-                this.PlotNewDot(this.Width / 2, this.Height * 0.8f);
+                this.PlotNewDot(this.Width / 2, this.Height);
                 this._doneDrawing = true;
             }
             else
