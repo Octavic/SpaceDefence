@@ -39,6 +39,16 @@ namespace Assets.Scripts.Wiring.Weapon
             this.ApplyCooldown();
         }
 
+        protected override void OnCooldownEnd()
+        {
+            if (this.FireMode == ProjectileWeaponFireMode.Rapid && this.Inputs.Any(input => input.IsOn))
+            {
+                this.OnFire();
+            }
+
+            base.OnCooldownEnd();
+        }
+
         /// <summary>
         /// Called when there was a change in input
         /// </summary>

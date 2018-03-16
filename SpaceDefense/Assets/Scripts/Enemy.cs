@@ -115,7 +115,7 @@ namespace Assets.Scripts
                 this.CurrentHealth -= damage;
             }
 
-            this._shieldRegenDelay = GeneralSettings.Enemy.ShieldRegenDelay;
+            this._shieldRegenDelay =EnemySettings.ShieldRegenDelay;
 
             if (this.CurrentHealth <= 0)
             {
@@ -137,7 +137,7 @@ namespace Assets.Scripts
                 if (this.EffectResistance[carriedEffect] > 0)
                 {
                     this.ApplyEffect(carriedEffect);
-                    this.EffectResistance[carriedEffect] = GeneralSettings.EffectResistance;
+                    this.EffectResistance[carriedEffect] = EffectSettings.EffectResistance;
                 }
             }
         }
@@ -148,7 +148,7 @@ namespace Assets.Scripts
         /// <param name="effect">Target effect</param>
         public void ApplyEffect(EffectEnum effect)
         {
-            this.Effects[effect] = GeneralSettings.EffectDuration;
+            this.Effects[effect] = EffectSettings.EffectDuration;
         }
 
         /// <summary>
@@ -211,11 +211,11 @@ namespace Assets.Scripts
             }
 
             // Decay effect proc
-            decay *= GeneralSettings.EffectBuildUpDecayPerSecond;
+            decay *= EffectSettings.EffectBuildUpDecayPerSecond;
             foreach (var key in this.EffectResistance.Keys)
             {
                 var curValue = this.EffectResistance[key];
-                if (curValue > GeneralSettings.EffectResistance)
+                if (curValue > EffectSettings.EffectResistance)
                 {
                     this.EffectResistance[key] -= decay;
                 }
@@ -228,7 +228,7 @@ namespace Assets.Scripts
             }
             else if (this.CurrentShield < this.TotalShield)
             {
-                this.CurrentShield = Mathf.Min(this.TotalShield, this.CurrentShield + Time.deltaTime * GeneralSettings.Enemy.ShieldRegenSpeed);
+                this.CurrentShield = Mathf.Min(this.TotalShield, this.CurrentShield + Time.deltaTime *EnemySettings.ShieldRegenSpeed);
             }
         }
 
