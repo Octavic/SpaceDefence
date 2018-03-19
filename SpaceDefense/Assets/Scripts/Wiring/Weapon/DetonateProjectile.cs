@@ -45,15 +45,18 @@ namespace Assets.Scripts.Wiring.Weapon
             {
                 var targetEnemy = enemies[i];
                 var distance = (targetEnemy.transform.position - this.transform.position).magnitude;
+
+                // Not hit
                 if (distance > this.BlastMaxRadius)
                 {
                     continue;
                 }
-
+                // Hit with outer radius
                 if (distance > this.BlastMinRadius)
                 {
                     targetEnemy.TakeDamage(this.BlastDamage / this._blastRadiusDiff * (distance - this.BlastMinRadius));
                 }
+                // Perfect hit
                 else
                 {
                     targetEnemy.TakeDamage(this.BlastDamage, EffectEnum.Ignited);

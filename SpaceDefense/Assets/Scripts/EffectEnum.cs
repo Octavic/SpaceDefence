@@ -16,12 +16,33 @@ namespace Assets.Scripts
     /// </summary>
     public enum EffectEnum
     {
+        /// <summary>
+        /// No effect
+        /// </summary>
         None,
-        Slow,
-        Freeze,
-        Poison,
+        /// <summary>
+        /// Movement speed reduced by 50%
+        /// </summary>
+        Slowed,
+        /// <summary>
+        /// Unable to move at all
+        /// </summary>
+        Frozen,
+        /// <summary>
+        /// Damage over time that negates shield
+        /// </summary>
+        Poisoned,
+        /// <summary>
+        /// Enemy takes extra damage
+        /// </summary>
         Vulnerable,
+        /// <summary>
+        /// Enemy explodes upon death
+        /// </summary>
         Ignited,
-        Cloak
+        /// <summary>
+        /// Enemy cannot be hit
+        /// </summary>
+        Cloaked
     }
 }
