@@ -86,6 +86,8 @@
     <Compile Include="Assets\Scripts\EffectEnum.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\EnemyHealthBar.cs" />
+    <Compile Include="Assets\Scripts\EnemyStatusBar.cs" />
+    <Compile Include="Assets\Scripts\EnemyStatusIcon.cs" />
     <Compile Include="Assets\Scripts\EnemyType.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\GameObjectExtensions.cs" />

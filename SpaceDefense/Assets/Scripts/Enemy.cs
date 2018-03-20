@@ -21,6 +21,11 @@ namespace Assets.Scripts
     public class Enemy : MonoBehaviour
     {
         /// <summary>
+        /// The status bar
+        /// </summary>
+        public EnemyStatusBar StatusBar;
+
+        /// <summary>
         /// What kind of enemy this is
         /// </summary>
         public EnemyType Type;
@@ -98,6 +103,11 @@ namespace Assets.Scripts
         /// <param name="carriedEffect">The effect carried</param>
         public void TakeDamage(float damage, EffectEnum carriedEffect = EffectEnum.None)
         {
+            if (this.Effects.ContainsKey(EffectEnum.Vulnerable))
+            {
+                damage *= 2;
+            }
+
             if (this.CurrentShield > 0)
             {
                 if (this.CurrentShield >= damage)
@@ -137,6 +147,7 @@ namespace Assets.Scripts
                 if (this.EffectResistance[carriedEffect] > 0)
                 {
                     this.ApplyEffect(carriedEffect);
+                    this.StatusBar.AddEffect(carriedEffect);
                     this.EffectResistance[carriedEffect] = EffectSettings.EffectResistance;
                 }
             }
@@ -179,22 +190,43 @@ namespace Assets.Scripts
             Vector2 curPos = this.transform.position;
             Vector2 curGoal = this.Path[this._currentPathNodeIndex];
             Vector2 diff = curGoal - curPos;
-            var movementThisFrame = this.Speed * Time.deltaTime;
-            if (diff.magnitude < movementThisFrame)
+
+            if (!this.Effects.ContainsKey(EffectEnum.Frozen))
             {
-                // Can reach destination this frame, proceed to next node as goal
-                this._currentPathNodeIndex++;
-                if (this._currentPathNodeIndex >= this.Path.Count)
+                var movementThisFrame = this.Speed * Time.deltaTime;
+                if (this.Effects.ContainsKey(EffectEnum.Slowed))
                 {
-                    GameController.CurrentInstance.OnEnemyReachEnd(this);
+                    movementThisFrame *= EffectSettings.SlowSpeedMultiplier;
+                }
+
+                if (diff.magnitude < movementThisFrame)
+                {
+                    // Can reach destination this frame, proceed to next node as goal
+                    this._currentPathNodeIndex++;
+                    if (this._currentPathNodeIndex >= this.Path.Count)
+                    {
+                        GameController.CurrentInstance.OnEnemyReachEnd(this);
+                        return;
+                    }
+                    this._rigidbody.MovePosition(curGoal);
+                }
+                else
+                {
+                    //  Not yet reached, proceed
+                    this._rigidbody.MovePosition(curPos + diff.normalized * movementThisFrame);
+                }
+            }
+
+            // Apply poison
+            if (this.Effects.ContainsKey(EffectEnum.Poisoned))
+            {
+                this.CurrentHealth -= EffectSettings.PoisonDamagePerSecond * Time.deltaTime;
+                if (this.CurrentHealth <= 0)
+                {
+                    GameController.CurrentInstance.AddIncome(this.Worth);
+                    Destroy(this.gameObject);
                     return;
                 }
-                this._rigidbody.MovePosition(curGoal);
-            }
-            else
-            {
-                //  Not yet reached, proceed
-                this._rigidbody.MovePosition(curPos + diff.normalized * movementThisFrame);
             }
 
             // Decay effects
@@ -205,14 +237,16 @@ namespace Assets.Scripts
                 var remainingDuration = this.Effects[key];
                 if (remainingDuration <= decay)
                 {
+                    this.StatusBar.RemoveEffect(key);
                     this.Effects.Remove(key);
                 }
                 this.Effects[key] -= decay;
             }
 
-            // Decay effect proc
+            // Decay effect resistance
+            keys = new List<EffectEnum>(this.EffectResistance.Keys);
             decay *= EffectSettings.EffectBuildUpDecayPerSecond;
-            foreach (var key in this.EffectResistance.Keys)
+            foreach (var key in keys)
             {
                 var curValue = this.EffectResistance[key];
                 if (curValue > EffectSettings.EffectResistance)
@@ -251,11 +285,14 @@ namespace Assets.Scripts
         /// <param name="collision">The collision that happened</param>
         protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
-            var detector = collision.gameObject.GetComponent<DetectorArea>();
-            if (detector != null)
+            if (!this.Effects.ContainsKey(EffectEnum.Cloaked))
             {
-                detector.OnEnemyEnter();
-                return;
+                var detector = collision.gameObject.GetComponent<DetectorArea>();
+                if (detector != null)
+                {
+                    detector.OnEnemyEnter();
+                    return;
+                }
             }
 
             var projectile = collision.gameObject.GetComponent<Projectile>();

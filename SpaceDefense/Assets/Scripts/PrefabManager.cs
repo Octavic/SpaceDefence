@@ -31,6 +31,12 @@ namespace Assets.Scripts
         protected Dictionary<EnemyType, Enemy> _enemyHash = new Dictionary<EnemyType, Enemy>();
 
         /// <summary>
+        /// A collection of prefabs for all enemy status bar icons
+        /// </summary>
+        public List<EnemyStatusIcon> StatusIcons;
+        protected Dictionary<EffectEnum, EnemyStatusIcon> _statusIconHash = new Dictionary<EffectEnum, EnemyStatusIcon>();
+
+        /// <summary>
         /// Gets the current instance  of the <see cref="PrefabManager"/> class
         /// </summary>
         public static PrefabManager CurrentInstance
@@ -67,6 +73,11 @@ namespace Assets.Scripts
             {
                 this._enemyHash[enemy.Type] = enemy;
             }
+
+            foreach (var icon in this.StatusIcons)
+            {
+                this._statusIconHash[icon.TargetEffect] = icon;
+            }
         }
 
         /// <summary>
@@ -94,7 +105,23 @@ namespace Assets.Scripts
         {
             Enemy result = null;
             if (!this._enemyHash.TryGetValue(type, out result))
-                {
+            {
+                return null;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the prefab for the target effect
+        /// </summary>
+        /// <param name="targetEffect">The target effect</param>
+        /// <returns>Prefab for the target effect. Null if unapplicable</returns>
+        public EnemyStatusIcon GetEnemyStatusIcon(EffectEnum targetEffect)
+        {
+            EnemyStatusIcon result = null;
+            if (!this._statusIconHash.TryGetValue(targetEffect, out result))
+            {
                 return null;
             }
 

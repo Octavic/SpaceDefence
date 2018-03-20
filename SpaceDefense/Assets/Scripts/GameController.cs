@@ -24,9 +24,10 @@ namespace Assets.Scripts
     {
         #region Unity object links
         /// <summary>
-        /// Text for the score number
+        /// Text for the score number and time
         /// </summary>
         public Text ScoreText;
+        public Text TimeText;
 
         /// <summary>
         /// The item shop game object
@@ -216,6 +217,7 @@ namespace Assets.Scripts
         private void UpdateScore()
         {
             this.ScoreText.text = ((int)(this._curIncome - this._curCost)).ToString();
+            this.TimeText.text = ((int)(this.TimeSinceFightStart)).ToString();
         }
 
         /// <summary>

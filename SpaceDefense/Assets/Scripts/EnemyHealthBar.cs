@@ -28,8 +28,15 @@ namespace Assets.Scripts
         public GameObject HealthBar;
         public GameObject ShieldBar;
 
+        /// <summary>
+        /// Updates  the given bar with the given ratio
+        /// </summary>
+        /// <param name="bar">Target bar to update</param>
+        /// <param name="newRatio">The new ratio to set the bar to</param>
         private static void _updateBar(GameObject bar, float newRatio)
         {
+            newRatio = Mathf.Clamp(newRatio, 0, 1);
+
             var oldScale = bar.transform.localScale;
             bar.transform.localScale = new Vector3(newRatio, oldScale.y, oldScale.z);
 
@@ -42,11 +49,18 @@ namespace Assets.Scripts
         /// </summary>
         protected void Update()
         {
-            var curHealth = this.TargetEnemy.CurrentHealth;
-            var curShield = this.TargetEnemy.CurrentShield;
+            _updateBar(this.HealthBar, this.TargetEnemy.CurrentHealth / this.TargetEnemy.TotalHealth);
 
-            _updateBar(this.HealthBar, curHealth == 0 ? 0 : curHealth / this.TargetEnemy.TotalHealth);
-            _updateBar(this.ShieldBar, curShield == 0 ? 0 : curShield / this.TargetEnemy.TotalShield);
+            var totalShield = this.TargetEnemy.TotalShield;
+            if (totalShield > 0)
+            {
+                this.ShieldBar.SetActive(true);
+                _updateBar(this.ShieldBar, this.TargetEnemy.CurrentShield / totalShield);
+            }
+            else
+            {
+                this.ShieldBar.SetActive(false);
+            }
         }
     }
 }

@@ -45,5 +45,10 @@ namespace Assets.Scripts.Settings
         /// How many seconds the player must defend to complete a level
         /// </summary>
         public const float TotalDefendDuration = 60;
+
+        /// <summary>
+        /// The size of status effect icons.
+        /// </summary>
+        public const float IconSize = 0.15f;
     }
 }

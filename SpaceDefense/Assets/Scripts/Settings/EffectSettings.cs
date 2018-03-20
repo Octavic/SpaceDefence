@@ -19,7 +19,7 @@ namespace Assets.Scripts.Settings
         /// <summary>
         /// The counter weight that must be cleared before an enemy is afflicted by a certain effect
         /// </summary>
-        public const float EffectResistance = -2000.0f;
+        public const float EffectResistance = -10.0f;
 
         /// <summary>
         /// How long any of the effects last
@@ -29,7 +29,12 @@ namespace Assets.Scripts.Settings
         /// <summary>
         /// How much poison will do per second
         /// </summary>
-        public const float PoisonDamagePerSecond = 200.0f;
+        public const float PoisonDamagePerSecond = 20.0f;
+
+        /// <summary>
+        /// How much the movement will slow
+        /// </summary>
+        public const float SlowSpeedMultiplier = 0.5f;
 
         /// <summary>
         /// The amount that effect resistance is gained per second
