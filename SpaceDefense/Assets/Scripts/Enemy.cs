@@ -220,7 +220,12 @@ namespace Assets.Scripts
             // Apply poison
             if (this.Effects.ContainsKey(EffectEnum.Poisoned))
             {
-                this.CurrentHealth -= EffectSettings.PoisonDamagePerSecond * Time.deltaTime;
+                var damage = EffectSettings.PoisonDamagePerSecond * Time.deltaTime;
+                if (this.Effects.ContainsKey(EffectEnum.Vulnerable))
+                {
+                    damage *= 2;
+                }
+                this.CurrentHealth -= damage;
                 if (this.CurrentHealth <= 0)
                 {
                     GameController.CurrentInstance.AddIncome(this.Worth);

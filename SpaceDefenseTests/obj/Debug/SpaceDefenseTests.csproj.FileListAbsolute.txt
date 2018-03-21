@@ -8,3 +8,7 @@ C:\Users\yifei\OneDrive\Documents\GitHub\SpaceDefence\SpaceDefenseTests\bin\Debu
 C:\Users\yifei\OneDrive\Documents\GitHub\SpaceDefence\SpaceDefenseTests\obj\Debug\SpaceDefenseTests.csprojResolveAssemblyReference.cache
 C:\Users\yifei\OneDrive\Documents\GitHub\SpaceDefence\SpaceDefenseTests\obj\Debug\SpaceDefenseTests.dll
 C:\Users\yifei\OneDrive\Documents\GitHub\SpaceDefence\SpaceDefenseTests\obj\Debug\SpaceDefenseTests.pdb
+C:\Users\yifei\OneDrive\Documents\GitHub\SpaceDefence\SpaceDefenseTests\bin\Debug\UnityEngine.UI.dll
+C:\Users\yifei\OneDrive\Documents\GitHub\SpaceDefence\SpaceDefenseTests\bin\Debug\UnityEditor.dll
+C:\Users\yifei\OneDrive\Documents\GitHub\SpaceDefence\SpaceDefenseTests\bin\Debug\UnityEngine.UI.xml
+C:\Users\yifei\OneDrive\Documents\GitHub\SpaceDefence\SpaceDefenseTests\bin\Debug\UnityEditor.xml

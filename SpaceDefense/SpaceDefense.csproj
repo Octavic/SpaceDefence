@@ -116,12 +116,17 @@
     <Compile Include="Assets\Scripts\SimpleEnemy.cs" />
     <Compile Include="Assets\Scripts\SpawnManager.cs" />
     <Compile Include="Assets\Scripts\Tags.cs" />
+    <Compile Include="Assets\Scripts\Tips.cs" />
     <Compile Include="Assets\Scripts\UI\EntityPurchaseButton.cs" />
     <Compile Include="Assets\Scripts\UI\Graph\BarGraph.cs" />
     <Compile Include="Assets\Scripts\UI\Graph\BaseGraph.cs" />
     <Compile Include="Assets\Scripts\UI\Graph\LineGraph.cs" />
     <Compile Include="Assets\Scripts\UI\Graph\UILine.cs" />
     <Compile Include="Assets\Scripts\UI\MainCamera.cs" />
+    <Compile Include="Assets\Scripts\UI\Shop\ShopMenu.cs" />
+    <Compile Include="Assets\Scripts\UI\Shop\ShopMenuItem.cs" />
+    <Compile Include="Assets\Scripts\UI\Shop\ShopMenuTabContent.cs" />
+    <Compile Include="Assets\Scripts\UI\Shop\ShopMenuTabTypes.cs" />
     <Compile Include="Assets\Scripts\Utils\LimitedStack.cs" />
     <Compile Include="Assets\Scripts\Utils\Utils.cs" />
     <Compile Include="Assets\Scripts\Wiring\AttachedBeam.cs" />

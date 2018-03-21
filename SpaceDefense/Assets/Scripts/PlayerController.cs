@@ -120,10 +120,7 @@ namespace Assets.Scripts
         /// </summary>
         private void HandlePlaceEntity()
         {
-            var mouseDown = Input.GetMouseButtonDown(0);
-            var mouseUp = Input.GetMouseButtonUp(0);
-
-            if (mouseDown)
+            if (Input.GetMouseButtonDown(0))
             {
                 var hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 15);
                 if (hits.Length == 0)
