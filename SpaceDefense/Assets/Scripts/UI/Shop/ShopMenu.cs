@@ -21,7 +21,7 @@ namespace Assets.Scripts.UI.Shop
         /// <summary>
         /// A collection of tab contents
         /// </summary>
-        public List<ShopMenuTabContent> TabContents;
+        public List<GameObject> TabContents;
 
         /// <summary>
         /// The current instance of the <see cref="ShopMenu"/> class
@@ -31,7 +31,7 @@ namespace Assets.Scripts.UI.Shop
         /// <summary>
         /// The currently selected grid entity
         /// </summary>
-        public GridEntity CurrentlySelected { get; private set; }
+        public ShopMenuItem CurrentlySelected { get; private set; }
 
         /// <summary>
         /// Switches  to the given tab
@@ -39,9 +39,9 @@ namespace Assets.Scripts.UI.Shop
         /// <param name="targetTabType">Target type</param>
         public void SwitchTabs(int targetTabType)
         {
-            foreach (var content in this.TabContents)
+            for(int i =0;i<this.TabContents.Count;i++)
             {
-                content.gameObject.SetActive(content.TabType == targetTabType);
+                this.TabContents[i].gameObject.SetActive(i == targetTabType);
             }
         }
 

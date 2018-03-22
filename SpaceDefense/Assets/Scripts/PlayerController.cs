@@ -187,11 +187,18 @@ namespace Assets.Scripts
         /// <summary>
         /// Rotates the holding item
         /// </summary>
-        public void RotateHolding()
+        public void RotateHolding(bool clockwise)
         {
             if (this._holdingGridEntity != null)
             {
-                this._holdingGridEntity.RotateClockwise();
+                if (clockwise)
+                {
+                    this._holdingGridEntity.RotateClockwise();
+                }
+                else
+                {
+                    this._holdingGridEntity.RotateCounterClockwise();
+                }
             }
         }
 

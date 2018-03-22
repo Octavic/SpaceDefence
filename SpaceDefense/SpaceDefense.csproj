@@ -125,7 +125,6 @@
     <Compile Include="Assets\Scripts\UI\MainCamera.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenu.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuItem.cs" />
-    <Compile Include="Assets\Scripts\UI\Shop\ShopMenuTabContent.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuTabTypes.cs" />
     <Compile Include="Assets\Scripts\Utils\LimitedStack.cs" />
     <Compile Include="Assets\Scripts\Utils\Utils.cs" />

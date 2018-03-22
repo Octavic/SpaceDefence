@@ -17,7 +17,7 @@ namespace Assets.Scripts.UI.Shop
     public static class  ShopMenuTabTypes
     {
         public const int Circuit = 0;
-        public const int Utility = 1;
-        public const int Weapon = 2;
+        public const int Weapon = 1;
+        public const int Utility = 2;
     }
 }

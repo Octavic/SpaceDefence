@@ -34,6 +34,11 @@ namespace Assets.Scripts.Grid
             }
             set
             {
+                while (value < 0)
+                {
+                    value += 4;
+                }
+
                 this._rotation = value % 4;
             }
         }
@@ -52,6 +57,19 @@ namespace Assets.Scripts.Grid
         /// The width of the entity
         /// </summary>
         public int ExtrudeY;
+
+        /// <summary>
+        /// Rotates the object counter clockwise
+        /// </summary>
+        public virtual void RotateCounterClockwise()
+        {
+            var newExtrudeX = this.ExtrudeY * -1;
+            var newExtrudeY = this.ExtrudeX;
+            this.ExtrudeX = newExtrudeX;
+            this.ExtrudeY = newExtrudeY;
+            this.transform.localEulerAngles += new Vector3(0, 0, 90);
+            this.Rotation--;
+        }
 
         /// <summary>
         /// Rotates the object

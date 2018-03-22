@@ -37,7 +37,6 @@ namespace Assets.Scripts.UI
             {
                 return;
             }
-
             var newEntity = Instantiate(this.TargetEntityPrefab);
             PlayerController.CurrentInstancce.OnCompletingPurchase(newEntity);
         }
