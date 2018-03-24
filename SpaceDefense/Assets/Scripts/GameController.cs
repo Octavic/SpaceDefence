@@ -16,6 +16,7 @@ namespace Assets.Scripts
     using Grid;
     using UI.Graph;
     using Settings;
+    using UI.Shop;
 
     /// <summary>
     /// Controls the overall game flow
@@ -32,7 +33,12 @@ namespace Assets.Scripts
         /// <summary>
         /// The item shop game object
         /// </summary>
-        public GameObject ItemShop;
+        public ShopMenu ItemShop;
+
+        /// <summary>
+        /// Save, reload, undo buttons 
+        /// </summary>
+        public GameObject Buttons;
 
         public GameObject SetLookModeButton;
         public GameObject SetBuildModeButton;
@@ -88,7 +94,9 @@ namespace Assets.Scripts
                 var isFight = value == GamePhases.Fight;
 
                 // Toggle visibility
-                this.ItemShop.SetActive(isBuild);
+                this.ItemShop.gameObject.SetActive(isBuild);
+                this.Buttons.SetActive(isBuild);
+
                 //this.SetLookModeButton.SetActive(isBuild);
                 this.SetBuildModeButton.SetActive(isLook);
                 this.SetFightModeButton.SetActive(!isFight);
@@ -108,6 +116,8 @@ namespace Assets.Scripts
                 // Update spawn manager
                 SpawnManager.CurrntInstance.OnGamePhaseChange(value);
 
+                this._isGameOver = false;
+                
                 this._currentPhase = value;
             }
         }
@@ -135,7 +145,7 @@ namespace Assets.Scripts
         private float _curIncome = 0;
         private float _curCost = 0;
 
-        private bool isGameOver = false;
+        private bool _isGameOver = false;
 
         /// <summary>
         /// The current grid object
@@ -235,7 +245,7 @@ namespace Assets.Scripts
         /// </summary>
         protected void Update()
         {
-            if (this.CurrentPhasee == GamePhases.Fight && !this.isGameOver)
+            if (this.CurrentPhasee == GamePhases.Fight && !this._isGameOver)
             {
                 this.TimeSinceFightStart += Time.deltaTime;
                 if (this.TimeSinceFightStart > GeneralSettings.TotalDefendDuration)
@@ -264,7 +274,7 @@ namespace Assets.Scripts
         /// </summary>
         private void OnGameOver(bool didWin)
         {
-            this.isGameOver = true;
+            this._isGameOver = true;
             this.GameOverScreenObject.gameObject.SetActive(true);
             var enemyPassPenalty = (this.TotalCoreHealth - this._coreHealthData.Last()) * GeneralSettings.EnemySurvivalPenaltyMultiplier;
             this.GameOverScreenObject.OnGameOver(didWin, enemyPassPenalty, this._incomeData, this._costData, this._coreHealthData);
