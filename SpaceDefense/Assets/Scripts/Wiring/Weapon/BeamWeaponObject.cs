@@ -11,6 +11,7 @@ namespace Assets.Scripts.Wiring.Weapon
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using Utils;
 
     /// <summary>
     /// Describes the actual beam object fired from a beam weapon
@@ -18,9 +19,15 @@ namespace Assets.Scripts.Wiring.Weapon
     public class BeamWeaponObject : MonoBehaviour
     {
         /// <summary>
-        /// The effect carried
+        /// The effect carried and their impacts
         /// </summary>
-        public EffectEnum CarriedEffect;
+        public List<EffectEnum> Effects;
+        public List<float> Impacts;
+
+        /// <summary>
+        /// The composed effects dictionary
+        /// </summary>
+        private Dictionary<EffectEnum, float> _effects;
 
         /// <summary>
         /// The damage per second
@@ -49,7 +56,15 @@ namespace Assets.Scripts.Wiring.Weapon
         /// <param name="hitEnemy">The enemy</param>
         public void OnHitEnemy(Enemy hitEnemy)
         {
-            hitEnemy.TakeDamage(this.DamagePerSecond * Time.deltaTime, this.CarriedEffect);
+            hitEnemy.TakeDamage(this.DamagePerSecond * Time.deltaTime, this._effects);
+        }
+
+        /// <summary>
+        /// Used for initialization
+        /// </summary>
+        protected void Start()
+        {
+            this._effects = Utils.ConvertListToDictionary(this.Effects, this.Impacts);
         }
     }
 }

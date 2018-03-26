@@ -11,6 +11,7 @@ namespace Assets.Scripts.Wiring.Weapon
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using Utils;
 
     /// <summary>
     /// Defines a projectile
@@ -25,7 +26,8 @@ namespace Assets.Scripts.Wiring.Weapon
         /// <summary>
         /// the effect that's carried
         /// </summary>
-        public EffectEnum CarriedEffect;
+        public List<EffectEnum> Effects;
+        public List<float> Impacts;
 
         /// <summary>
         /// Speed of the bullet
@@ -63,17 +65,30 @@ namespace Assets.Scripts.Wiring.Weapon
         private bool _projectileHit = false;
 
         /// <summary>
+        /// The composed effects dictionary
+        /// </summary>
+        private Dictionary<EffectEnum, float> _effects;
+
+        /// <summary>
         /// Called when the projectile hits an enemy
         /// </summary>
         /// <param name="hitEnemy">The enemy that was hit</param>
         public void OnHittingEnemy(Enemy hitEnemy)
         {
-            hitEnemy.TakeDamage(this.Damage, this.CarriedEffect);
+            hitEnemy.TakeDamage(this.Damage, this._effects);
             if (!this.DoesPenetrate)
             {
                 Destroy(this.ProjectileObject.gameObject);
                 this._projectileHit = true;
             }
+        }
+
+        /// <summary>
+        /// Used for initialization
+        /// </summary>
+        protected void Start()
+        {
+            this._effects = Utils.ConvertListToDictionary(this.Effects, this.Impacts);
         }
 
         /// <summary>

@@ -34,6 +34,7 @@ namespace Assets.Scripts.Wiring.Weapon
         public float BlastDamage;
 
         private float _blastRadiusDiff;
+        private Dictionary<EffectEnum, float> _sweetSpotEffect = new Dictionary<EffectEnum, float>();
 
         /// <summary>
         /// Detonates the projectile
@@ -59,7 +60,7 @@ namespace Assets.Scripts.Wiring.Weapon
                 // Perfect hit
                 else
                 {
-                    targetEnemy.TakeDamage(this.BlastDamage, EffectEnum.Ignited);
+                    targetEnemy.TakeDamage(this.BlastDamage, this._sweetSpotEffect);
                 }
 
             }
@@ -71,6 +72,7 @@ namespace Assets.Scripts.Wiring.Weapon
         protected void Start()
         {
             this._blastRadiusDiff = this.BlastMaxRadius - this.BlastMinRadius;
+            this._sweetSpotEffect[EffectEnum.Ignited] = 1200;
         }
     }
 }

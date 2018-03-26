@@ -73,7 +73,7 @@ namespace Assets.Scripts
         /// <summary>
         /// A dictionary of effect => value until proc
         /// </summary>
-        protected Dictionary<EffectEnum, float> EffectResistance = new Dictionary<EffectEnum, float>();
+        protected Dictionary<EffectEnum, float> EffectBuildUp = new Dictionary<EffectEnum, float>();
 
         /// <summary>
         /// The node in the route that the enemy is trying to reach
@@ -101,7 +101,7 @@ namespace Assets.Scripts
         /// </summary>
         /// <param name="damage">How much damage to take</param>
         /// <param name="carriedEffect">The effect carried</param>
-        public void TakeDamage(float damage, EffectEnum carriedEffect = EffectEnum.None)
+        public void TakeDamage(float damage, IDictionary<EffectEnum, float> carriedEffects = null)
         {
             if (this.Effects.ContainsKey(EffectEnum.Vulnerable))
             {
@@ -125,7 +125,7 @@ namespace Assets.Scripts
                 this.CurrentHealth -= damage;
             }
 
-            this._shieldRegenDelay =EnemySettings.ShieldRegenDelay;
+            this._shieldRegenDelay = EnemySettings.ShieldRegenDelay;
 
             if (this.CurrentHealth <= 0)
             {
@@ -134,21 +134,27 @@ namespace Assets.Scripts
                 return;
             }
 
-            if (carriedEffect != EffectEnum.None)
+            if (carriedEffects != null)
             {
-                float oldValue;
-                if (!this.EffectResistance.TryGetValue(carriedEffect, out oldValue))
-                {
-                    oldValue = 0;
-                }
+                var effects = carriedEffects.Keys;
 
-                this.EffectResistance[carriedEffect] = oldValue + damage;
-
-                if (this.EffectResistance[carriedEffect] > 0)
+                foreach (var effect in effects)
                 {
-                    this.ApplyEffect(carriedEffect);
-                    this.StatusBar.AddEffect(carriedEffect);
-                    this.EffectResistance[carriedEffect] = EffectSettings.EffectResistance;
+                    var impact = carriedEffects[effect];
+                    float oldValue;
+                    if (!this.EffectBuildUp.TryGetValue(effect, out oldValue))
+                    {
+                        oldValue = 0;
+                    }
+
+                    this.EffectBuildUp[effect] = oldValue + damage * impact;
+
+                    if (this.EffectBuildUp[effect] > EffectSettings.EffectProcLimit)
+                    {
+                        this.ApplyEffect(effect);
+                        this.StatusBar.AddEffect(effect);
+                        this.EffectBuildUp[effect] = - EffectSettings.EffectProcLimit;
+                    }
                 }
             }
         }
@@ -191,30 +197,31 @@ namespace Assets.Scripts
             Vector2 curGoal = this.Path[this._currentPathNodeIndex];
             Vector2 diff = curGoal - curPos;
 
-            if (!this.Effects.ContainsKey(EffectEnum.Frozen))
+            var movementThisFrame = this.Speed * Time.deltaTime;
+            if (this.Effects.ContainsKey(EffectEnum.Slowed))
             {
-                var movementThisFrame = this.Speed * Time.deltaTime;
-                if (this.Effects.ContainsKey(EffectEnum.Slowed))
-                {
-                    movementThisFrame *= EffectSettings.SlowSpeedMultiplier;
-                }
+                movementThisFrame *= EffectSettings.SlowSpeedMultiplier;
+            }
+            else if (this.Effects.ContainsKey(EffectEnum.Frozen))
+            {
+                movementThisFrame *= 0.01f;
+            }
 
-                if (diff.magnitude < movementThisFrame)
+            if (diff.magnitude < movementThisFrame)
+            {
+                // Can reach destination this frame, proceed to next node as goal
+                this._currentPathNodeIndex++;
+                if (this._currentPathNodeIndex >= this.Path.Count)
                 {
-                    // Can reach destination this frame, proceed to next node as goal
-                    this._currentPathNodeIndex++;
-                    if (this._currentPathNodeIndex >= this.Path.Count)
-                    {
-                        GameController.CurrentInstance.OnEnemyReachEnd(this);
-                        return;
-                    }
-                    this._rigidbody.MovePosition(curGoal);
+                    GameController.CurrentInstance.OnEnemyReachEnd(this);
+                    return;
                 }
-                else
-                {
-                    //  Not yet reached, proceed
-                    this._rigidbody.MovePosition(curPos + diff.normalized * movementThisFrame);
-                }
+                this._rigidbody.MovePosition(curGoal);
+            }
+            else
+            {
+                //  Not yet reached, proceed
+                this._rigidbody.MovePosition(curPos + diff.normalized * movementThisFrame);
             }
 
             // Apply poison
@@ -245,18 +252,21 @@ namespace Assets.Scripts
                     this.StatusBar.RemoveEffect(key);
                     this.Effects.Remove(key);
                 }
-                this.Effects[key] -= decay;
+                else
+                {
+                    this.Effects[key] -= decay;
+                }
             }
 
             // Decay effect resistance
-            keys = new List<EffectEnum>(this.EffectResistance.Keys);
+            keys = new List<EffectEnum>(this.EffectBuildUp.Keys);
             decay *= EffectSettings.EffectBuildUpDecayPerSecond;
             foreach (var key in keys)
             {
-                var curValue = this.EffectResistance[key];
-                if (curValue > EffectSettings.EffectResistance)
+                var curValue = this.EffectBuildUp[key];
+                if (curValue > EffectSettings.EffectProcLimit)
                 {
-                    this.EffectResistance[key] -= decay;
+                    this.EffectBuildUp[key] -= decay;
                 }
             }
 
@@ -267,7 +277,7 @@ namespace Assets.Scripts
             }
             else if (this.CurrentShield < this.TotalShield)
             {
-                this.CurrentShield = Mathf.Min(this.TotalShield, this.CurrentShield + Time.deltaTime *EnemySettings.ShieldRegenSpeed);
+                this.CurrentShield = Mathf.Min(this.TotalShield, this.CurrentShield + Time.deltaTime * EnemySettings.ShieldRegenSpeed);
             }
         }
 

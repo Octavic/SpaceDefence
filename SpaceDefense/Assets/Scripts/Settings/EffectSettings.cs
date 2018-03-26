@@ -19,7 +19,7 @@ namespace Assets.Scripts.Settings
         /// <summary>
         /// The counter weight that must be cleared before an enemy is afflicted by a certain effect
         /// </summary>
-        public const float EffectResistance = -10.0f;
+        public const float EffectProcLimit = 100.0f;
 
         /// <summary>
         /// How long any of the effects last
@@ -39,6 +39,6 @@ namespace Assets.Scripts.Settings
         /// <summary>
         /// The amount that effect resistance is gained per second
         /// </summary>
-        public const float EffectBuildUpDecayPerSecond = -400.0f;
+        public const float EffectBuildUpDecayPerSecond = 40.0f;
     }
 }
