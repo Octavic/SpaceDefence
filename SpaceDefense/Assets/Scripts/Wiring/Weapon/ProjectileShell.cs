@@ -67,15 +67,15 @@ namespace Assets.Scripts.Wiring.Weapon
         /// <summary>
         /// The composed effects dictionary
         /// </summary>
-        private Dictionary<EffectEnum, float> _effects;
+        public Dictionary<EffectEnum, float> EffectImpacts { get; private set; }
 
         /// <summary>
         /// Called when the projectile hits an enemy
         /// </summary>
         /// <param name="hitEnemy">The enemy that was hit</param>
-        public void OnHittingEnemy(Enemy hitEnemy)
+        public virtual void OnHittingEnemy(Enemy hitEnemy)
         {
-            hitEnemy.TakeDamage(this.Damage, this._effects);
+            hitEnemy.TakeDamage(this.Damage, this.EffectImpacts);
             if (!this.DoesPenetrate)
             {
                 Destroy(this.ProjectileObject.gameObject);
@@ -88,7 +88,7 @@ namespace Assets.Scripts.Wiring.Weapon
         /// </summary>
         protected void Start()
         {
-            this._effects = Utils.ConvertListToDictionary(this.Effects, this.Impacts);
+            this.EffectImpacts = Utils.ConvertListToDictionary(this.Effects, this.Impacts);
         }
 
         /// <summary>

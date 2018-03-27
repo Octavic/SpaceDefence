@@ -58,10 +58,11 @@ namespace Assets.Scripts.Wiring.Weapon
         /// <summary>
         /// Called when the weapon is fired
         /// </summary>
-        protected override void OnFire()
+        protected override GameObject OnFire()
         {
             this._wasFiring = true;
             this.Beam.OnFire();
+            return this.Beam.gameObject;
         }
 
         protected override void Update()

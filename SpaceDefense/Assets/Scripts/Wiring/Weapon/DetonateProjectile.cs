@@ -34,7 +34,6 @@ namespace Assets.Scripts.Wiring.Weapon
         public float BlastDamage;
 
         private float _blastRadiusDiff;
-        private Dictionary<EffectEnum, float> _sweetSpotEffect = new Dictionary<EffectEnum, float>();
 
         /// <summary>
         /// Detonates the projectile
@@ -45,6 +44,11 @@ namespace Assets.Scripts.Wiring.Weapon
             for (int i = enemies.Count - 1; i >= 0; i--)
             {
                 var targetEnemy = enemies[i];
+                if (targetEnemy == null)
+                {
+                    continue;
+                }
+
                 var distance = (targetEnemy.transform.position - this.transform.position).magnitude;
 
                 // Not hit
@@ -55,14 +59,13 @@ namespace Assets.Scripts.Wiring.Weapon
                 // Hit with outer radius
                 if (distance > this.BlastMinRadius)
                 {
-                    targetEnemy.TakeDamage(this.BlastDamage / this._blastRadiusDiff * (distance - this.BlastMinRadius));
+                    targetEnemy.TakeDamage(this.BlastDamage * (distance - this.BlastMinRadius) / this._blastRadiusDiff);
                 }
                 // Perfect hit
                 else
                 {
-                    targetEnemy.TakeDamage(this.BlastDamage, this._sweetSpotEffect);
+                    targetEnemy.TakeDamage(this.BlastDamage, this.Shell.EffectImpacts);
                 }
-
             }
         }
 
@@ -72,7 +75,6 @@ namespace Assets.Scripts.Wiring.Weapon
         protected void Start()
         {
             this._blastRadiusDiff = this.BlastMaxRadius - this.BlastMinRadius;
-            this._sweetSpotEffect[EffectEnum.Ignited] = 1200;
         }
     }
 }

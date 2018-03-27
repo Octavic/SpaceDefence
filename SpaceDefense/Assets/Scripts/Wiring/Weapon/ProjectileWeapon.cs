@@ -30,13 +30,14 @@ namespace Assets.Scripts.Wiring.Weapon
         /// <summary>
         /// Called when the weapon is fired
         /// </summary>
-        protected override void OnFire()
+        protected override GameObject OnFire()
         {
             var newshell = Instantiate(this.ProjectileShellPrefab);
             newshell.transform.eulerAngles = this.transform.eulerAngles;
             newshell.transform.position = this.transform.position;
             GameController.CurrentInstance.AddCost(this.Cost);
             this.ApplyCooldown();
+            return newshell;
         }
 
         protected override void OnCooldownEnd()

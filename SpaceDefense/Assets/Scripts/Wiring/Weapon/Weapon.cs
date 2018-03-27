@@ -78,7 +78,7 @@ namespace Assets.Scripts.Wiring.Weapon
         /// <summary>
         /// Called when the weapon fires
         /// </summary>
-        protected abstract void OnFire();
+        protected abstract GameObject OnFire();
 
         /// <summary>
         /// Called when the cooldown of the weapon starts
