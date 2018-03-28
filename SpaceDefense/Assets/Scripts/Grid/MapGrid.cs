@@ -115,6 +115,22 @@ namespace Assets.Scripts.Grid
             }
         }
 
+
+        public GridEntity GetEntityAtPositijon(Vector2 mousePos)
+        {
+            return this.GetEntityAtPositijon(this.GetMouseHoveringCoordinate(mousePos));
+        }
+        public GridEntity GetEntityAtPositijon(GridCoordinate coordinate)
+        {
+            GridEntity result = null;
+            if (this._map.TryGetValue(coordinate, out result))
+            {
+                return result;
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// See if the new entity can be added at the target coordinate (Using top left of entity as index)
         /// </summary>

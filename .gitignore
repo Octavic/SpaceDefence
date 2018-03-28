@@ -5,6 +5,7 @@
 /[Bb]uilds/
 /Assets/AssetStoreTools*
 SpaceDefense/Library
+SpaceDefense/ProjectSettings
 *.meta
 SpaceDefense/.vs
 SpaceDefense/Temp
