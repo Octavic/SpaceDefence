@@ -106,6 +106,9 @@ namespace Assets.Scripts
                 this._curIncome = 0;
                 this._curCost = 0;
                 this.UpdateScore();
+                this._incomeData = new List<float>();
+                this._costData = new List<float>();
+                this._scoreData = new List<float>();
 
                 // Reset timer
                 this.TimeSinceFightStart = 0;
