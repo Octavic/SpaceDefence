@@ -216,12 +216,12 @@ namespace Assets.Scripts
                     GameController.CurrentInstance.OnEnemyReachEnd(this);
                     return;
                 }
-                this._rigidbody.MovePosition(curGoal);
+                this.transform.position = curGoal;
             }
             else
             {
                 //  Not yet reached, proceed
-                this._rigidbody.MovePosition(curPos + diff.normalized * movementThisFrame);
+                this.transform.position = curPos + diff.normalized * movementThisFrame;
             }
 
             // Apply poison
