@@ -30,17 +30,6 @@ namespace Assets.Scripts
         public static PlayerController CurrentInstancce { get; private set; }
 
         /// <summary>
-        /// If the player can purchase things right now
-        /// </summary>
-        public static bool CanPurchase
-        {
-            get
-            {
-                return PlayerController.CurrentInstancce.HoldingEntity == null;
-            }
-        }
-
-        /// <summary>
         /// The grid entity that's being held right now
         /// </summary>
         private GridEntity HoldingEntity
@@ -199,6 +188,13 @@ namespace Assets.Scripts
         /// <param name="purchased">The item purchased</param>
         public void OnCompletingPurchase(GridEntity purchased)
         {
+            if (this.HoldingEntity != null)
+            {
+                if (!this.IsHeldOnGrid)
+                {
+                    Destroy(this.HoldingEntity.gameObject);
+                }
+            }
             this.HoldingEntity = purchased;
             this.IsHeldOnGrid = false;
         }
@@ -241,8 +237,14 @@ namespace Assets.Scripts
         /// </summary>
         protected void Update()
         {
-            this.HandlePlaceEntity();
-            this.HandleSocketInteraction();
+            if (this.HoldingEntity != null)
+            {
+                this.HandlePlaceEntity();
+            }
+            else
+            {
+                this.HandleSocketInteraction();
+            }
         }
 
         /// <summary>

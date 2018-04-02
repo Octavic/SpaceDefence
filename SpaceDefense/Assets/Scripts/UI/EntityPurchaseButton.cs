@@ -33,10 +33,6 @@ namespace Assets.Scripts.UI
         /// </summary>
         public void OnPurchase()
         {
-            if (!PlayerController.CanPurchase)
-            {
-                return;
-            }
             var newEntity = Instantiate(this.TargetEntityPrefab);
             PlayerController.CurrentInstancce.OnCompletingPurchase(newEntity);
         }
