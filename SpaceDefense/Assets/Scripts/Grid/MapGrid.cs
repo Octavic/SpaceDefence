@@ -98,7 +98,7 @@ namespace Assets.Scripts.Grid
         {
             this.ResetBoard();
             this._redoStack.Push(this._undoStack.Pop());
-            this.TryLoadFromState(this._undoStack.Peek());
+            this._tryLoadFromState(this._undoStack.Peek());
         }
 
         /// <summary>
@@ -111,16 +111,17 @@ namespace Assets.Scripts.Grid
                 var item = this._redoStack.Pop();
                 this._undoStack.Push(item);
                 this.ResetBoard();
-                this.TryLoadFromState(item);
+                this._tryLoadFromState(item);
             }
         }
 
 
-        public GridEntity GetEntityAtPositijon(Vector2 mousePos)
+        public GridEntity GetEntityAtPosition(Vector2 mousePos)
         {
-            return this.GetEntityAtPositijon(this.GetMouseHoveringCoordinate(mousePos));
+            var coordinate = this.GetMouseHoveringCoordinate(mousePos);
+            return this.GetEntityAtPosition(coordinate);
         }
-        public GridEntity GetEntityAtPositijon(GridCoordinate coordinate)
+        public GridEntity GetEntityAtPosition(GridCoordinate coordinate)
         {
             GridEntity result = null;
             if (this._map.TryGetValue(coordinate, out result))
@@ -132,6 +133,30 @@ namespace Assets.Scripts.Grid
         }
 
         /// <summary>
+        /// Rotates the target entity
+        /// </summary>
+        /// <param name="targetEntity">Entity  to be rotated</param>
+        /// <param name="isClockWise">If the rotation is clockwise or not</param>
+        public void RotateEntity(GridEntity targetEntity, bool isClockWise)
+        {
+            GridCoordinate index;
+            if (!this._entities.TryGetValue(targetEntity, out index))
+            {
+                return;
+            }
+
+            var neededCoordinates = this._getNeededCoordinates(index, targetEntity.Size.Rotate(isClockWise));
+            GridEntityContainer container;
+            if (!this._canAddEntity(targetEntity, neededCoordinates, out container))
+            {
+                return;
+            }
+
+            targetEntity.Rotate(isClockWise);
+            this.TryAddEntity(targetEntity, index);
+        }
+
+        /// <summary>
         /// See if the new entity can be added at the target coordinate (Using top left of entity as index)
         /// </summary>
         /// <param name="newEntity">new entity to be added</param>
@@ -139,7 +164,7 @@ namespace Assets.Scripts.Grid
         /// <returns>True if the entity can be added</returns>
         public bool CanAddEntity(GridEntity newEntity, GridCoordinate coordiante)
         {
-            var neededCoordinates = _getNeededCoordinates(newEntity, coordiante);
+            var neededCoordinates = _getNeededCoordinates(coordiante, newEntity.Size);
             GridEntityContainer c;
             return _canAddEntity(newEntity, neededCoordinates, out c);
         }
@@ -157,6 +182,28 @@ namespace Assets.Scripts.Grid
         }
 
         /// <summary>
+        /// Removes the target entity from the grid. Does nothing if the item is not inside the grid
+        /// </summary>
+        /// <param name="targetEntity">Target entity</param>
+        public void RemoveEntity(GridEntity targetEntity)
+        {
+            GridCoordinate indexCoor;
+            if (!this._entities.TryGetValue(targetEntity, out indexCoor))
+            {
+                return;
+            }
+
+            this._entities.Remove(targetEntity);
+            var occupiedCoors = this._getNeededCoordinates(indexCoor, targetEntity.Size);
+            foreach (var occupied in occupiedCoors)
+            {
+                this._map.Remove(occupied);
+            }
+
+            this.OnStateChange();
+        }
+
+        /// <summary>
         /// Try to add the given entity onto the map
         /// </summary>
         /// <param name="newEntity">The new entity to be added</param>
@@ -165,7 +212,7 @@ namespace Assets.Scripts.Grid
         /// <returns>True if operation succeed</returns>
         public bool TryAddEntity(GridEntity newEntity, GridCoordinate coordinate, bool addToUndoStack = true)
         {
-            var neededCoordinates = _getNeededCoordinates(newEntity, coordinate);
+            var neededCoordinates = _getNeededCoordinates(coordinate, newEntity.Size);
             GridEntityContainer container;
             if (!this._canAddEntity(newEntity, neededCoordinates, out container))
             {
@@ -238,7 +285,7 @@ namespace Assets.Scripts.Grid
             {
                 entityState = new GridEntityState();
             }
-            else 
+            else
             {
                 var containerState = new GridEntityContainerState();
 
@@ -274,7 +321,6 @@ namespace Assets.Scripts.Grid
 
                         if (!this._map.TryGetValue(pos, out entityAtPos))
                         {
-                            Debug.LogError("Nothing at position: " + pos.ToString());
                             return null;
                         }
 
@@ -288,7 +334,7 @@ namespace Assets.Scripts.Grid
                         connectionState.ConnectedX = pos.X;
                         connectionState.ConnectedY = pos.Y;
 
-                        
+
                         connectionState.InputSocketIndex = receiver.IndexOf(input);
 
                         outputState.Connections.Add(connectionState);
@@ -343,7 +389,7 @@ namespace Assets.Scripts.Grid
 
             for (int i = 0; i < entityState.Rotation; i++)
             {
-                newEntity.RotateClockwise();
+                newEntity.Rotate(true);
             }
 
             var containerState = entityState as GridEntityContainerState;
@@ -368,12 +414,17 @@ namespace Assets.Scripts.Grid
             return newEntity;
         }
 
+        public bool TryLoadFromState(MapGridState state)
+        {
+            return this._tryLoadFromState(state, true);
+        }
+
         /// <summary>
         /// Try to load the grid from the given state
         /// </summary>
         /// <param name="state">Target state</param>
         /// <returns>True if operation succeed</returns>
-        public bool TryLoadFromState(MapGridState state)
+        private bool _tryLoadFromState(MapGridState state, bool shouldSave = false)
         {
             if (state == null)
             {
@@ -396,6 +447,7 @@ namespace Assets.Scripts.Grid
                 var entityObject = this.InstantiateEntityFromState(entityState);
                 if (entityObject == null)
                 {
+                    Debug.Log("Failed to load entity at " + entityState.PosX + ',' + entityState.PosY);
                     return false;
                 }
                 else 
@@ -451,6 +503,11 @@ namespace Assets.Scripts.Grid
                         }
                     }
                 }
+            }
+
+            if (shouldSave)
+            {
+                this.OnStateChange();
             }
             return true;
         }
@@ -515,19 +572,19 @@ namespace Assets.Scripts.Grid
         /// <summary>
         /// Constructs a list of needed coordinates
         /// </summary>
-        /// <param name="newEntity">Target entity</param>
+        /// <param name="targetEntity">Target entity</param>
         /// <param name="index">Index coordinate</param>
         /// <returns>A list of coordinates that the target entity will take up</returns>
-        private List<GridCoordinate> _getNeededCoordinates(GridEntity newEntity, GridCoordinate index)
+        private List<GridCoordinate> _getNeededCoordinates(GridCoordinate index, GridEntitySize entitySize)
         {
             List<GridCoordinate> result = new List<GridCoordinate>();
 
-            int signX = newEntity.ExtrudeX > 0 ? 1 : -1;
-            int signY = newEntity.ExtrudeY > 0 ? 1 : -1;
+            int signX = entitySize.ExtrudeX > 0 ? 1 : -1;
+            int signY = entitySize.ExtrudeY > 0 ? 1 : -1;
 
-            for (int x = 0; x <= Math.Abs(newEntity.ExtrudeX); x++)
+            for (int x = 0; x <= Math.Abs(entitySize.ExtrudeX); x++)
             {
-                for (int y = 0; y <= Math.Abs(newEntity.ExtrudeY); y++)
+                for (int y = 0; y <= Math.Abs(entitySize.ExtrudeY); y++)
                 {
                     result.Add(index + new GridCoordinate(x * signX, y * signY));
                 }

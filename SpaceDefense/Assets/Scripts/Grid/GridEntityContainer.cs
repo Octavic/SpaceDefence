@@ -44,7 +44,7 @@ namespace Assets.Scripts.Grid
         public bool CanAddEntity(GridEntity newEntity)
         {
             // New entity must be 1 x 1
-            if (newEntity.ExtrudeX > 0 || newEntity.ExtrudeY > 0)
+            if (newEntity.Size.ExtrudeX > 0 || newEntity.Size.ExtrudeY > 0)
             {
                 return false;
             }

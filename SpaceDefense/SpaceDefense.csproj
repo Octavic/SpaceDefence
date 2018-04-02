@@ -93,6 +93,7 @@
     <Compile Include="Assets\Scripts\GameObjectExtensions.cs" />
     <Compile Include="Assets\Scripts\GameOverScreen.cs" />
     <Compile Include="Assets\Scripts\GamePhases.cs" />
+    <Compile Include="Assets\Scripts\Grid\GridEntitySize.cs" />
     <Compile Include="Assets\Scripts\Grid\Grid2DPlatformMover.cs" />
     <Compile Include="Assets\Scripts\Grid\GridCoordinate.cs" />
     <Compile Include="Assets\Scripts\Grid\GridEntity.cs" />

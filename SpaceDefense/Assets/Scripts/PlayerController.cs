@@ -11,15 +11,19 @@ namespace Assets.Scripts
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using UnityEngine.UI;
     using Wiring;
     using Wiring.Emitters;
     using Grid;
+    using Wiring;
 
     /// <summary>
     /// The player controller class
     /// </summary>
     public class PlayerController : MonoBehaviour
     {
+        public List<Button> EntityModifyButtons;
+
         /// <summary>
         /// Gets the current instance of the <see cref="PlayerController"/> class
         /// </summary>
@@ -32,14 +36,31 @@ namespace Assets.Scripts
         {
             get
             {
-                return PlayerController.CurrentInstancce._holdingGridEntity == null;
+                return PlayerController.CurrentInstancce.HoldingEntity == null;
             }
         }
 
         /// <summary>
         /// The grid entity that's being held right now
         /// </summary>
-        private GridEntity _holdingGridEntity;
+        private GridEntity HoldingEntity
+        {
+            get
+            {
+                return this._holdingEntity;
+            }
+            set
+            {
+                foreach (var button in this.EntityModifyButtons)
+                {
+                    button.interactable = (value != null);
+                }
+
+                this._holdingEntity = value;
+            }
+        }
+        private GridEntity _holdingEntity;
+        private bool IsHeldOnGrid { get; set; }
 
         /// <summary>
         /// The socket clicked on when the mouse was down
@@ -64,8 +85,7 @@ namespace Assets.Scripts
                 }
             }
 
-            
-            #region Socket interactions
+
             var hoveringSocket = GetFirstHitWithComponent<ISocket>(hits);
 
             if (hoveringSocket != null)
@@ -100,19 +120,6 @@ namespace Assets.Scripts
                     this._mouseDownSocket = null;
                 }
             }
-            #endregion
-
-            #region Manual control interaction
-
-            if (mouseDown)
-            {
-                var hoverControl = hoveringSocket != null ? null : GetFirstHitWithComponent<ManualControl>(hits);
-                if (hoverControl != null)
-                {
-                    hoverControl.OnClick();
-                }
-            }
-            #endregion
         }
 
         /// <summary>
@@ -140,11 +147,22 @@ namespace Assets.Scripts
                     }
                 }
 
+                // If the mouse indeed clicked a grid
                 if (grid != null)
                 {
-                    if (grid.TryAddEntity(this._holdingGridEntity, mousePos))
+                    // If the player is actually holding onto something
+                    if (this.HoldingEntity != null)
                     {
-                        this._holdingGridEntity = null;
+                        if (grid.TryAddEntity(this.HoldingEntity, mousePos))
+                        {
+                            this.HoldingEntity.OnMove();
+                            this.HoldingEntity = null;
+                        }
+                    }
+                    else
+                    {
+                        this.HoldingEntity = grid.GetEntityAtPosition(mousePos);
+                        this.IsHeldOnGrid = true;
                     }
                 }
             }
@@ -181,23 +199,39 @@ namespace Assets.Scripts
         /// <param name="purchased">The item purchased</param>
         public void OnCompletingPurchase(GridEntity purchased)
         {
-            this._holdingGridEntity = purchased;
+            this.HoldingEntity = purchased;
+            this.IsHeldOnGrid = false;
+        }
+
+        /// <summary>
+        /// Deletes the item that's being held 
+        /// </summary>
+        public void RemoveHolding()
+        {
+            if (this.HoldingEntity == null)
+            {
+                return;
+            }
+
+            MapGrid.CurrentInstance.RemoveEntity(this.HoldingEntity);
+            Destroy(this.HoldingEntity.gameObject);
+            this.HoldingEntity = null;
         }
 
         /// <summary>
         /// Rotates the holding item
         /// </summary>
-        public void RotateHolding(bool clockwise)
+        public void RotateHolding(bool isClockwise)
         {
-            if (this._holdingGridEntity != null)
+            if (this.HoldingEntity != null)
             {
-                if (clockwise)
+                if (this.IsHeldOnGrid)
                 {
-                    this._holdingGridEntity.RotateClockwise();
+                    MapGrid.CurrentInstance.RotateEntity(this.HoldingEntity, isClockwise);
                 }
                 else
                 {
-                    this._holdingGridEntity.RotateCounterClockwise();
+                    this.HoldingEntity.Rotate(isClockwise);
                 }
             }
         }
@@ -207,14 +241,8 @@ namespace Assets.Scripts
         /// </summary>
         protected void Update()
         {
-            if (this._holdingGridEntity != null)
-            {
-                this.HandlePlaceEntity();
-            }
-            else
-            {
-                this.HandleSocketInteraction();
-            }
+            this.HandlePlaceEntity();
+            this.HandleSocketInteraction();
         }
 
         /// <summary>

@@ -51,37 +51,24 @@ namespace Assets.Scripts.Grid
         /// <summary>
         /// The width of the entity
         /// </summary>
-        public int ExtrudeX;
-
-        /// <summary>
-        /// The width of the entity
-        /// </summary>
-        public int ExtrudeY;
-
-        /// <summary>
-        /// Rotates the object counter clockwise
-        /// </summary>
-        public virtual void RotateCounterClockwise()
-        {
-            var newExtrudeX = this.ExtrudeY * -1;
-            var newExtrudeY = this.ExtrudeX;
-            this.ExtrudeX = newExtrudeX;
-            this.ExtrudeY = newExtrudeY;
-            this.transform.localEulerAngles += new Vector3(0, 0, 90);
-            this.Rotation--;
-        }
+        public GridEntitySize Size;
 
         /// <summary>
         /// Rotates the object
         /// </summary>
-        public virtual void RotateClockwise()
+        public virtual void Rotate(bool isClockWise)
         {
-            var newExtrudeX = this.ExtrudeY;
-            var newExtrudeY = this.ExtrudeX * -1;
-            this.ExtrudeX = newExtrudeX;
-            this.ExtrudeY = newExtrudeY;
-            this.transform.localEulerAngles += new Vector3(0, 0, -90);
-            this.Rotation++;
+            this.Size = this.Size.Rotate(isClockWise);
+            this.transform.localEulerAngles += new Vector3(0, 0, isClockWise ? -90 : 90);
+            if (isClockWise)
+            {
+                this.Rotation++;
+            }
+            else
+            {
+                this.Rotation--;
+            }
+            this.OnMove();
         }
 
         /// <summary>

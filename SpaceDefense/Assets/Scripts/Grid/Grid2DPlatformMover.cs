@@ -89,7 +89,7 @@ namespace Assets.Scripts.Grid
         protected override void Start()
         {
             this._minX = GeneralSettings.GridSize;
-            this._maxX = GeneralSettings.GridSize * (this.ExtrudeX - 1);
+            this._maxX = GeneralSettings.GridSize * (this.Size.ExtrudeX - 1);
 
             base.Start();
         }
