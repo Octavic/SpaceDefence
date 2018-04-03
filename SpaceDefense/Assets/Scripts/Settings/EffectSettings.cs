@@ -40,5 +40,8 @@ namespace Assets.Scripts.Settings
         /// The amount that effect resistance is gained per second
         /// </summary>
         public const float EffectBuildUpDecayPerSecond = 40.0f;
+
+        public const float ZappedShieldMultiplier = 3.0f;
+        public const float VulnerableHealthDamageMultiplier = 2.0f;
     }
 }

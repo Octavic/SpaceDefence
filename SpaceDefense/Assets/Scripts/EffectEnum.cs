@@ -43,6 +43,10 @@ namespace Assets.Scripts
         /// <summary>
         /// Enemy cannot be hit
         /// </summary>
-        Cloaked
+        Cloaked,
+        /// <summary>
+        /// Enemy shield is 3x vulnerable and regenerates slower
+        /// </summary>
+        Zapped
     }
 }

@@ -16,7 +16,7 @@ namespace Assets.Scripts.Wiring.Weapon
     /// <summary>
     /// Describes the actual beam object fired from a beam weapon
     /// </summary>
-    public class BeamWeaponObject : MonoBehaviour
+    public class BeamWeaponObject : MonoBehaviour, IConstantHitbox
     {
         /// <summary>
         /// The effect carried and their impacts

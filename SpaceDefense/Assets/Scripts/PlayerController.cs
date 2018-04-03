@@ -15,7 +15,6 @@ namespace Assets.Scripts
     using Wiring;
     using Wiring.Emitters;
     using Grid;
-    using Wiring;
 
     /// <summary>
     /// The player controller class

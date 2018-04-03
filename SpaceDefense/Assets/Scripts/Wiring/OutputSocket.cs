@@ -21,12 +21,12 @@ namespace Assets.Scripts.Wiring
         /// <summary>
         /// Prefab for the  socket beam 
         /// </summary>
-        public AttachedBeam BeamPrefab;
+        public SocketBeam BeamPrefab;
 
         /// <summary>
         /// A  collection of connected input sockets => their respective beams
         /// </summary>
-        public Dictionary<InputSocket, AttachedBeam> ConnectedInputs = new Dictionary<InputSocket, AttachedBeam>();
+        public Dictionary<InputSocket, SocketBeam> ConnectedInputs = new Dictionary<InputSocket, SocketBeam>();
 
         /// <summary>
         /// The current state for the socket
@@ -64,7 +64,7 @@ namespace Assets.Scripts.Wiring
                 return false;
             }
 
-            var newBeam = Instantiate(this.BeamPrefab.gameObject, this.transform).GetComponent<AttachedBeam>();
+            var newBeam = Instantiate(this.BeamPrefab.gameObject, this.transform).GetComponent<SocketBeam>();
             newBeam.Attach(this.transform.position, newInput.transform.position);
             this.ConnectedInputs[newInput] = newBeam;
             newInput.Trigger(this, this._currentState);
@@ -83,7 +83,7 @@ namespace Assets.Scripts.Wiring
                 return;
             }
 
-            AttachedBeam beam;
+            SocketBeam beam;
             if (!this.ConnectedInputs.TryGetValue(input, out beam))
             {
                 return;
@@ -119,17 +119,17 @@ namespace Assets.Scripts.Wiring
         /// <param name="socket">Targe socket. Null if update all</param>
         public void UpdateBeam(InputSocket socket = null)
         {
-            List<KeyValuePair<InputSocket, AttachedBeam>> allBeams = null;
+            List<KeyValuePair<InputSocket, SocketBeam>> allBeams = null;
             if (socket == null)
             {
                 allBeams = this.ConnectedInputs.ToList();
             }
             else
             {
-                AttachedBeam beam = null;
+                SocketBeam beam = null;
                 if (this.ConnectedInputs.TryGetValue(socket, out beam))
                 {
-                    allBeams = new List<KeyValuePair<InputSocket, AttachedBeam>> () { new KeyValuePair<InputSocket, AttachedBeam>(socket, beam )};
+                    allBeams = new List<KeyValuePair<InputSocket, SocketBeam>> () { new KeyValuePair<InputSocket, SocketBeam>(socket, beam )};
                 }
             }
 

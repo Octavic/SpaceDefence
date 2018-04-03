@@ -1,29 +1,29 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="WeaponSettings.cs">
+//  <copyright file="TeslaCoilWeapon.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Settings
+namespace Assets.Scripts.Wiring.Weapon
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using UnityEngine;
 
     /// <summary>
-    /// A collection of weapon related settings
+    /// The bolt between two tesla coils
     /// </summary>
-    public static class WeaponSettings
+    public class TeslaCoilBolt : AttachableBeam, IConstantHitbox
     {
         /// <summary>
-        /// How many live grenades the detonator can have
+        /// Called when the bolt hits an enemy
         /// </summary>
-        public const int DetonatorMaxProjectilCount = 5;
-
-        /// <summary>
-        /// How far away can tesla coils connect
-        /// </summary>
-        public const float TeslaCoilRange = 0.65f;
+        /// <param name="hitEnemy">The enmy hit</param>
+        public void OnHitEnemy(Enemy hitEnemy)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

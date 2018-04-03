@@ -103,9 +103,14 @@ namespace Assets.Scripts
         /// <param name="carriedEffect">The effect carried</param>
         public void TakeDamage(float damage, IDictionary<EffectEnum, float> carriedEffects = null)
         {
-            if (this.Effects.ContainsKey(EffectEnum.Vulnerable))
+            bool isZapped = this.Effects.ContainsKey(EffectEnum.Zapped);
+            bool isVulnerable = this.Effects.ContainsKey(EffectEnum.Vulnerable);
+
+            float healthDamage = 0;
+
+            if (isZapped)
             {
-                damage *= 2;
+                damage *= EffectSettings.ZappedShieldMultiplier;
             }
 
             if (this.CurrentShield > 0)
@@ -113,16 +118,32 @@ namespace Assets.Scripts
                 if (this.CurrentShield >= damage)
                 {
                     this.CurrentShield -= damage;
+                    healthDamage = 0;
                 }
                 else
                 {
-                    this.CurrentHealth -= (damage - this.CurrentShield);
+                    healthDamage -= this.CurrentShield;
                     this.CurrentShield = 0;
                 }
             }
             else
             {
-                this.CurrentHealth -= damage;
+                healthDamage = damage;
+            }
+
+            if (healthDamage != 0)
+            {
+                if (isZapped)
+                {
+                    healthDamage /= EffectSettings.ZappedShieldMultiplier;
+                }
+
+                if (isVulnerable)
+                {
+                    healthDamage *= EffectSettings.VulnerableHealthDamageMultiplier;
+                }
+
+                this.CurrentHealth -= healthDamage;
             }
 
             this._shieldRegenDelay = EnemySettings.ShieldRegenDelay;
@@ -153,7 +174,7 @@ namespace Assets.Scripts
                     {
                         this.ApplyEffect(effect);
                         this.StatusBar.AddEffect(effect);
-                        this.EffectBuildUp[effect] = - EffectSettings.EffectProcLimit;
+                        this.EffectBuildUp[effect] = -EffectSettings.EffectProcLimit;
                     }
                 }
             }
@@ -287,7 +308,7 @@ namespace Assets.Scripts
         /// <param name="collision">The collision</param>
         private void OnTriggerStay2D(Collider2D collision)
         {
-            var beamObject = collision.gameObject.GetComponent<BeamWeaponObject>();
+            var beamObject = collision.gameObject.GetComponent<IConstantHitbox>();
             if (beamObject != null)
             {
                 beamObject.OnHitEnemy(this);

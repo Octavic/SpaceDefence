@@ -83,6 +83,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\AttachableBeam.cs" />
     <Compile Include="Assets\Scripts\EffectEnum.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\EnemyHealthBar.cs" />
@@ -129,7 +130,7 @@
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuTabTypes.cs" />
     <Compile Include="Assets\Scripts\Utils\LimitedStack.cs" />
     <Compile Include="Assets\Scripts\Utils\Utils.cs" />
-    <Compile Include="Assets\Scripts\Wiring\AttachedBeam.cs" />
+    <Compile Include="Assets\Scripts\Wiring\SocketBeam.cs" />
     <Compile Include="Assets\Scripts\Wiring\Emitters\Detector.cs" />
     <Compile Include="Assets\Scripts\Wiring\Emitters\DetectorArea.cs" />
     <Compile Include="Assets\Scripts\Wiring\Emitters\Emitter.cs" />
@@ -150,12 +151,15 @@
     <Compile Include="Assets\Scripts\Wiring\Transformers\Transformer.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\BeamWeapon.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\BeamWeaponObject.cs" />
+    <Compile Include="Assets\Scripts\Wiring\Weapon\ConstantHitbox.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\DetonateProjectile.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\DetonatorWeapon.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\Projectile.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\ProjectileShell.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\ProjectileWeapon.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\ProjectileWeaponFireMode.cs" />
+    <Compile Include="Assets\Scripts\Wiring\Weapon\TeslaCoilBolt.cs" />
+    <Compile Include="Assets\Scripts\Wiring\Weapon\TeslaCoilWeapon.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\Weapon.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
