@@ -41,7 +41,19 @@ namespace Assets.Scripts.Settings
         /// </summary>
         public const float EffectBuildUpDecayPerSecond = 40.0f;
 
-        public const float ZappedShieldMultiplier = 3.0f;
+        /// <summary>
+        /// How much more damage the shield takes when zapped
+        /// </summary>
+        public const float ZappedShieldDamageMultiplier = 3.0f;
+
+        /// <summary>
+        /// The multiplier applied to shield regen when the enmy is zapped
+        /// </summary>
+        public const float ZappedShieldRegenMultiplier = 0.5f;
+
+        /// <summary>
+        /// How much more health the enemy takes when vulnerable
+        /// </summary>
         public const float VulnerableHealthDamageMultiplier = 2.0f;
     }
 }

@@ -110,7 +110,7 @@ namespace Assets.Scripts
 
             if (isZapped)
             {
-                damage *= EffectSettings.ZappedShieldMultiplier;
+                damage *= EffectSettings.ZappedShieldDamageMultiplier;
             }
 
             if (this.CurrentShield > 0)
@@ -135,7 +135,7 @@ namespace Assets.Scripts
             {
                 if (isZapped)
                 {
-                    healthDamage /= EffectSettings.ZappedShieldMultiplier;
+                    healthDamage /= EffectSettings.ZappedShieldDamageMultiplier;
                 }
 
                 if (isVulnerable)
@@ -298,7 +298,13 @@ namespace Assets.Scripts
             }
             else if (this.CurrentShield < this.TotalShield)
             {
-                this.CurrentShield = Mathf.Min(this.TotalShield, this.CurrentShield + Time.deltaTime * EnemySettings.ShieldRegenSpeed);
+                var regenAmount = Time.deltaTime * EnemySettings.ShieldRegenSpeed;
+                if (this.Effects.ContainsKey(EffectEnum.Zapped))
+                {
+                    regenAmount *= EffectSettings.ZappedShieldRegenMultiplier;
+                }
+
+                this.CurrentShield = Mathf.Min(this.TotalShield, this.CurrentShield + regenAmount);
             }
         }
 
