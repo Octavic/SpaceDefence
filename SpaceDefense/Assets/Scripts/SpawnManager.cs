@@ -21,8 +21,15 @@ namespace Assets.Scripts
         /// <summary>
         /// A collection of enemy type => time in between spawns
         /// </summary>
-        public List<EnemyType> SpawnEnemies;
-        public List<float> SpawnInterval;
+        public List<EnemyType> RegularSpawnEnemies;
+        public List<float> RegularSpawnInterval;
+
+        /// <summary>
+        /// A list of special designed enemies and when they'll spawn
+        /// </summary>
+        public List<EnemyType> SpecialSpawnEnemies;
+        public List<float> SpecialSpawnTime;
+
 
         /// <summary>
         /// How long until the enemies spawns
@@ -97,13 +104,13 @@ namespace Assets.Scripts
             for (int i = 0; i < this.Paths.Count; i++)
             {
                 var path = this.Paths[i];
-                if (path.SpawnEnemies.Count != path.SpawnInterval.Count)
+                if (path.RegularSpawnEnemies.Count != path.RegularSpawnInterval.Count)
                 {
                     Debug.LogError("Invalid path in spawn manager");
                 }
                 else
                 {
-                    path.TimeUntilSpawn = new List<float>(path.SpawnInterval);
+                    path.TimeUntilSpawn = new List<float>(path.RegularSpawnInterval);
                 }
             }
         }
@@ -129,9 +136,9 @@ namespace Assets.Scripts
                         timeUntilSpawn[i] -= timePassed;
                         if (timeUntilSpawn[i] < 0)
                         {
-                            timeUntilSpawn[i] = path.SpawnInterval[i];
+                            timeUntilSpawn[i] = path.RegularSpawnInterval[i];
 
-                            var newEnemyType = path.SpawnEnemies[i];
+                            var newEnemyType = path.RegularSpawnEnemies[i];
                             var newEnemyPrefab = prefabManager.GetEnemyPrefab(newEnemyType);
                             if (newEnemyPrefab == null)
                             {

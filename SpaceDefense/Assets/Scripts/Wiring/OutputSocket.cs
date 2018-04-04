@@ -135,7 +135,10 @@ namespace Assets.Scripts.Wiring
 
             foreach (var pairs in allBeams)
             {
-                pairs.Value.Attach(pairs.Key.transform.position, this.transform.position);
+                if (pairs.Value != null)
+                {
+                    pairs.Value.Attach(pairs.Key.transform.position, this.transform.position);
+                }
             }
         }
     }

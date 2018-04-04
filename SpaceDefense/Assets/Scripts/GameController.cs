@@ -69,7 +69,6 @@ namespace Assets.Scripts
                 this._currentCoreHealth = value;
             }
         }
-
         private float _currentCoreHealth;
 
         /// <summary>

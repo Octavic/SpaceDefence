@@ -236,14 +236,8 @@ namespace Assets.Scripts
         /// </summary>
         protected void Update()
         {
-            if (this.HoldingEntity != null)
-            {
-                this.HandlePlaceEntity();
-            }
-            else
-            {
-                this.HandleSocketInteraction();
-            }
+            this.HandlePlaceEntity();
+            this.HandleSocketInteraction();
         }
 
         /// <summary>
