@@ -16,6 +16,20 @@ namespace Assets.Scripts
     using Grid;
     using Grid.States;
 
+    [Serializable]
+    class LevelData
+    {
+        public int LevelId;
+        public MapGridState SavedState;
+        public float HighScore;
+    }
+
+    [Serializable]
+    class SaveFile
+    {
+        public List<LevelData> Levels = new List<LevelData>();
+    }
+
     /// <summary>
     /// Describes a save manager
     /// </summary>
@@ -44,37 +58,105 @@ namespace Assets.Scripts
         private string _savePath;
 
         /// <summary>
+        /// The current save file
+        /// </summary>
+        private SaveFile _currentSaveFile;
+
+        /// <summary>
         /// Save the state into a file
         /// </summary>
+        /// <param name="levelId">Id of the level</param>
         /// <param name="state">Target state to save</param>
-        public void SaveData(MapGridState state)
+        public void SaveLevelData(int levelId, MapGridState state)
         {
-            var formatter = new BinaryFormatter();
-            var targetFile = File.Open(this._savePath, FileMode.Create);
+            var targetLevel = this._currentSaveFile.Levels.Find(level => level.LevelId == levelId);
+            if (targetLevel != null)
+            {
+                targetLevel.SavedState = state;
+            }
+            else
+            {
+                var newLevelData = new LevelData();
+                newLevelData.LevelId = levelId;
+                newLevelData.SavedState = state;
+                this._currentSaveFile.Levels.Add(newLevelData);
+            }
 
-            formatter.Serialize(targetFile, state);
-            targetFile.Close();
+            this.Save();
+        }
+
+        /// <summary>
+        /// Updates the high score for the given level
+        /// </summary>
+        /// <param name="levelId">Target level</param>
+        /// <param name="currentScore">The current score</param>
+        public void UpdateHighscore(int levelId, float currentScore)
+        {
+            var targetLevel = this._currentSaveFile.Levels.Find(level => level.LevelId == levelId);
+            if (targetLevel != null)
+            {
+                targetLevel.HighScore = Mathf.Max(targetLevel.HighScore, currentScore);
+            }
+            else
+            {
+                var newLevelData = new LevelData();
+                newLevelData.LevelId = levelId;
+                newLevelData.HighScore = currentScore;
+                this._currentSaveFile.Levels.Add(newLevelData);
+            }
+
+            this.Save();
         }
 
         /// <summary>
         /// Loads the saved state from data
         /// </summary>
+        /// <param name="levelId">Id of the level</param>
         /// <returns>The save state, null if inone</returns>
-        public MapGridState LoadState()
+        public MapGridState LoadLevelState(int levelId)
         {
+            var result = this._currentSaveFile.Levels.Find(level => level.LevelId == levelId);
+            if (result != null)
+            {
+                return result.SavedState;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private void Save()
+        {
+            var formatter = new BinaryFormatter();
+            var targetFile = File.Open(this._savePath, FileMode.Create);
+
+            formatter.Serialize(targetFile, this._currentSaveFile);
+            targetFile.Close();
+        }
+
+        private void Load()
+        {
+            FileStream targetFile = null;
             try
             {
                 var formatter = new BinaryFormatter();
-                var targetFile = File.Open(this._savePath, FileMode.Open);
+                targetFile = File.Open(this._savePath, FileMode.Open);
 
-                var result = (MapGridState)formatter.Deserialize(targetFile);
-                targetFile.Close();
-                return result;
+                var result = (SaveFile)formatter.Deserialize(targetFile);
+                this._currentSaveFile = result;
             }
             catch
             {
                 Debug.Log("No save data");
-                return null;
+                this._currentSaveFile = new SaveFile();
+            }
+            finally
+            {
+                if (targetFile != null)
+                {
+                    targetFile.Close();
+                }
             }
         }
 
@@ -84,6 +166,7 @@ namespace Assets.Scripts
         protected void Start()
         {
             this._savePath = Application.persistentDataPath + "/save.dat";
+            this.Load();
         }
     }
 }

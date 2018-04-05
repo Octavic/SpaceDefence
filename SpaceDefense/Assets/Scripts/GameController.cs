@@ -51,6 +51,8 @@ namespace Assets.Scripts
         public GameOverScreen GameOverScreenObject;
         #endregion
 
+        public int LevelId;
+
         public float TotalCoreHealth;
 
         public float CurrentCoreHealth
@@ -185,13 +187,13 @@ namespace Assets.Scripts
 
         public void Save()
         {
-            SaveManager.CurrentInstance.SaveData(Grid.SaveState());
+            SaveManager.CurrentInstance.SaveLevelData(this.LevelId, Grid.SaveState());
         }
 
         public void Load()
         {
             this.Grid.ResetBoard();
-            var savedState = SaveManager.CurrentInstance.LoadState();
+            var savedState = SaveManager.CurrentInstance.LoadLevelState(this.LevelId);
             if (savedState != null)
             {
                 this.Grid.TryLoadFromState(savedState);
