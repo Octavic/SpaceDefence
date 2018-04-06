@@ -78,6 +78,8 @@ namespace Assets.Scripts
             {
                 this._statusIconHash[icon.TargetEffect] = icon;
             }
+
+            DontDestroyOnLoad(this.gameObject);
         }
 
         /// <summary>

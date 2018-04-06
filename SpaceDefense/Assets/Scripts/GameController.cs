@@ -17,12 +17,28 @@ namespace Assets.Scripts
     using UI.Graph;
     using Settings;
     using UI.Shop;
+    using UnityEngine.SceneManagement;
 
     /// <summary>
     /// Controls the overall game flow
     /// </summary>
     public class GameController : MonoBehaviour
     {
+        /// <summary>
+        /// Level of the id. Must be unique across all levels 
+        /// </summary>
+        public int LevelId;
+
+        /// <summary>
+        /// The total core health
+        /// </summary>
+        public float TotalCoreHealth;
+
+        /// <summary>
+        /// How long to defend for
+        /// </summary>
+        public float TotalDefenseDuration;
+
         #region Unity object links
         /// <summary>
         /// Text for the score number and time
@@ -50,10 +66,6 @@ namespace Assets.Scripts
         /// </summary>
         public GameOverScreen GameOverScreenObject;
         #endregion
-
-        public int LevelId;
-
-        public float TotalCoreHealth;
 
         public float CurrentCoreHealth
         {
@@ -134,7 +146,7 @@ namespace Assets.Scripts
         /// <summary>
         /// How often data is collected
         /// </summary>
-        public float CollectDataInterval;
+        private float _collectDataInterval;
 
         /// <summary>
         /// How much time passed since last time data was collected
@@ -172,6 +184,11 @@ namespace Assets.Scripts
         }
         private static GameController _currentInstane;
 
+        public void ReturnToLevelSelect()
+        {
+            SceneManager.LoadScene(LevelSettings.LevelSelectSceneIndex);
+        }
+
         public void SetLookPhase()
         {
             this.CurrentPhasee = GamePhases.Look;
@@ -193,10 +210,10 @@ namespace Assets.Scripts
         public void Load()
         {
             this.Grid.ResetBoard();
-            var savedState = SaveManager.CurrentInstance.LoadLevelState(this.LevelId);
-            if (savedState != null)
+            var levelData = SaveManager.CurrentInstance.GetLevelData(this.LevelId);
+            if (levelData != null && levelData.SavedState != null)
             {
-                this.Grid.TryLoadFromState(savedState);
+                this.Grid.TryLoadFromState(levelData.SavedState);
             }
         }
 
@@ -242,6 +259,7 @@ namespace Assets.Scripts
             _currentInstane = this;
             this.CurrentCoreHealth = this.TotalCoreHealth;
             this._currentPhase = GamePhases.Look;
+            this._collectDataInterval = this.TotalDefenseDuration / GeneralSettings.EndGraphSections;
         }
 
         /// <summary>
@@ -252,25 +270,26 @@ namespace Assets.Scripts
             if (this.CurrentPhasee == GamePhases.Fight && !this._isGameOver)
             {
                 this.TimeSinceFightStart += Time.deltaTime;
-                if (this.TimeSinceFightStart > GeneralSettings.TotalDefendDuration)
+                if (this.TimeSinceFightStart > this.TotalDefenseDuration)
                 {
                     this.OnGameOver(true);
                 }
 
                 this.UpdateScore();
-            }
 
-            this._timeSinceCollect += Time.deltaTime;
+                this._timeSinceCollect += Time.deltaTime;
 
-            // Collect data every x seconds
-            if (this._timeSinceCollect >= this.CollectDataInterval)
-            {
-                this._timeSinceCollect -= this.CollectDataInterval;
+                // Collect data every x seconds
+                if (this._timeSinceCollect >= this._collectDataInterval)
+                {
+                    this._timeSinceCollect -= this._collectDataInterval;
 
-                this._incomeData.Add(this._curIncome);
-                this._costData.Add(this._curCost);
-                this._coreHealthData.Add(this.CurrentCoreHealth);
-            }
+                    this._incomeData.Add(this._curIncome);
+                    this._costData.Add(this._curCost);
+                    this._coreHealthData.Add(this.CurrentCoreHealth);
+                    this._scoreData.Add(this._curIncome - this._curCost);
+                }
+            }   
         }
 
         /// <summary>
@@ -279,6 +298,8 @@ namespace Assets.Scripts
         private void OnGameOver(bool didWin)
         {
             this._isGameOver = true;
+            var finalScore = this._scoreData.Last();
+            SaveManager.CurrentInstance.OnLevelEnd(this.LevelId, finalScore, didWin);
             this.GameOverScreenObject.gameObject.SetActive(true);
             var enemyPassPenalty = (this.TotalCoreHealth - this._coreHealthData.Last()) * GeneralSettings.EnemySurvivalPenaltyMultiplier;
             this.GameOverScreenObject.OnGameOver(didWin, enemyPassPenalty, this._incomeData, this._costData, this._coreHealthData);
