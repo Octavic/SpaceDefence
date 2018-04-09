@@ -25,11 +25,6 @@ namespace Assets.Scripts.Wiring.Weapon
         public List<float> Impacts;
 
         /// <summary>
-        /// The composed effects dictionary
-        /// </summary>
-        private Dictionary<EffectEnum, float> _effects;
-
-        /// <summary>
         /// The damage per second
         /// </summary>
         public float DamagePerSecond;
@@ -56,15 +51,13 @@ namespace Assets.Scripts.Wiring.Weapon
         /// <param name="hitEnemy">The enemy</param>
         public void OnHitEnemy(Enemy hitEnemy)
         {
-            hitEnemy.TakeDamage(this.DamagePerSecond * Time.deltaTime, this._effects);
-        }
+            var effects = new Dictionary<EffectEnum, float>();
+            for (int i = 0; i < this.Effects.Count; i++)
+            {
+                effects[this.Effects[i]] = this.Impacts[i] * Time.deltaTime;
+            }
 
-        /// <summary>
-        /// Used for initialization
-        /// </summary>
-        protected void Start()
-        {
-            this._effects = Utils.ConvertListToDictionary(this.Effects, this.Impacts);
+            hitEnemy.TakeDamage(this.DamagePerSecond * Time.deltaTime, effects);
         }
     }
 }

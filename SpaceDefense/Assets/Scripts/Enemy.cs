@@ -168,7 +168,7 @@ namespace Assets.Scripts
                         oldValue = 0;
                     }
 
-                    this.EffectBuildUp[effect] = oldValue + damage * impact;
+                    this.EffectBuildUp[effect] = oldValue + impact;
 
                     if (this.EffectBuildUp[effect] > EffectSettings.EffectProcLimit)
                     {
