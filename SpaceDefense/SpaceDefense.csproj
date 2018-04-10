@@ -153,6 +153,8 @@
     <Compile Include="Assets\Scripts\Wiring\Transformers\Transformer.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\BeamWeapon.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\BeamWeaponObject.cs" />
+    <Compile Include="Assets\Scripts\Wiring\Weapon\ChargeBeamObject.cs" />
+    <Compile Include="Assets\Scripts\Wiring\Weapon\ChargeBeamWeapon.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\ConstantHitbox.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\DetonateProjectile.cs" />
     <Compile Include="Assets\Scripts\Wiring\Weapon\DetonatorWeapon.cs" />

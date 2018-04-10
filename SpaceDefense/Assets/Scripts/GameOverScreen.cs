@@ -48,6 +48,9 @@ namespace Assets.Scripts
             this.FinalScoreText.text = finalScore.ToString();
         }
 
+        /// <summary>
+        /// Called when the game was restarted
+        /// </summary>
         public void OnRestart()
         {
             this.gameObject.SetActive(false);

@@ -236,6 +236,11 @@ namespace Assets.Scripts
         /// </summary>
         protected void Update()
         {
+            if (GameController.CurrentInstance.CurrentPhasee != GamePhases.Build)
+            {
+                return;
+            }
+
             this.HandlePlaceEntity();
             this.HandleSocketInteraction();
         }
