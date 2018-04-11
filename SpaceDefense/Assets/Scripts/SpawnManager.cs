@@ -11,6 +11,7 @@ namespace Assets.Scripts
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using Settings;
 
     /// <summary>
     /// Defines a path for an enemy
@@ -25,14 +26,18 @@ namespace Assets.Scripts
         public List<float> RegularSpawnInterval;
 
         /// <summary>
+        /// When should the regular enemies be stopped spawning
+        /// </summary>
+        public float StopSpawnAt;
+
+        /// <summary>
         /// A list of special designed enemies and when they'll spawn
         /// </summary>
         public List<EnemyType> SpecialSpawnEnemies;
         public List<float> SpecialSpawnTime;
 
-
         /// <summary>
-        /// How long until the enemies spawns
+        /// How long until the enemies spawn
         /// </summary>
         [HideInInspector]
         public IList<float> TimeUntilSpawn;
@@ -112,6 +117,11 @@ namespace Assets.Scripts
                 {
                     path.TimeUntilSpawn = new List<float>(path.RegularSpawnInterval);
                 }
+
+                if (path.StopSpawnAt == 0)
+                {
+                    path.StopSpawnAt = GameController.CurrentInstance.TotalDefenseDuration - GeneralSettings.DefaultStopEnemySpawnOffset;
+                }
             }
         }
 
@@ -125,10 +135,16 @@ namespace Assets.Scripts
                 var timePassed = Time.deltaTime;
 
                 var prefabManager = PrefabManager.CurrentInstance;
+                var gameController = GameController.CurrentInstance;
 
                 // Update each path
                 foreach (var path in this.Paths)
                 {
+                    if (path.StopSpawnAt >= gameController.TimeSinceFightStart)
+                    {
+                        continue;
+                    }
+
                     // Decay time
                     var timeUntilSpawn = path.TimeUntilSpawn;
                     for (int i = 0; i < timeUntilSpawn.Count; i++)

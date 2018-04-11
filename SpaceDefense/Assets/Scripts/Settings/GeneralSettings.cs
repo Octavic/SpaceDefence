@@ -50,5 +50,10 @@ namespace Assets.Scripts.Settings
         /// The size of status effect icons.
         /// </summary>
         public const float IconSize = 0.15f;
+
+        /// <summary>
+        /// By default, how long before the game ends should the regular enemies be stopped from spawning
+        /// </summary>
+        public const float DefaultStopEnemySpawnOffset = 10.0f;
     }
 }
