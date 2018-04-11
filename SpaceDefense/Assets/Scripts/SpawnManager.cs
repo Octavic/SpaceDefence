@@ -26,9 +26,9 @@ namespace Assets.Scripts
         public List<float> RegularSpawnInterval;
 
         /// <summary>
-        /// When should the regular enemies be stopped spawning
+        /// How many seconds before the game ends, should the path stop spawning enemies
         /// </summary>
-        public float StopSpawnAt;
+        public float StopSpawnBeforeEnd;
 
         /// <summary>
         /// A list of special designed enemies and when they'll spawn
@@ -79,7 +79,7 @@ namespace Assets.Scripts
         private bool _shouldSpawn;
 
         /// <summary>
-        /// called when the gamephase changes
+        /// Called when the game phase changes
         /// </summary>
         /// <param name="newPhase">The new  phase</param>
         public void OnGamePhaseChange(GamePhases newPhase)
@@ -117,11 +117,6 @@ namespace Assets.Scripts
                 {
                     path.TimeUntilSpawn = new List<float>(path.RegularSpawnInterval);
                 }
-
-                if (path.StopSpawnAt == 0)
-                {
-                    path.StopSpawnAt = GameController.CurrentInstance.TotalDefenseDuration - GeneralSettings.DefaultStopEnemySpawnOffset;
-                }
             }
         }
 
@@ -140,7 +135,8 @@ namespace Assets.Scripts
                 // Update each path
                 foreach (var path in this.Paths)
                 {
-                    if (path.StopSpawnAt >= gameController.TimeSinceFightStart)
+                    var timeTillEnd = gameController.TotalDefenseDuration - gameController.TimeSinceFightStart;
+                    if (path.StopSpawnBeforeEnd >= timeTillEnd)
                     {
                         continue;
                     }

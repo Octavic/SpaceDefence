@@ -132,8 +132,10 @@ namespace Assets.Scripts
                 // Update spawn manager
                 SpawnManager.CurrntInstance.OnGamePhaseChange(value);
 
+                // Save the board
+                this.Save();
+
                 this._isGameOver = false;
-                
                 this._currentPhase = value;
             }
         }
