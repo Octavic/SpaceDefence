@@ -54,6 +54,7 @@ namespace Assets.Scripts.Wiring.Weapon
             }
 
             this.gameObject.SetActive(true);
+            this._activeDurationLeft = this.ActiveDuration;
             this._realDamage = (this.MaxDamage - this.MinDamage) * chargeLevel * chargeLevel + this.MinDamage;
         }
         

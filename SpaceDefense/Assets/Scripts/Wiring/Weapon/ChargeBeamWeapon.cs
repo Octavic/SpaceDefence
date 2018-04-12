@@ -23,6 +23,11 @@ namespace Assets.Scripts.Wiring.Weapon
         public float ChargeSpeed;
 
         /// <summary>
+        /// How much it costs to charge the weapon per second
+        /// </summary>
+        public float ChargeCost;
+
+        /// <summary>
         /// The actual beam weapon
         /// </summary>
         public ChargeBeamObject BeamObject;
@@ -77,6 +82,7 @@ namespace Assets.Scripts.Wiring.Weapon
         protected override GameObject OnFire()
         {
             this.BeamObject.Activate(this._charageLevel);
+            GameController.CurrentInstance.AddCost(this.Cost);
             this._charageLevel = 0;
             return this.BeamObject.gameObject;
         }
@@ -89,7 +95,7 @@ namespace Assets.Scripts.Wiring.Weapon
             if (this._isCharging)
             {
                 this.ChargeLevel += this.ChargeSpeed * Time.deltaTime;
-                GameController.CurrentInstance.AddCost(this.Cost * Time.deltaTime);
+                GameController.CurrentInstance.AddCost(this.ChargeCost * Time.deltaTime);
             }
 
             base.Update();
