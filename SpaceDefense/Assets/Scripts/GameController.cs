@@ -261,7 +261,7 @@ namespace Assets.Scripts
         {
             _currentInstane = this;
             this.CurrentCoreHealth = this.TotalCoreHealth;
-            this._currentPhase = GamePhases.Look;
+            this._currentPhase = GamePhases.Build;
             this._collectDataInterval = this.TotalDefenseDuration / GeneralSettings.EndGraphSections;
         }
 

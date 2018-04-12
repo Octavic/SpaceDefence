@@ -113,7 +113,7 @@ namespace Assets.Scripts
         /// <summary>
         /// Handles all entity placements
         /// </summary>
-        private void HandlePlaceEntity()
+        private void HandleEntityInteraction()
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -241,7 +241,7 @@ namespace Assets.Scripts
                 return;
             }
 
-            this.HandlePlaceEntity();
+            this.HandleEntityInteraction();
             this.HandleSocketInteraction();
         }
 

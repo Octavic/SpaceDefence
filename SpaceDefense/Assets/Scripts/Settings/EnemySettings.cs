@@ -12,7 +12,7 @@ namespace Assets.Scripts.Settings
     using System.Text;
 
     /// <summary>
-    /// A collection of enemy setings
+    /// A collection of enemy settings
     /// </summary>
     public static class EnemySettings
     {

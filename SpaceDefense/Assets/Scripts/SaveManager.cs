@@ -104,7 +104,7 @@ namespace Assets.Scripts
         /// </summary>
         /// <param name="levelId">Target level</param>
         /// <param name="currentScore">The current score</param>
-        /// <param name="didWin">If the playerbeat the level or not</param>
+        /// <param name="didWin">If the player beat the level or not</param>
         public void OnLevelEnd(int levelId, float currentScore, bool didWin)
         {
             var targetLevel = this.CurrentSaveFile.Levels.Find(level => level.LevelId == levelId);
