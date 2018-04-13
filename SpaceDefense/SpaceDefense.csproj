@@ -130,6 +130,7 @@
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenu.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuItem.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuTabTypes.cs" />
+    <Compile Include="Assets\Scripts\Utils\ColorExtension.cs" />
     <Compile Include="Assets\Scripts\Utils\LimitedStack.cs" />
     <Compile Include="Assets\Scripts\Utils\Utils.cs" />
     <Compile Include="Assets\Scripts\Wiring\Emitters\Detector.cs" />

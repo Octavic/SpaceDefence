@@ -11,12 +11,19 @@ namespace Assets.Scripts.Wiring.Weapon
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using Utils;
 
     /// <summary>
     /// The actual charge beam 
     /// </summary>
     public  class ChargeBeamObject : MonoBehaviour, IConstantHitbox
     {
+        /// <summary>
+        /// Color variation of the beam based on charge level
+        /// </summary>
+        public Color UnchargedColor;
+        public Color FullyChargedColor;
+
         /// <summary>
         /// The damage the beam does per second when fully charged
         /// </summary>
@@ -43,6 +50,11 @@ namespace Assets.Scripts.Wiring.Weapon
         private float _activeDurationLeft;
 
         /// <summary>
+        /// The sprite renderer component
+        /// </summary>
+        private SpriteRenderer _renderer;
+
+        /// <summary>
         /// Called when the beam was activated
         /// </summary>
         /// <param name="chargeLevel">The charge level</param>
@@ -56,6 +68,7 @@ namespace Assets.Scripts.Wiring.Weapon
             this.gameObject.SetActive(true);
             this._activeDurationLeft = this.ActiveDuration;
             this._realDamage = (this.MaxDamage - this.MinDamage) * chargeLevel * chargeLevel + this.MinDamage;
+            this._renderer.color = this.UnchargedColor.Lerp(this.FullyChargedColor, chargeLevel);
         }
         
         /// <summary>
@@ -65,6 +78,14 @@ namespace Assets.Scripts.Wiring.Weapon
         public void OnHitEnemy(Enemy hitEnemy)
         {
             hitEnemy.TakeDamage(this._realDamage * Time.deltaTime, null);
+        }
+
+        /// <summary>
+        /// Used for initialization
+        /// </summary>
+        protected void Start()
+        {
+            this._renderer = this.GetComponent<SpriteRenderer>();
         }
 
         /// <summary>
