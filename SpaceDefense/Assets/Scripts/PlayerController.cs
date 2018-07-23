@@ -21,7 +21,15 @@ namespace Assets.Scripts
     /// </summary>
     public class PlayerController : MonoBehaviour
     {
+        /// <summary>
+        /// A list of buttons used to modify the entity
+        /// </summary>
         public List<Button> EntityModifyButtons;
+
+        /// <summary>
+        /// The hover beam object
+        /// </summary>
+        public AttachableBeam HoverBeam;
 
         /// <summary>
         /// Gets the current instance of the <see cref="PlayerController"/> class
@@ -63,16 +71,24 @@ namespace Assets.Scripts
             var mouseDown = Input.GetMouseButtonDown(0);
             var mouseUp = Input.GetMouseButtonUp(0);
 
+            // Get all clicked sockets
             RaycastHit2D[] hits = null;
+            var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (mouseDown || mouseUp)
             {
-                hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 15);
+                hits = Physics2D.RaycastAll(mousePos, Vector2.zero, 15);
                 if (hits.Length == 0)
                 {
                     return;
                 }
             }
 
+            // If mouse is held, change the hover beam
+            if (this._mouseDownSocket != null)
+            {
+                var socketObj = (MonoBehaviour)this._mouseDownSocket;
+                this.HoverBeam.Attach(socketObj.transform.position, mousePos);
+            }
 
             var hoveringSocket = GetFirstHitWithComponent<ISocket>(hits);
 
@@ -81,9 +97,11 @@ namespace Assets.Scripts
                 if (mouseDown)
                 {
                     this._mouseDownSocket = hoveringSocket;
+                    this.HoverBeam.gameObject.SetActive(true);
                 }
                 else if (mouseUp)
                 {
+                    this.HoverBeam.gameObject.SetActive(false);
                     if (hoveringSocket != null)
                     {
                         var output = this._mouseDownSocket as OutputSocket;
