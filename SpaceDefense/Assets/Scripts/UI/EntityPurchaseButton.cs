@@ -34,6 +34,7 @@ namespace Assets.Scripts.UI
         public void OnPurchase()
         {
             var newEntity = Instantiate(this.TargetEntityPrefab);
+            newEntity.gameObject.SetActive(false);
             PlayerController.CurrentInstancce.OnCompletingPurchase(newEntity);
         }
     }

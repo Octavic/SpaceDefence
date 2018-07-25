@@ -53,7 +53,15 @@ namespace Assets.Scripts
                 }
 
                 this._holdingEntity = value;
-                this.HoldingPhantom = value == null ? null : value.CreatePhantom();
+                if (value != null)
+                {
+                    this.HoldingPhantom = value.CreatePhantom();
+                    this.HoldingPhantom.gameObject.SetActive(true);
+                }
+                else
+                {
+                    this.HoldingPhantom = null;
+                }
             }
         }
         private GridEntity _holdingEntity;
@@ -172,9 +180,10 @@ namespace Assets.Scripts
                     {
                         if (grid.TryAddEntity(this.HoldingEntity, mousePos))
                         {
+                            this.HoldingEntity.gameObject.SetActive(true);
                             this.HoldingEntity.OnMove();
-                            this.HoldingEntity = null;
                             Destroy(this.HoldingPhantom.transform.gameObject);
+                            this.HoldingEntity = null;
                         }
                     }
                     else
@@ -217,14 +226,12 @@ namespace Assets.Scripts
         /// <param name="purchased">The item purchased</param>
         public void OnCompletingPurchase(GridEntity purchased)
         {
-            if (this.HoldingEntity != null)
+            if (this.HoldingEntity != null && !this.IsHeldOnGrid)
             {
-                if (!this.IsHeldOnGrid)
-                {
-                    Destroy(this.HoldingEntity.gameObject);
-                    Destroy(this.HoldingPhantom.gameObject);
-                }
+                Destroy(this.HoldingEntity.gameObject);
+                Destroy(this.HoldingPhantom.gameObject);
             }
+
             this.HoldingEntity = purchased;
             this.IsHeldOnGrid = false;
         }
