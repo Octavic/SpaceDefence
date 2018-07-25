@@ -75,5 +75,29 @@ namespace Assets.Scripts.Grid
         /// Called when the entity moves to update the attached beams
         /// </summary>
         public abstract void OnMove();
+
+        /// <summary>
+        /// Generates a phantom of the grid entity for hovering
+        /// </summary>
+        /// <returns>The phantom</returns>
+        public virtual GridEntity CreatePhantom()
+        {
+            var phantom = Instantiate(this.gameObject);
+
+            // Set own color
+            phantom.GetComponent<SpriteRenderer>().color = Settings.GeneralSettings.NormalPhantomColor;
+
+            // Set children color
+            for (int i = 0; i < this.transform.childCount; i++)
+            {
+                var childSprite = phantom.transform.GetChild(i).GetComponent<SpriteRenderer>();
+                if (childSprite != null)
+                {
+                    childSprite.color = Settings.GeneralSettings.NormalPhantomColor;
+                }
+            }
+
+            return phantom.GetComponent<GridEntity>();
+        }
     }
 }

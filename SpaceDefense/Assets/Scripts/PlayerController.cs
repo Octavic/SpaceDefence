@@ -53,10 +53,15 @@ namespace Assets.Scripts
                 }
 
                 this._holdingEntity = value;
+                this.HoldingPhantom = value == null ? null : value.CreatePhantom();
             }
         }
         private GridEntity _holdingEntity;
         private bool IsHeldOnGrid { get; set; }
+        /// <summary>
+        /// The phantom object that resembles the held entity
+        /// </summary>
+        private GridEntity HoldingPhantom;
 
         /// <summary>
         /// The socket clicked on when the mouse was down
@@ -133,26 +138,32 @@ namespace Assets.Scripts
         /// </summary>
         private void HandleEntityInteraction()
         {
+            var hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 15);
+            if (hits.Length == 0)
+            {
+                return;
+            }
+
+            MapGrid grid = null;
+            Vector2 mousePos = new Vector2();
+            foreach (var hit in hits)
+            {
+                var tryGrid = hit.collider.gameObject.GetComponent<MapGrid>();
+                if (tryGrid)
+                {
+                    grid = tryGrid;
+                    mousePos = hit.point;
+                }
+            }
+
+            // Handles  phantom movement
+            if (this.HoldingPhantom != null)
+            {
+                this.HoldingPhantom.transform.position = mousePos;
+            }
+
             if (Input.GetMouseButtonDown(0))
             {
-                var hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 15);
-                if (hits.Length == 0)
-                {
-                    return;
-                }
-
-                MapGrid grid = null;
-                Vector2 mousePos = new Vector2();
-                foreach (var hit in hits)
-                {
-                    var tryGrid = hit.collider.gameObject.GetComponent<MapGrid>();
-                    if (tryGrid)
-                    {
-                        grid = tryGrid;
-                        mousePos = hit.point;
-                    }
-                }
-
                 // If the mouse indeed clicked a grid
                 if (grid != null)
                 {
@@ -163,6 +174,7 @@ namespace Assets.Scripts
                         {
                             this.HoldingEntity.OnMove();
                             this.HoldingEntity = null;
+                            Destroy(this.HoldingPhantom.transform.gameObject);
                         }
                     }
                     else
@@ -210,6 +222,7 @@ namespace Assets.Scripts
                 if (!this.IsHeldOnGrid)
                 {
                     Destroy(this.HoldingEntity.gameObject);
+                    Destroy(this.HoldingPhantom.gameObject);
                 }
             }
             this.HoldingEntity = purchased;
@@ -228,6 +241,7 @@ namespace Assets.Scripts
 
             MapGrid.CurrentInstance.RemoveEntity(this.HoldingEntity);
             Destroy(this.HoldingEntity.gameObject);
+            Destroy(this.HoldingPhantom.gameObject);
             this.HoldingEntity = null;
         }
 
@@ -246,6 +260,8 @@ namespace Assets.Scripts
                 {
                     this.HoldingEntity.Rotate(isClockwise);
                 }
+
+                this.HoldingPhantom.Rotate(isClockwise);
             }
         }
 

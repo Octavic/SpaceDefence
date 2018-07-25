@@ -10,6 +10,7 @@ namespace Assets.Scripts.Settings
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using UnityEngine;
 
     /// <summary>
     /// A collection of general settings
@@ -50,5 +51,15 @@ namespace Assets.Scripts.Settings
         /// The size of status effect icons.
         /// </summary>
         public const float IconSize = 0.15f;
+        
+        /// <summary>
+        /// The half transparent color for the phantom
+        /// </summary>
+        public static Color NormalPhantomColor = new Color(0.2f, 1, 0.2f, 0.5f);
+
+        /// <summary>
+        /// The half transparent color for the phantom when it can't be placed
+        /// </summary>
+        public static Color DisabledPhantomColor = new Color(1, 0.2f, 0.2f, 0.5f);
     }
 }
