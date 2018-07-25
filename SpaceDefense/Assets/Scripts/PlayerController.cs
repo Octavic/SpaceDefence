@@ -53,19 +53,12 @@ namespace Assets.Scripts
                 }
 
                 this._holdingEntity = value;
-                if (value != null)
-                {
-                    this.HoldingPhantom = value.CreatePhantom();
-                    this.HoldingPhantom.gameObject.SetActive(true);
-                }
-                else
-                {
-                    this.HoldingPhantom = null;
-                }
             }
         }
         private GridEntity _holdingEntity;
-        private bool IsHeldOnGrid { get; set; }
+        private bool _isHeldOnGrid;
+        private bool _isMoving;
+
         /// <summary>
         /// The phantom object that resembles the held entity
         /// </summary>
@@ -99,8 +92,11 @@ namespace Assets.Scripts
             // If mouse is held, change the hover beam
             if (this._mouseDownSocket != null)
             {
-                var socketObj = (MonoBehaviour)this._mouseDownSocket;
-                this.HoverBeam.Attach(socketObj.transform.position, mousePos);
+                var socketObj = this._mouseDownSocket as MonoBehaviour;
+                if (socketObj != null)
+                {
+                    this.HoverBeam.Attach(socketObj.transform.position, mousePos);
+                }
             }
 
             var hoveringSocket = GetFirstHitWithComponent<ISocket>(hits);
@@ -170,26 +166,33 @@ namespace Assets.Scripts
                 this.HoldingPhantom.transform.position = mousePos;
             }
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonUp(0))
             {
                 // If the mouse indeed clicked a grid
                 if (grid != null)
                 {
                     // If the player is actually holding onto something
-                    if (this.HoldingEntity != null)
+                    if (this.HoldingEntity != null && this._isMoving)
                     {
                         if (grid.TryAddEntity(this.HoldingEntity, mousePos))
                         {
                             this.HoldingEntity.gameObject.SetActive(true);
                             this.HoldingEntity.OnMove();
-                            Destroy(this.HoldingPhantom.transform.gameObject);
+
+                            if (this.HoldingPhantom != null)
+                            {
+                                Destroy(this.HoldingPhantom.transform.gameObject);
+                            }
+
+                            this._isMoving = false;
                             this.HoldingEntity = null;
                         }
                     }
                     else
                     {
+                        // Not holding anything, instead pick up the item that was placed there
                         this.HoldingEntity = grid.GetEntityAtPosition(mousePos);
-                        this.IsHeldOnGrid = true;
+                        this._isHeldOnGrid = true;
                     }
                 }
             }
@@ -226,14 +229,21 @@ namespace Assets.Scripts
         /// <param name="purchased">The item purchased</param>
         public void OnCompletingPurchase(GridEntity purchased)
         {
-            if (this.HoldingEntity != null && !this.IsHeldOnGrid)
+            if (this.HoldingEntity != null && !this._isHeldOnGrid)
             {
                 Destroy(this.HoldingEntity.gameObject);
-                Destroy(this.HoldingPhantom.gameObject);
+
+                if (this.HoldingPhantom != null)
+                {
+                    Destroy(this.HoldingPhantom.gameObject);
+                }
             }
 
             this.HoldingEntity = purchased;
-            this.IsHeldOnGrid = false;
+            this.HoldingPhantom = this.HoldingEntity.CreatePhantom();
+            this.HoldingPhantom.gameObject.SetActive(true);
+            this._isMoving = true;
+            this._isHeldOnGrid = false;
         }
 
         /// <summary>
@@ -248,8 +258,13 @@ namespace Assets.Scripts
 
             MapGrid.CurrentInstance.RemoveEntity(this.HoldingEntity);
             Destroy(this.HoldingEntity.gameObject);
-            Destroy(this.HoldingPhantom.gameObject);
             this.HoldingEntity = null;
+
+            if (this.HoldingPhantom != null)
+            {
+                Destroy(this.HoldingPhantom.gameObject);
+                this.HoldingPhantom = null;
+            }
         }
 
         /// <summary>
@@ -259,7 +274,7 @@ namespace Assets.Scripts
         {
             if (this.HoldingEntity != null)
             {
-                if (this.IsHeldOnGrid)
+                if (this._isHeldOnGrid)
                 {
                     MapGrid.CurrentInstance.RotateEntity(this.HoldingEntity, isClockwise);
                 }
@@ -268,8 +283,30 @@ namespace Assets.Scripts
                     this.HoldingEntity.Rotate(isClockwise);
                 }
 
-                this.HoldingPhantom.Rotate(isClockwise);
+                if (this.HoldingPhantom != null)
+                {
+                    this.HoldingPhantom.Rotate(isClockwise);
+                }
             }
+        }
+
+        /// <summary>
+        ///  Turn on the move mode for the item that's held
+        /// </summary>
+        public void MoveHolding()
+        {
+            if (this.HoldingEntity == null)
+            {
+                return;
+            }
+
+            if (this.HoldingPhantom != null)
+            {
+                Destroy(this.HoldingPhantom.gameObject);
+            }
+
+            this.HoldingPhantom = this.HoldingEntity.CreatePhantom();
+            this._isMoving = true;
         }
 
         /// <summary>
@@ -292,6 +329,8 @@ namespace Assets.Scripts
         protected void Start()
         {
             PlayerController.CurrentInstancce = this;
+
+            this._isMoving = false;
         }
     }
 }

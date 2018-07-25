@@ -87,13 +87,23 @@ namespace Assets.Scripts.Grid
             // Set own color
             phantom.GetComponent<SpriteRenderer>().color = Settings.GeneralSettings.NormalPhantomColor;
 
-            // Set children color
-            for (int i = 0; i < this.transform.childCount; i++)
+            // Destroy children
+            for (int i = 0; i < phantom.transform.childCount; i++)
             {
-                var childSprite = phantom.transform.GetChild(i).GetComponent<SpriteRenderer>();
-                if (childSprite != null)
+                var child = phantom.transform.GetChild(i);
+
+                // If it's a socket, hide it 
+                if (child.GetComponent<ISocket>() != null)
                 {
-                    childSprite.color = Settings.GeneralSettings.NormalPhantomColor;
+                    Destroy(child.gameObject);
+                }
+                else
+                {
+                    var childSprite = child.GetComponent<SpriteRenderer>();
+                    if (childSprite != null)
+                    {
+                        childSprite.color = Settings.GeneralSettings.NormalPhantomColor;
+                    }
                 }
             }
 
