@@ -85,11 +85,12 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\AttachableBeam.cs" />
     <Compile Include="Assets\Scripts\EffectEnum.cs" />
-    <Compile Include="Assets\Scripts\Enemy.cs" />
-    <Compile Include="Assets\Scripts\EnemyHealthBar.cs" />
-    <Compile Include="Assets\Scripts\EnemyStatusBar.cs" />
-    <Compile Include="Assets\Scripts\EnemyStatusIcon.cs" />
-    <Compile Include="Assets\Scripts\EnemyType.cs" />
+    <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyHealthBar.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyStats.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyStatusBar.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyStatusIcon.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyType.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\GameObjectExtensions.cs" />
     <Compile Include="Assets\Scripts\GameOverScreen.cs" />
@@ -118,7 +119,6 @@
     <Compile Include="Assets\Scripts\Settings\LevelSettings.cs" />
     <Compile Include="Assets\Scripts\Settings\Version.cs" />
     <Compile Include="Assets\Scripts\Settings\WeaponSettings.cs" />
-    <Compile Include="Assets\Scripts\SimpleEnemy.cs" />
     <Compile Include="Assets\Scripts\SpawnManager.cs" />
     <Compile Include="Assets\Scripts\Tags.cs" />
     <Compile Include="Assets\Scripts\Tips.cs" />

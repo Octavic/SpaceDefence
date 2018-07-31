@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Enemy
 {
     /// <summary>
     /// A collection of all possible enemy types
@@ -12,6 +12,7 @@ namespace Assets.Scripts
     public enum EnemyType
     {
         Locust,
-        Phalanx
+        Phalanx,
+        Pulser
     }
 }

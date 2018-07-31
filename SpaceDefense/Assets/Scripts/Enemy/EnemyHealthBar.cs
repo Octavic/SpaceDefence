@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Enemy
 {
     using System;
     using System.Collections.Generic;
@@ -49,9 +49,9 @@ namespace Assets.Scripts
         /// </summary>
         protected void Update()
         {
-            _updateBar(this.HealthBar, this.TargetEnemy.CurrentHealth / this.TargetEnemy.TotalHealth);
+            _updateBar(this.HealthBar, this.TargetEnemy.CurrentHealth / this.TargetEnemy.BaseHealth);
 
-            var totalShield = this.TargetEnemy.TotalShield;
+            var totalShield = this.TargetEnemy.BaseShield;
             if (totalShield > 0)
             {
                 this.ShieldBar.SetActive(true);

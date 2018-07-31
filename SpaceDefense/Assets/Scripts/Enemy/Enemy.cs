@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Enemy
 {
     using System;
     using System.Collections.Generic;
@@ -41,14 +41,26 @@ namespace Assets.Scripts
         public float Worth;
 
         /// <summary>
-        /// The amount of total hit points for the enemy
+        /// The amount of base hit points for the enemy
         /// </summary>
-        public float TotalHealth;
+        public float BaseHealth;
 
         /// <summary>
-        /// THe amount of total shields for the enemy
+        /// THe amount of base armor for the enemy
         /// </summary>
-        public float TotalShield;
+        public float BaseShield;
+
+        /// <summary>
+        /// The amount of base armor for the enemy
+        /// </summary>
+        public float BaseArmor;
+
+        /// <summary>
+        /// Bonus shield and health
+        /// </summary>
+        public float BonusHealth { get; private set; }
+        public float BonusShield { get; private set; }
+        public float BonusArmor { get; private set; }
 
         /// <summary>
         /// Gets the current health level of the enemy
@@ -204,8 +216,8 @@ namespace Assets.Scripts
         /// </summary>
         protected virtual void Start()
         {
-            this.CurrentHealth = this.TotalHealth;
-            this.CurrentShield = this.TotalShield;
+            this.CurrentHealth = this.BaseHealth;
+            this.CurrentShield = this.BaseShield;
         }
 
         /// <summary>
@@ -296,7 +308,7 @@ namespace Assets.Scripts
             {
                 this._shieldRegenDelay -= Time.deltaTime;
             }
-            else if (this.CurrentShield < this.TotalShield)
+            else if (this.CurrentShield < this.BaseShield)
             {
                 var regenAmount = Time.deltaTime * EnemySettings.ShieldRegenSpeed;
                 if (this.Effects.ContainsKey(EffectEnum.Zapped))
@@ -304,7 +316,7 @@ namespace Assets.Scripts
                     regenAmount *= EffectSettings.ZappedShieldRegenMultiplier;
                 }
 
-                this.CurrentShield = Mathf.Min(this.TotalShield, this.CurrentShield + regenAmount);
+                this.CurrentShield = Mathf.Min(this.BaseShield, this.CurrentShield + regenAmount);
             }
         }
 
