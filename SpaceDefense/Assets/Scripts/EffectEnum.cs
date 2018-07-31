@@ -47,6 +47,10 @@ namespace Assets.Scripts
         /// <summary>
         /// Enemy shield is 3x vulnerable and regenerates slower
         /// </summary>
-        Zapped
+        Zapped,
+        /// <summary>
+        /// Enemy is in the range of the shield pulser and receives additional shields
+        /// </summary>
+        Shielded
     }
 }

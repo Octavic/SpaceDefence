@@ -31,46 +31,41 @@ namespace Assets.Scripts.Enemies
         public EnemyType Type;
 
         /// <summary>
-        /// How fast the enemy moves per frame
-        /// </summary>
-        public float Speed;
-
-        /// <summary>
         /// How much the enemy is worth
         /// </summary>
         public float Worth;
 
         /// <summary>
-        /// The amount of base hit points for the enemy
+        /// The base stats for an enemy
         /// </summary>
-        public float BaseHealth;
+        public EnemyStats BaseStats;
 
         /// <summary>
-        /// THe amount of base armor for the enemy
+        /// 
         /// </summary>
-        public float BaseShield;
-
-        /// <summary>
-        /// The amount of base armor for the enemy
-        /// </summary>
-        public float BaseArmor;
-
-        /// <summary>
-        /// Bonus shield and health
-        /// </summary>
-        public float BonusHealth { get; private set; }
-        public float BonusShield { get; private set; }
-        public float BonusArmor { get; private set; }
+        [HideInInspector]
+        public EnemyStats CurrentStats
+        {
+            get
+            {
+                EnemyStats result = this.BaseStats;
+                foreach (var set in this.Effects)
+                {
+                    result = result.ApplyEffect(set.Key);
+                }
+                return this.BaseStats;
+            }
+        }
 
         /// <summary>
         /// Gets the current health level of the enemy
         /// </summary>
-        public float CurrentHealth { get; private set; }
+        public float HealthRemaining { get; private set; }
 
         /// <summary>
         /// The amount of shield that's currently present
         /// </summary>
-        public float CurrentShield { get; private set; }
+        public float ShieldRemaining { get; private set; }
 
         /// <summary>
         /// Gets or sets the route that the enemy will take
@@ -125,17 +120,17 @@ namespace Assets.Scripts.Enemies
                 damage *= EffectSettings.ZappedShieldDamageMultiplier;
             }
 
-            if (this.CurrentShield > 0)
+            if (this.ShieldRemaining > 0)
             {
-                if (this.CurrentShield >= damage)
+                if (this.ShieldRemaining >= damage)
                 {
-                    this.CurrentShield -= damage;
+                    this.ShieldRemaining -= damage;
                     healthDamage = 0;
                 }
                 else
                 {
-                    healthDamage -= this.CurrentShield;
-                    this.CurrentShield = 0;
+                    healthDamage -= this.ShieldRemaining;
+                    this.ShieldRemaining = 0;
                 }
             }
             else
@@ -155,12 +150,12 @@ namespace Assets.Scripts.Enemies
                     healthDamage *= EffectSettings.VulnerableHealthDamageMultiplier;
                 }
 
-                this.CurrentHealth -= healthDamage;
+                this.HealthRemaining -= healthDamage;
             }
 
             this._shieldRegenDelay = EnemySettings.ShieldRegenDelay;
 
-            if (this.CurrentHealth <= 0)
+            if (this.HealthRemaining <= 0)
             {
                 GameController.CurrentInstance.AddIncome(this.Worth);
                 Destroy(this.gameObject);
@@ -216,8 +211,8 @@ namespace Assets.Scripts.Enemies
         /// </summary>
         protected virtual void Start()
         {
-            this.CurrentHealth = this.BaseHealth;
-            this.CurrentShield = this.BaseShield;
+            this.HealthRemaining = this.BaseStats.Health;
+            this.ShieldRemaining = this.BaseStats.Shield;
         }
 
         /// <summary>
@@ -230,15 +225,7 @@ namespace Assets.Scripts.Enemies
             Vector2 curGoal = this.Path[this._currentPathNodeIndex];
             Vector2 diff = curGoal - curPos;
 
-            var movementThisFrame = this.Speed * Time.deltaTime;
-            if (this.Effects.ContainsKey(EffectEnum.Slowed))
-            {
-                movementThisFrame *= EffectSettings.SlowSpeedMultiplier;
-            }
-            else if (this.Effects.ContainsKey(EffectEnum.Frozen))
-            {
-                movementThisFrame *= 0.01f;
-            }
+            var movementThisFrame = this.CurrentStats.Speed * Time.deltaTime;
 
             if (diff.magnitude < movementThisFrame)
             {
@@ -265,8 +252,8 @@ namespace Assets.Scripts.Enemies
                 {
                     damage *= 2;
                 }
-                this.CurrentHealth -= damage;
-                if (this.CurrentHealth <= 0)
+                this.HealthRemaining -= damage;
+                if (this.HealthRemaining <= 0)
                 {
                     GameController.CurrentInstance.AddIncome(this.Worth);
                     Destroy(this.gameObject);
@@ -308,7 +295,7 @@ namespace Assets.Scripts.Enemies
             {
                 this._shieldRegenDelay -= Time.deltaTime;
             }
-            else if (this.CurrentShield < this.BaseShield)
+            else if (this.ShieldRemaining < this.CurrentStats.Shield)
             {
                 var regenAmount = Time.deltaTime * EnemySettings.ShieldRegenSpeed;
                 if (this.Effects.ContainsKey(EffectEnum.Zapped))
@@ -316,7 +303,7 @@ namespace Assets.Scripts.Enemies
                     regenAmount *= EffectSettings.ZappedShieldRegenMultiplier;
                 }
 
-                this.CurrentShield = Mathf.Min(this.BaseShield, this.CurrentShield + regenAmount);
+                this.ShieldRemaining = Mathf.Min(this.CurrentStats.Shield, this.ShieldRemaining + regenAmount);
             }
         }
 

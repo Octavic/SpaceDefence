@@ -49,13 +49,13 @@ namespace Assets.Scripts.Enemies
         /// </summary>
         protected void Update()
         {
-            _updateBar(this.HealthBar, this.TargetEnemy.CurrentHealth / this.TargetEnemy.BaseHealth);
+            _updateBar(this.HealthBar, this.TargetEnemy.HealthRemaining / this.TargetEnemy.CurrentStats.Health);
 
-            var totalShield = this.TargetEnemy.BaseShield;
+            var totalShield = this.TargetEnemy.CurrentStats.Shield;
             if (totalShield > 0)
             {
                 this.ShieldBar.SetActive(true);
-                _updateBar(this.ShieldBar, this.TargetEnemy.CurrentShield / totalShield);
+                _updateBar(this.ShieldBar, this.TargetEnemy.ShieldRemaining / totalShield);
             }
             else
             {

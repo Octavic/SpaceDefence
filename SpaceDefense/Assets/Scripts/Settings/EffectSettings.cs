@@ -47,7 +47,7 @@ namespace Assets.Scripts.Settings
         public const float ZappedShieldDamageMultiplier = 3.0f;
 
         /// <summary>
-        /// The multiplier applied to shield regen when the enmy is zapped
+        /// The multiplier applied to shield regenerate when the enemy is zapped
         /// </summary>
         public const float ZappedShieldRegenMultiplier = 0.5f;
 
@@ -55,5 +55,7 @@ namespace Assets.Scripts.Settings
         /// How much more health the enemy takes when vulnerable
         /// </summary>
         public const float VulnerableHealthDamageMultiplier = 2.0f;
+
+        public const float ShieldedAmount = 10.0f;
     }
 }
