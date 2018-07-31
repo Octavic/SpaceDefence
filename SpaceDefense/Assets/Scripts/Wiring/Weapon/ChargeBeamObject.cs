@@ -12,11 +12,12 @@ namespace Assets.Scripts.Wiring.Weapon
     using System.Text;
     using UnityEngine;
     using Utils;
+    using Enemies;
 
     /// <summary>
     /// The actual charge beam 
     /// </summary>
-    public  class ChargeBeamObject : MonoBehaviour, IConstantHitbox
+    public class ChargeBeamObject : MonoBehaviour, IConstantHitbox
     {
         /// <summary>
         /// Color variation of the beam based on charge level

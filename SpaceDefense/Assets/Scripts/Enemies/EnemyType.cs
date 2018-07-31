@@ -1,24 +1,18 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="EnemyStats.cs">
+//  <copyright file="LevelManager.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Enemy
+namespace Assets.Scripts.Enemies
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
-    /// Defines all enemy stats
+    /// A collection of all possible enemy types
     /// </summary>
-    [Serializable]
-    public struct EnemyStats
+    public enum EnemyType
     {
-        public float Health;
-        public float Shield;
-        public float Armomr;
+        Locust,
+        Phalanx,
+        Pulser
     }
 }

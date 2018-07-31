@@ -12,6 +12,7 @@ namespace Assets.Scripts
     using System.Text;
     using UnityEngine;
     using Grid;
+    using Enemies;
 
     /// <summary>
     /// Manages all prefabs

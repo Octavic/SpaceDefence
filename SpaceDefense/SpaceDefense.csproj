@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>WebGL:20</UnityBuildTarget>
     <UnityVersion>2017.1.1f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -85,12 +83,12 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\AttachableBeam.cs" />
     <Compile Include="Assets\Scripts\EffectEnum.cs" />
-    <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
-    <Compile Include="Assets\Scripts\Enemy\EnemyHealthBar.cs" />
-    <Compile Include="Assets\Scripts\Enemy\EnemyStats.cs" />
-    <Compile Include="Assets\Scripts\Enemy\EnemyStatusBar.cs" />
-    <Compile Include="Assets\Scripts\Enemy\EnemyStatusIcon.cs" />
-    <Compile Include="Assets\Scripts\Enemy\EnemyType.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyHealthBar.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyStats.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyStatusBar.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyStatusIcon.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyType.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\GameObjectExtensions.cs" />
     <Compile Include="Assets\Scripts\GameOverScreen.cs" />

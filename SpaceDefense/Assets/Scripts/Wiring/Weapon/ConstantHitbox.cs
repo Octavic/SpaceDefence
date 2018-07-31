@@ -10,6 +10,7 @@ namespace Assets.Scripts.Wiring.Weapon
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using Enemies;
 
     public interface IConstantHitbox
     {

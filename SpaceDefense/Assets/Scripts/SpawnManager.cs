@@ -12,6 +12,7 @@ namespace Assets.Scripts
     using System.Text;
     using UnityEngine;
     using Settings;
+    using Enemies;
 
     /// <summary>
     /// Defines a path for an enemy
