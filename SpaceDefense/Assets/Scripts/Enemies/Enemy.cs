@@ -93,6 +93,11 @@ namespace Assets.Scripts.Enemies
         private float _shieldRegenDelay = 0;
 
         /// <summary>
+        /// All of the detectors that is being triggered by this enemy
+        /// </summary>
+        private HashSet<DetectorArea> _detectedBy = new HashSet<DetectorArea>();
+
+        /// <summary>
         /// The rigidbody component
         /// </summary>
         protected Rigidbody2D _rigidbody
@@ -191,9 +196,18 @@ namespace Assets.Scripts.Enemies
         /// Applies the given effect
         /// </summary>
         /// <param name="effect">Target effect</param>
-        public void ApplyEffect(EffectEnum effect)
+        /// <param name="duration">Effect duration</param>
+        public void ApplyEffect(EffectEnum effect, float duration = EffectSettings.EffectDuration)
         {
-            this.Effects[effect] = EffectSettings.EffectDuration;
+            this.Effects[effect] = duration;
+            if (effect == EffectEnum.Cloaked)
+            {
+                foreach (var detector in this._detectedBy)
+                {
+                    detector.OnEnemyExit();
+                    this._detectedBy = new HashSet<DetectorArea>();
+                }
+            }
         }
 
         /// <summary>
@@ -331,6 +345,7 @@ namespace Assets.Scripts.Enemies
                 var detector = collision.gameObject.GetComponent<DetectorArea>();
                 if (detector != null)
                 {
+                    this._detectedBy.Add(detector);
                     detector.OnEnemyEnter();
                     return;
                 }

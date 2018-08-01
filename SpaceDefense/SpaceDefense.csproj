@@ -91,6 +91,7 @@
     <Compile Include="Assets\Scripts\Enemies\EnemyStatusBar.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyStatusIcon.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyType.cs" />
+    <Compile Include="Assets\Scripts\Enemies\PluseBuffEnemy.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\GameObjectExtensions.cs" />
     <Compile Include="Assets\Scripts\GameOverScreen.cs" />
