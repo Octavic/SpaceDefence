@@ -44,18 +44,7 @@ namespace Assets.Scripts.Enemies
         /// 
         /// </summary>
         [HideInInspector]
-        public EnemyStats CurrentStats
-        {
-            get
-            {
-                EnemyStats result = new EnemyStats(this.BaseStats);
-                foreach (var set in this.Effects)
-                {
-                    result.ApplyEffect(set.Key);
-                }
-                return result;
-            }
-        }
+        public EnemyStats CurrentStats { get; private set; }
 
         /// <summary>
         /// Gets the current health level of the enemy
@@ -200,13 +189,41 @@ namespace Assets.Scripts.Enemies
         public void ApplyEffect(EffectEnum effect, float duration = EffectSettings.EffectDuration)
         {
             this.Effects[effect] = duration;
-            if (effect == EffectEnum.Cloaked)
+            this.OnEffectApplied(effect, duration);
+        }
+
+        private void OnEffectApplied(EffectEnum effect, float duration)
+        {
+            this.RecalculateStats();
+            switch (effect)
             {
-                foreach (var detector in this._inRangeDetectors)
-                {
-                    detector.OnEnemyExit();
-                    this._inRangeDetectors = new HashSet<DetectorArea>();
-                }
+                case EffectEnum.Cloaked:
+                    foreach (var detector in this._inRangeDetectors)
+                    {
+                        detector.OnEnemyExit();
+                    }
+                    break;
+            }
+        }
+        private void OnEffectExpire(EffectEnum effect)
+        {
+            this.RecalculateStats();
+            switch (effect)
+            {
+                case EffectEnum.Cloaked:
+                    foreach (var detector in this._inRangeDetectors)
+                    {
+                        detector.OnEnemyEnter();
+                    }
+                    break;
+            }
+        }
+        private void RecalculateStats()
+        {
+            this.CurrentStats = new EnemyStats(this.BaseStats);
+            foreach (var effect in this.Effects.Keys)
+            {
+                this.CurrentStats.ApplyEffect(effect);
             }
         }
 
@@ -285,6 +302,7 @@ namespace Assets.Scripts.Enemies
                 {
                     this.StatusBar.RemoveEffect(key);
                     this.Effects.Remove(key);
+                    this.OnEffectExpire(key);
                 }
                 else
                 {
