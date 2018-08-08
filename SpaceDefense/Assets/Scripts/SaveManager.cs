@@ -45,7 +45,16 @@ namespace Assets.Scripts
             {
                 if (_currentInstance == null)
                 {
-                    _currentInstance = GameObject.FindGameObjectWithTag(Tags.SaveManager).GetComponent<SaveManager>();
+                    var saveManagerObject = GameObject.FindGameObjectWithTag(Tags.SaveManager);
+
+                    // Only happens when the game is launched from a certain level. Happens during development only
+                    if (saveManagerObject == null)
+                    {
+                        saveManagerObject = new GameObject();
+                        saveManagerObject.AddComponent<SaveManager>();
+                    }
+
+                    _currentInstance = saveManagerObject.GetComponent<SaveManager>();
                 }
 
                 return _currentInstance;

@@ -13,6 +13,21 @@ namespace Assets.Scripts
     using UnityEngine;
     using Settings;
     using Enemies;
+    
+    [Serializable]
+    public class PathRegularSpawn
+    {
+        public EnemyType Enemy;
+        public float SpawnInterval;
+        [HideInInspector]
+        public float TimeUntilSpawn;
+    }
+
+    public class PathSpecialSpawn
+    {
+        public EnemyType Enemy;
+        public float SpecialSpawnTime;
+    }
 
     /// <summary>
     /// Defines a path for an enemy
@@ -23,8 +38,7 @@ namespace Assets.Scripts
         /// <summary>
         /// A collection of enemy type => time in between spawns
         /// </summary>
-        public List<EnemyType> RegularSpawnEnemies;
-        public List<float> RegularSpawnInterval;
+        public List<PathRegularSpawn> RegularSpawns;
 
         /// <summary>
         /// How many seconds before the game ends, should the path stop spawning enemies
@@ -34,8 +48,7 @@ namespace Assets.Scripts
         /// <summary>
         /// A list of special designed enemies and when they'll spawn
         /// </summary>
-        public List<EnemyType> SpecialSpawnEnemies;
-        public List<float> SpecialSpawnTime;
+        public List<PathSpecialSpawn> SpecialSpawns;
 
         /// <summary>
         /// How long until the enemies spawn
@@ -107,18 +120,6 @@ namespace Assets.Scripts
         protected void Start()
         {
             SpawnManager.CurrntInstance = this;
-            for (int i = 0; i < this.Paths.Count; i++)
-            {
-                var path = this.Paths[i];
-                if (path.RegularSpawnEnemies.Count != path.RegularSpawnInterval.Count)
-                {
-                    Debug.LogError("Invalid path in spawn manager");
-                }
-                else
-                {
-                    path.TimeUntilSpawn = new List<float>(path.RegularSpawnInterval);
-                }
-            }
         }
 
         /// <summary>
@@ -142,20 +143,18 @@ namespace Assets.Scripts
                         continue;
                     }
 
-                    // Decay time
-                    var timeUntilSpawn = path.TimeUntilSpawn;
-                    for (int i = 0; i < timeUntilSpawn.Count; i++)
-                    {
-                        timeUntilSpawn[i] -= timePassed;
-                        if (timeUntilSpawn[i] < 0)
-                        {
-                            timeUntilSpawn[i] = path.RegularSpawnInterval[i];
+                    // Update the regular spawns
 
-                            var newEnemyType = path.RegularSpawnEnemies[i];
-                            var newEnemyPrefab = prefabManager.GetEnemyPrefab(newEnemyType);
+                    foreach (var regularSpawn in path.RegularSpawns)
+                    {
+                        regularSpawn.TimeUntilSpawn -= Time.deltaTime;
+                        if (regularSpawn.TimeUntilSpawn <= 0)
+                        {
+                            regularSpawn.TimeUntilSpawn = regularSpawn.SpawnInterval;
+                            var newEnemyPrefab = prefabManager.GetEnemyPrefab(regularSpawn.Enemy);
                             if (newEnemyPrefab == null)
                             {
-                                Debug.LogError("Prefab for enemy not found: " + newEnemyType);
+                                Debug.LogError("Prefab for enemy not found: " + regularSpawn.Enemy);
                             }
                             else
                             {

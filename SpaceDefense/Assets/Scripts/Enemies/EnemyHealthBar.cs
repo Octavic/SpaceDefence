@@ -49,17 +49,20 @@ namespace Assets.Scripts.Enemies
         /// </summary>
         protected void Update()
         {
-            _updateBar(this.HealthBar, this.TargetEnemy.HealthRemaining / this.TargetEnemy.CurrentStats.Health);
+            if (this.TargetEnemy != null)
+            {
+                _updateBar(this.HealthBar, this.TargetEnemy.HealthRemaining / this.TargetEnemy.CurrentStats.Health);
 
-            var totalShield = this.TargetEnemy.CurrentStats.Shield;
-            if (totalShield > 0)
-            {
-                this.ShieldBar.SetActive(true);
-                _updateBar(this.ShieldBar, this.TargetEnemy.ShieldRemaining / totalShield);
-            }
-            else
-            {
-                this.ShieldBar.SetActive(false);
+                var totalShield = this.TargetEnemy.CurrentStats.Shield;
+                if (totalShield > 0)
+                {
+                    this.ShieldBar.SetActive(true);
+                    _updateBar(this.ShieldBar, this.TargetEnemy.ShieldRemaining / totalShield);
+                }
+                else
+                {
+                    this.ShieldBar.SetActive(false);
+                }
             }
         }
     }

@@ -22,9 +22,14 @@ namespace Assets.Scripts
     public class PlayerController : MonoBehaviour
     {
         /// <summary>
+        /// The parent gameobject that holds all entity modify buttons
+        /// </summary>
+        public GameObject EntityModifyButtonParent;
+
+        /// <summary>
         /// A list of buttons used to modify the entity
         /// </summary>
-        public List<Button> EntityModifyButtons;
+        private List<Button> _entityModifyButtons = new List<Button>();
 
         /// <summary>
         /// The hover beam object
@@ -47,9 +52,12 @@ namespace Assets.Scripts
             }
             set
             {
-                foreach (var button in this.EntityModifyButtons)
+                foreach (var button in this._entityModifyButtons)
                 {
-                    button.interactable = (value != null);
+                    if (button != null)
+                    {
+                        button.interactable = (value != null);
+                    }
                 }
 
                 this._holdingEntity = value;
@@ -331,6 +339,7 @@ namespace Assets.Scripts
             PlayerController.CurrentInstancce = this;
 
             this._isMoving = false;
+            this._entityModifyButtons = this.EntityModifyButtonParent.GetComponentsInChildren<Button>().ToList();
         }
     }
 }

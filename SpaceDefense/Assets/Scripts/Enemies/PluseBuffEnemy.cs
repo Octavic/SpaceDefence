@@ -51,7 +51,7 @@ namespace Assets.Scripts.Enemies
                     SpawnManager
                         .CurrntInstance
                         .CurrentEnemies
-                        .Where(enemy => (enemy.transform.position - curPos).magnitude < range);
+                        .Where(enemy => enemy != null && (enemy.transform.position - curPos).magnitude < range);
 
                 foreach(var enemy in enemiesInRange)
                 {
