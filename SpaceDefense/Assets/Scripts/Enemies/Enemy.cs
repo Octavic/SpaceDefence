@@ -48,12 +48,12 @@ namespace Assets.Scripts.Enemies
         {
             get
             {
-                EnemyStats result = this.BaseStats;
+                EnemyStats result = new EnemyStats(this.BaseStats);
                 foreach (var set in this.Effects)
                 {
-                    result = result.ApplyEffect(set.Key);
+                    result.ApplyEffect(set.Key);
                 }
-                return this.BaseStats;
+                return result;
             }
         }
 
@@ -95,7 +95,7 @@ namespace Assets.Scripts.Enemies
         /// <summary>
         /// All of the detectors that is being triggered by this enemy
         /// </summary>
-        private HashSet<DetectorArea> _detectedBy = new HashSet<DetectorArea>();
+        private HashSet<DetectorArea> _inRangeDetectors = new HashSet<DetectorArea>();
 
         /// <summary>
         /// The rigidbody component
@@ -202,10 +202,10 @@ namespace Assets.Scripts.Enemies
             this.Effects[effect] = duration;
             if (effect == EffectEnum.Cloaked)
             {
-                foreach (var detector in this._detectedBy)
+                foreach (var detector in this._inRangeDetectors)
                 {
                     detector.OnEnemyExit();
-                    this._detectedBy = new HashSet<DetectorArea>();
+                    this._inRangeDetectors = new HashSet<DetectorArea>();
                 }
             }
         }
@@ -345,7 +345,7 @@ namespace Assets.Scripts.Enemies
                 var detector = collision.gameObject.GetComponent<DetectorArea>();
                 if (detector != null)
                 {
-                    this._detectedBy.Add(detector);
+                    this._inRangeDetectors.Add(detector);
                     detector.OnEnemyEnter();
                     return;
                 }
@@ -369,6 +369,7 @@ namespace Assets.Scripts.Enemies
             if (detector != null)
             {
                 detector.OnEnemyExit();
+                this._inRangeDetectors.Remove(detector);
             }
         }
     }

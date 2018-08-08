@@ -74,23 +74,20 @@ namespace Assets.Scripts.Enemies
         /// </summary>
         /// <param name="effect">Target effect</param>
         /// <returns>A new modified stats</returns>
-        public EnemyStats ApplyEffect(EffectEnum effect)
+        public void ApplyEffect(EffectEnum effect)
         {
-            var copied = new EnemyStats(this);
             switch (effect)
             {
                 case EffectEnum.Frozen:
-                    copied.Speed = 0;
+                    this.Speed = 0;
                     break;
                 case EffectEnum.Shielded:
-                    copied.Shield += EffectSettings.ShieldedAmount;
+                    this.Shield += EffectSettings.ShieldedAmount;
                     break;
                 case EffectEnum.Slowed:
-                    copied.Speed *= EffectSettings.SlowSpeedMultiplier;
+                    this.Speed *= EffectSettings.SlowSpeedMultiplier;
                     break;
             }
-
-            return copied;
         }
     }
 }
