@@ -28,6 +28,5 @@ namespace Assets.Scripts
             this.transform.position = (posA + posB) / 2;
             this.transform.eulerAngles = new Vector3(0, 0, angle * Mathf.Rad2Deg);
         }
-
     }
 }

@@ -120,6 +120,21 @@ namespace Assets.Scripts
         protected void Start()
         {
             SpawnManager.CurrntInstance = this;
+
+            var pathPrefab = PrefabManager.CurrentInstance.SpawnPath;
+            // Visualize each path
+            foreach (var path in this.Paths)
+            {
+                var firstPath = Instantiate(pathPrefab);
+                firstPath.Attach(path.SpawnPos, path.Nodes[0]); 
+                for (int i = 1; i < path.Nodes.Count; i++)
+                {
+                    var prevNode = path.Nodes[i - 1];
+                    var curNode = path.Nodes[i];
+                    var newPath = Instantiate(pathPrefab);
+                    newPath.Attach(prevNode, curNode);
+                }
+            }
         }
 
         /// <summary>

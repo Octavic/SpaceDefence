@@ -121,6 +121,7 @@
     <Compile Include="Assets\Scripts\Settings\Version.cs" />
     <Compile Include="Assets\Scripts\Settings\WeaponSettings.cs" />
     <Compile Include="Assets\Scripts\SpawnManager.cs" />
+    <Compile Include="Assets\Scripts\SpawnPathIndicator.cs" />
     <Compile Include="Assets\Scripts\Tags.cs" />
     <Compile Include="Assets\Scripts\Tips.cs" />
     <Compile Include="Assets\Scripts\UI\EntityPurchaseButton.cs" />

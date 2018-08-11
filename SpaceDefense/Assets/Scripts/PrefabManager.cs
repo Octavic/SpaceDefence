@@ -38,6 +38,11 @@ namespace Assets.Scripts
         protected Dictionary<EffectEnum, EnemyStatusIcon> _statusIconHash = new Dictionary<EffectEnum, EnemyStatusIcon>();
 
         /// <summary>
+        /// The path for each spawn
+        /// </summary>
+        public AttachableBeam SpawnPath;
+
+        /// <summary>
         /// Gets the current instance  of the <see cref="PrefabManager"/> class
         /// </summary>
         public static PrefabManager CurrentInstance
