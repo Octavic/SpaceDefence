@@ -88,6 +88,11 @@ namespace Assets.Scripts
         public List<Enemy> CurrentEnemies = new List<Enemy>();
 
         /// <summary>
+        /// Parent object for all the paths and indicators
+        /// </summary>
+        private GameObject _pathParent;
+
+        /// <summary>
         /// Should enemies spawn
         /// </summary>
         private bool _shouldSpawn;
@@ -120,18 +125,25 @@ namespace Assets.Scripts
         protected void Start()
         {
             SpawnManager.CurrntInstance = this;
+            this._pathParent = new GameObject();
 
             var pathPrefab = PrefabManager.CurrentInstance.SpawnPath;
+            var indicatorPrefab = PrefabManager.CurrentInstance.SpawnPathIndicator;
+
             // Visualize each path
             foreach (var path in this.Paths)
             {
-                var firstPath = Instantiate(pathPrefab);
+                var indicator = Instantiate(indicatorPrefab, this._pathParent.transform);
+                indicator.TargetPath = path;
+                indicator.StartRunningFromBeginning();
+
+                var firstPath = Instantiate(pathPrefab, this._pathParent.transform);
                 firstPath.Attach(path.SpawnPos, path.Nodes[0]); 
                 for (int i = 1; i < path.Nodes.Count; i++)
                 {
                     var prevNode = path.Nodes[i - 1];
                     var curNode = path.Nodes[i];
-                    var newPath = Instantiate(pathPrefab);
+                    var newPath = Instantiate(pathPrefab, this._pathParent.transform);
                     newPath.Attach(prevNode, curNode);
                 }
             }
@@ -159,7 +171,6 @@ namespace Assets.Scripts
                     }
 
                     // Update the regular spawns
-
                     foreach (var regularSpawn in path.RegularSpawns)
                     {
                         regularSpawn.TimeUntilSpawn -= Time.deltaTime;

@@ -41,6 +41,7 @@ namespace Assets.Scripts
         /// The path for each spawn
         /// </summary>
         public AttachableBeam SpawnPath;
+        public SpawnPathIndicator SpawnPathIndicator;
 
         /// <summary>
         /// Gets the current instance  of the <see cref="PrefabManager"/> class
