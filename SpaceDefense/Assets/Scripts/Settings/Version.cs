@@ -12,7 +12,7 @@ namespace Assets.Scripts.Settings
     public static class Version
     {
         public const int MajorVersion = 0;
-        public const int MinorVersion = 4;
+        public const int MinorVersion = 5;
         public const int PointRelease = 0;
         public const string GitHash = "";
 
