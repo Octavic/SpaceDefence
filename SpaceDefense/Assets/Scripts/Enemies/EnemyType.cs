@@ -13,6 +13,9 @@ namespace Assets.Scripts.Enemies
     {
         Locust,
         Phalanx,
-        Pulser
+        Pulser,
+        Cloaker,
+        Healer,
+        Titan
     }
 }

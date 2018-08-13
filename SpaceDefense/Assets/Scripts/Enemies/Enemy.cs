@@ -102,7 +102,7 @@ namespace Assets.Scripts.Enemies
         /// </summary>
         /// <param name="damage">How much damage to take</param>
         /// <param name="carriedEffect">The effect carried</param>
-        public void TakeDamage(float damage, IDictionary<EffectEnum, float> carriedEffects = null)
+        public virtual void TakeDamage(float damage, IDictionary<EffectEnum, float> carriedEffects = null)
         {
             bool isZapped = this.Effects.ContainsKey(EffectEnum.Zapped);
             bool isVulnerable = this.Effects.ContainsKey(EffectEnum.Vulnerable);

@@ -85,6 +85,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\AttachableBeam.cs" />
     <Compile Include="Assets\Scripts\EffectEnum.cs" />
+    <Compile Include="Assets\Scripts\Enemies\CloakerEnemy.cs" />
     <Compile Include="Assets\Scripts\Enemies\Enemy.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyHealthBar.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyStats.cs" />

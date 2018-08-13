@@ -25,5 +25,10 @@ namespace Assets.Scripts.Settings
         /// How many shield points is regained per second
         /// </summary>
         public const float ShieldRegenSpeed = 3.0f;
+
+        /// <summary>
+        /// The HP percentage that when dropper lower, cloaked enemies will become cloaked
+        /// </summary>
+        public const float CloakTriggerThreshold = 0.3f;
     }
 }
