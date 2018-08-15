@@ -34,7 +34,7 @@ namespace Assets.Scripts.LevelSelector
         /// </summary>
         public Text HighScore;
 
-        private LevelData CurrentLevelData
+        private MapNodeSaveData CurrentLevelData
         {
             get
             {
@@ -46,7 +46,7 @@ namespace Assets.Scripts.LevelSelector
                 return this._currentLevelData;
             }
         }
-        private LevelData _currentLevelData;
+        private MapNodeSaveData _currentLevelData;
 
         /// <summary>
         /// Gets a value representing if this level is available

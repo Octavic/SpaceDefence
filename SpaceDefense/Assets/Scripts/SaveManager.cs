@@ -17,18 +17,23 @@ namespace Assets.Scripts
     using Grid.States;
 
     [Serializable]
-    public class LevelData
+    public class MapNodeSaveData
     {
         public int LevelId;
         public MapGridState SavedState = null;
-        public float HighScore = 0;
+        public float HighScore;
         public bool IsBeat = false;
+
+        /// <summary>
+        /// A value between 0-1 that represents how well the player did.
+        /// </summary>
+        public float Efficiency;
     }
 
     [Serializable]
     class SaveFile
     {
-        public List<LevelData> Levels = new List<LevelData>();
+        public List<MapNodeSaveData> NodeProgress = new List<MapNodeSaveData>();
     }
 
     /// <summary>
@@ -92,17 +97,17 @@ namespace Assets.Scripts
         /// <param name="state">Target state to save</param>
         public void SaveLevelData(int levelId, MapGridState state)
         {
-            var targetLevel = this.CurrentSaveFile.Levels.Find(level => level.LevelId == levelId);
+            var targetLevel = this.CurrentSaveFile.NodeProgress.Find(level => level.LevelId == levelId);
             if (targetLevel != null)
             {
                 targetLevel.SavedState = state;
             }
             else
             {
-                var newLevelData = new LevelData();
+                var newLevelData = new MapNodeSaveData();
                 newLevelData.LevelId = levelId;
                 newLevelData.SavedState = state;
-                this.CurrentSaveFile.Levels.Add(newLevelData);
+                this.CurrentSaveFile.NodeProgress.Add(newLevelData);
             }
 
             this.Save();
@@ -116,7 +121,7 @@ namespace Assets.Scripts
         /// <param name="didWin">If the player beat the level or not</param>
         public void OnLevelEnd(int levelId, float currentScore, bool didWin)
         {
-            var targetLevel = this.CurrentSaveFile.Levels.Find(level => level.LevelId == levelId);
+            var targetLevel = this.CurrentSaveFile.NodeProgress.Find(level => level.LevelId == levelId);
             if (targetLevel != null)
             {
                 targetLevel.HighScore = Mathf.Max(targetLevel.HighScore, currentScore);
@@ -124,11 +129,11 @@ namespace Assets.Scripts
             }
             else
             {
-                var newLevelData = new LevelData();
+                var newLevelData = new MapNodeSaveData();
                 newLevelData.LevelId = levelId;
                 newLevelData.HighScore = currentScore;
                 newLevelData.IsBeat = didWin;
-                this.CurrentSaveFile.Levels.Add(newLevelData);
+                this.CurrentSaveFile.NodeProgress.Add(newLevelData);
             }
 
             this.Save();
@@ -139,7 +144,7 @@ namespace Assets.Scripts
         /// </summary>
         /// <param name="levelId">target level</param>
         /// <returns>Level data for the target level</returns>
-        public LevelData GetLevelData(int levelId)
+        public MapNodeSaveData GetLevelData(int levelId)
         {
             // Lazy initialization
             if (this.CurrentSaveFile == null)
@@ -152,14 +157,14 @@ namespace Assets.Scripts
                 return null;
             }
 
-            return this.CurrentSaveFile.Levels.Find(level => level.LevelId == levelId);
+            return this.CurrentSaveFile.NodeProgress.Find(level => level.LevelId == levelId);
         }
 
         /// <summary>
         /// Loads the saved state from data
         /// </summary>
         /// <param name="levelId">Id of the level</param>
-        /// <returns>The save state, null if inone</returns>
+        /// <returns>The save state, null if none</returns>
         public MapGridState LoadLevelState(int levelId)
         {
             var levelData = this.GetLevelData(levelId);
