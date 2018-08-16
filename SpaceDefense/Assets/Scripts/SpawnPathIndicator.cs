@@ -25,7 +25,7 @@ namespace Assets.Scripts
         /// <summary>
         /// Target path
         /// </summary>
-        public Path TargetPath { get; set; }
+        public SpawnPath TargetPath { get; set; }
 
         private int _curGoalIndex;
 

@@ -11,6 +11,9 @@ namespace Assets.Scripts
     using UnityEngine;
     using Enemies;
     
+    /// <summary>
+    /// Defines an enemy that regularly spawns
+    /// </summary>
     [Serializable]
     public class PathRegularSpawn
     {
@@ -20,6 +23,9 @@ namespace Assets.Scripts
         public float TimeUntilSpawn;
     }
 
+    /// <summary>
+    /// Defines a special enemy that spawns at a specific time
+    /// </summary>
     public class PathSpecialSpawn
     {
         public EnemyType Enemy;
@@ -30,7 +36,7 @@ namespace Assets.Scripts
     /// Defines a path for an enemy
     /// </summary>
     [Serializable]
-    public class Path
+    public class SpawnPath
     {
         /// <summary>
         /// A collection of enemy type => time in between spawns
@@ -48,18 +54,12 @@ namespace Assets.Scripts
         public List<PathSpecialSpawn> SpecialSpawns;
 
         /// <summary>
-        /// How long until the enemies spawn
-        /// </summary>
-        [HideInInspector]
-        public IList<float> TimeUntilSpawn;
-        
-        /// <summary>
         /// Where the enemies spawn
         /// </summary>
         public Vector2 SpawnPos;
 
         /// <summary>
-        /// A collection of nodes
+        /// A collection of goal nodes that enemies will move towards on this path
         /// </summary>
         public List<Vector2> Nodes;
     }
@@ -77,7 +77,7 @@ namespace Assets.Scripts
         /// <summary>
         /// A list of paths
         /// </summary>
-        public List<Path> Paths;
+        public List<SpawnPath> Paths;
 
         /// <summary>
         /// A list of enemies

@@ -24,6 +24,7 @@ namespace Assets.Scripts.Level
     /// <summary>
     /// Defines a node on a map
     /// </summary>
+    [Serializable]
     public class MapNode
     {
         /// <summary>
@@ -45,5 +46,10 @@ namespace Assets.Scripts.Level
         /// The save data for this node
         /// </summary>
         public MapNodeSaveData SaveData;
+
+        /// <summary>
+        /// All information required to play the level
+        /// </summary>
+        public LevelData LevelData;
     }
 }

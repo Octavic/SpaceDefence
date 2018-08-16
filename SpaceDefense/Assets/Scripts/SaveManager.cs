@@ -19,10 +19,30 @@ namespace Assets.Scripts
     [Serializable]
     public class MapNodeSaveData
     {
+        /// <summary>
+        /// ID for the level
+        /// </summary>
         public int LevelId;
+
+        /// <summary>
+        /// The saved state for this level 
+        /// </summary>
         public MapGridState SavedState = null;
+
+        /// <summary>
+        /// Best score achieved
+        /// </summary>
         public float HighScore;
+
+        /// <summary>
+        /// If the level has been beat yet
+        /// </summary>
         public bool IsBeat = false;
+
+        /// <summary>
+        /// The energy cost for the last run
+        /// </summary>
+        public float EnergyCost;
 
         /// <summary>
         /// A value between 0-1 that represents how well the player did.

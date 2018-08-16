@@ -1,5 +1,5 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="SocketBeam.cs">
+//  <copyright file="AttachableBeam.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
@@ -12,6 +12,9 @@ namespace Assets.Scripts
     using System.Text;
     using UnityEngine;
 
+    /// <summary>
+    /// Defines a beam that can be attached to two positions
+    /// </summary>
     public class AttachableBeam : MonoBehaviour
     {
         /// <summary>
