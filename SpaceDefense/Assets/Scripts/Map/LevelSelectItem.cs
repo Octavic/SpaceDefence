@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.LevelSelector
+namespace Assets.Scripts.MapSelector
 {
     using System;
     using System.Collections.Generic;

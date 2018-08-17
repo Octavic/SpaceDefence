@@ -1,21 +1,23 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="LevelManager.cs">
+//  <copyright file="MapNodeLevelData.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Enemies
+namespace Assets.Scripts.Map
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
-    /// A collection of all possible enemy types
+    /// All information about a level
     /// </summary>
-    public enum EnemyType
+    [Serializable]
+    public class MapNodeLevelData
     {
-        Locust,
-        Phalanx,
-        Pulser,
-        Cloaker,
-        Healer,
-        Titan
+        public int GridSizeX;
+        public int GridSizeY;
+
+        public List<SpawnPath> SpawnPaths;
     }
 }

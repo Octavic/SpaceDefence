@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Level
+namespace Assets.Scripts.Map
 {
     using System;
     using System.Collections.Generic;
@@ -17,8 +17,9 @@ namespace Assets.Scripts.Level
     [Serializable]
     public class MapNodeResources
     {
-        public ResourceType Resrouce;
-        public float Amount;
+        public ResourceType Resource;
+        public float ProduceAmount;
+        public float CapacityBoost;
     }
 
     /// <summary>
@@ -38,9 +39,14 @@ namespace Assets.Scripts.Level
         public MapNodeDifficulty Difficulty;
 
         /// <summary>
-        /// The amount of resources produced
+        /// The amount of resources rewarded when this map node is captured
         /// </summary>
-        public List<MapNodeResources> Productions;
+        public List<MapNodeResources> ResourceReward;
+
+        /// <summary>
+        /// How much power is generated when this map node is captured
+        /// </summary>
+        public float PowerGenerated;
 
         /// <summary>
         /// The save data for this node
@@ -50,6 +56,6 @@ namespace Assets.Scripts.Level
         /// <summary>
         /// All information required to play the level
         /// </summary>
-        public LevelData LevelData;
+        public MapNodeLevelData LevelData;
     }
 }

@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Level
+namespace Assets.Scripts.Map
 {
     using System;
     using System.Collections.Generic;

@@ -11,6 +11,7 @@ namespace Assets.Scripts.Wiring.Weapon
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using Map;
 
     /// <summary>
     /// Defines a detonable projectile

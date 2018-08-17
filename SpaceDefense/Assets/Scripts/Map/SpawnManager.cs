@@ -4,12 +4,12 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Map
 {
     using System;
     using System.Collections.Generic;
     using UnityEngine;
-    using Enemies;
+    using Map.Enemies;
     
     /// <summary>
     /// Defines an enemy that regularly spawns

@@ -12,7 +12,7 @@ namespace Assets.Scripts.Wiring.Weapon
     using System.Text;
     using UnityEngine;
     using Utils;
-    using Enemies;
+    using Map.Enemies;
 
     /// <summary>
     /// The bolt between two tesla coils

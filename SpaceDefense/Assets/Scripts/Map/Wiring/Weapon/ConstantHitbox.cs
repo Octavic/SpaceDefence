@@ -1,25 +1,19 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="LevelData.cs">
+//  <copyright file="ConstantHitbox.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Level
+namespace Assets.Scripts.Wiring.Weapon
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using Map.Enemies;
 
-    /// <summary>
-    /// All information about a levels
-    /// </summary>
-    [Serializable]
-    public class LevelData
+    public interface IConstantHitbox
     {
-        public int GridSizeX;
-        public int GridSizeY;
-
-        public List<SpawnPath> SpawnPaths;
+        void OnHitEnemy(Enemy hitEnemy);
     }
 }

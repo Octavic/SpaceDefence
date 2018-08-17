@@ -4,13 +4,14 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Enemies
+namespace Assets.Scripts.Map.Enemies
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using Map;
 
     /// <summary>
     /// Defines an enemy that generates a pulse to  buff nearby enemies

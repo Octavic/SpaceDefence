@@ -1,21 +1,21 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="MapNodeBehavior.cs">
+//  <copyright file="LevelManager.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Level
+namespace Assets.Scripts.Map.Enemies
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using UnityEngine;
-
     /// <summary>
-    /// Defines the unity behavior of a map node
+    /// A collection of all possible enemy types
     /// </summary>
-    public class MapNodeBehavior: MonoBehaviour
+    public enum EnemyType
     {
+        Locust,
+        Phalanx,
+        Pulser,
+        Cloaker,
+        Healer,
+        Titan
     }
 }

@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Enemies
+namespace Assets.Scripts.Map.Enemies
 {
     using System;
     using System.Collections.Generic;

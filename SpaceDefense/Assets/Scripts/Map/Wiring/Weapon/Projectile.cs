@@ -11,7 +11,7 @@ namespace Assets.Scripts.Wiring.Weapon
     using System.Linq;
     using System.Text;
     using UnityEngine;
-    using Enemies;
+    using Map.Enemies;
 
     /// <summary>
     /// The projectile fired

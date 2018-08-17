@@ -1,25 +1,25 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="EnemyStatusIcon.cs">
+//  <copyright file="ResourceType.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Enemies
+namespace Assets.Scripts.Map
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using UnityEngine;
 
     /// <summary>
-    /// Represents an icon for the status bar
+    /// All resources
     /// </summary>
-    public class EnemyStatusIcon : MonoBehaviour
+    public enum ResourceType
     {
-        /// <summary>
-        /// The target effect
-        /// </summary>
-        public EffectEnum TargetEffect;
+        Iron,
+        Copper,
+        Circuit,
+        Plasma,
+        Power
     }
 }

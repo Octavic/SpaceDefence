@@ -18,7 +18,8 @@ namespace Assets.Scripts
     using Settings;
     using UI.Shop;
     using UnityEngine.SceneManagement;
-    using Enemies;
+    using Map.Enemies;
+    using Map;
 
     /// <summary>
     /// Controls the overall game flow
