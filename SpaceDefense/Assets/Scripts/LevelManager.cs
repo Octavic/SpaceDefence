@@ -11,11 +11,13 @@ namespace Assets.Scripts
     using System.Linq;
     using System.Text;
     using Map;
+    using UnityEngine;
+    using UnityEngine.SceneManagement;
 
     /// <summary>
     /// Manages the current level
     /// </summary>
-    public class LevelManager
+    public class LevelManager : MonoBehaviour
     {
         /// <summary>
         /// Gets the current instance of the <see cref="LevelManager"/> class
@@ -34,11 +36,25 @@ namespace Assets.Scripts
         }
         private static LevelManager _currentInstance;
 
-        public MapNodeLevelData CurrentLevel { get; private set; }
+        public MapNode CurrentLevel { get; private set; }
 
-        public void StartLevel(MapNode level)
+        public void ShowLevelInfo(MapNode level)
         {
+            this.CurrentLevel = level;
+            MapNodeInfoPanel.CurrentInstance.Render(level);
+        }
 
+        public void LaunchLevel()
+        {
+            SceneManager.LoadScene("PlayScene");
+        }
+
+        /// <summary>
+        /// Used for initialization
+        /// </summary>
+        protected void Start()
+        {
+            GameObject.DontDestroyOnLoad(this.gameObject);
         }
     }
 }

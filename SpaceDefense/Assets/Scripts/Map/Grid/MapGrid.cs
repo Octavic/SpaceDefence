@@ -30,12 +30,12 @@ namespace Assets.Scripts.Grid
         /// <summary>
         /// Width of the grid
         /// </summary>
-        public int SizeX;
+        public int SizeX { get; private set; }
 
         /// <summary>
         /// Height of the grid
         /// </summary>
-        public int SizeY;
+        public int SizeY { get; private set; }
 
         /// <summary>
         /// Gets the current instance of the <see cref="MapGrid"/> class
@@ -597,6 +597,15 @@ namespace Assets.Scripts.Grid
         /// </summary>
         protected void Start()
         {
+            if (LevelManager.CurrentInstance.CurrentLevel == null)
+            {
+                Debug.LogError("No level selected!");
+                return;
+            }
+
+            this.SizeX = LevelManager.CurrentInstance.CurrentLevel.LevelData.GridSizeX;
+            this.SizeY = LevelManager.CurrentInstance.CurrentLevel.LevelData.GridSizeY;
+
             this._bottomLeftWorldPosition = this.transform.position - new Vector3(GeneralSettings.GridSize / 2, GeneralSettings.GridSize / 2);
             var _boxCollider = this.GetComponent<BoxCollider2D>();
             _boxCollider.size = new Vector2(this.SizeX * GeneralSettings.GridSize, this.SizeY * GeneralSettings.GridSize);
