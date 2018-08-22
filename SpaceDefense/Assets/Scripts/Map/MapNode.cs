@@ -10,6 +10,7 @@ namespace Assets.Scripts.Map
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using UnityEngine;
 
     /// <summary>
     /// Specific production of a resource type
@@ -51,6 +52,7 @@ namespace Assets.Scripts.Map
         /// <summary>
         /// The save data for this node
         /// </summary>
+        [HideInInspector]
         public MapNodeSaveData SaveData;
 
         /// <summary>

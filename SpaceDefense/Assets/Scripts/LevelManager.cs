@@ -28,7 +28,7 @@ namespace Assets.Scripts
             {
                 if (_currentInstance == null)
                 {
-                    _currentInstance = new LevelManager();
+                    _currentInstance = new GameObject().AddComponent<LevelManager>();
                 }
 
                 return _currentInstance;
