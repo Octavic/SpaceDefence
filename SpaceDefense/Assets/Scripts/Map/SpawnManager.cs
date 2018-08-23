@@ -127,7 +127,7 @@ namespace Assets.Scripts.Map
                 return;
             }
 
-            this._paths = LevelManager.CurrentInstance.CurrentLevel.LevelData.SpawnPaths;
+            this._paths = LevelManager.CurrentInstance.CurrentLevel.TargetNode.LevelData.SpawnPaths;
 
             SpawnManager.CurrntInstance = this;
             this._pathParent = new GameObject();

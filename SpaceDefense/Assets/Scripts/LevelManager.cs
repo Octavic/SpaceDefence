@@ -36,16 +36,20 @@ namespace Assets.Scripts
         }
         private static LevelManager _currentInstance;
 
-        public MapNode CurrentLevel { get; private set; }
+        public MapNodeBehavior CurrentLevel { get; private set; }
 
-        public void ShowLevelInfo(MapNode level)
+        public void ShowLevelInfo(MapNodeBehavior level)
         {
             this.CurrentLevel = level;
-            MapNodeInfoPanel.CurrentInstance.Render(level);
+            MapNodeInfoPanel.CurrentInstance.Render(level.TargetNode);
         }
 
         public void LaunchLevel()
         {
+            if(!this.CurrentLevel.IsAvailable)
+            {
+                Debug.Log("Unavailable level tried to launch: " + this.CurrentLevel.TargetNode.NodeId);
+            }
             SceneManager.LoadScene("PlayScene");
         }
 

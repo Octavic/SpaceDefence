@@ -18,16 +18,53 @@ namespace Assets.Scripts.Map
     public class MapNodeBehavior : MonoBehaviour
     {
         /// <summary>
+        /// A hash of map node name => map node behavior
+        /// </summary>
+        public static Dictionary<int, MapNodeBehavior> MapNodes = new Dictionary<int, MapNodeBehavior>();
+
+        /// <summary>
         /// The node that this behavior represents
         /// </summary>
         public MapNode TargetNode;
+
+        /// <summary>
+        /// If the map node is available
+        /// </summary>
+        public bool IsAvailable
+        {
+            get
+            {
+                if (!this._isAvailable.HasValue)
+                {
+                    this._isAvailable = !this.TargetNode.LockedBy.Any(nodeId => !MapNodes[nodeId].TargetNode.SaveData.IsBeat);
+                }
+
+                return this._isAvailable.Value;
+            }
+        }
+        private bool? _isAvailable;
 
         /// <summary>
         /// Called when the node was clicked 
         /// </summary>
         public void OnCliCkNode()
         {
-            LevelManager.CurrentInstance.ShowLevelInfo(this.TargetNode);
+            LevelManager.CurrentInstance.ShowLevelInfo(this);
+        }
+
+        /// <summary>
+        /// Used for initialization
+        /// </summary>
+        protected void Start()
+        {
+            var nodeId = this.TargetNode.NodeId;
+            if (MapNodeBehavior.MapNodes.ContainsKey(nodeId))
+            {
+                Debug.LogError("Duplicate map node id: " + nodeId);
+                return;
+            }
+
+            MapNodeBehavior.MapNodes[nodeId] = this;
         }
     }
 }

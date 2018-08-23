@@ -450,7 +450,7 @@ namespace Assets.Scripts.Grid
                     Debug.Log("Failed to load entity at " + entityState.PosX + ',' + entityState.PosY);
                     return false;
                 }
-                else 
+                else
                 {
                     // Try to place the entity on board
                     var newCoor = new GridCoordinate(entityState.PosX, entityState.PosY);
@@ -481,7 +481,7 @@ namespace Assets.Scripts.Grid
                         var targetCoordinate = new GridCoordinate(connection.ConnectedX, connection.ConnectedY);
                         if (!this._map.TryGetValue(targetCoordinate, out connectedEntity))
                         {
-                            Debug.Log("No entity at coordinate to connect to: "+ targetCoordinate);
+                            Debug.Log("No entity at coordinate to connect to: " + targetCoordinate);
                             this.ResetBoard();
                             return false;
                         }
@@ -603,8 +603,9 @@ namespace Assets.Scripts.Grid
                 return;
             }
 
-            this.SizeX = LevelManager.CurrentInstance.CurrentLevel.LevelData.GridSizeX;
-            this.SizeY = LevelManager.CurrentInstance.CurrentLevel.LevelData.GridSizeY;
+            var levelData = LevelManager.CurrentInstance.CurrentLevel.TargetNode.LevelData;
+            this.SizeX = levelData.GridSizeX;
+            this.SizeY = levelData.GridSizeY;
 
             this._bottomLeftWorldPosition = this.transform.position - new Vector3(GeneralSettings.GridSize / 2, GeneralSettings.GridSize / 2);
             var _boxCollider = this.GetComponent<BoxCollider2D>();
