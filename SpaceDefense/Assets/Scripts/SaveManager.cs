@@ -16,6 +16,9 @@ namespace Assets.Scripts
     using Grid;
     using Grid.States;
 
+    /// <summary>
+    /// The save data related to one map node
+    /// </summary>
     [Serializable]
     public class MapNodeSaveData
     {
@@ -50,6 +53,9 @@ namespace Assets.Scripts
         public float Efficiency;
     }
 
+    /// <summary>
+    /// Defines the save file
+    /// </summary>
     [Serializable]
     class SaveFile
     {
@@ -71,14 +77,6 @@ namespace Assets.Scripts
                 if (_currentInstance == null)
                 {
                     var saveManagerObject = GameObject.FindGameObjectWithTag(Tags.SaveManager);
-
-                    // Only happens when the game is launched from a certain level. Happens during development only
-                    if (saveManagerObject == null)
-                    {
-                        saveManagerObject = new GameObject();
-                        saveManagerObject.AddComponent<SaveManager>();
-                    }
-
                     _currentInstance = saveManagerObject.GetComponent<SaveManager>();
                 }
 
@@ -113,11 +111,11 @@ namespace Assets.Scripts
         /// <summary>
         /// Save the state into a file
         /// </summary>
-        /// <param name="levelId">Id of the level</param>
+        /// <param name="mapNodeId">Id of the level</param>
         /// <param name="state">Target state to save</param>
-        public void SaveLevelData(int levelId, MapGridState state)
+        public void SaveMapGridState(int mapNodeId, MapGridState state)
         {
-            var targetLevel = this.CurrentSaveFile.NodeProgress.Find(level => level.LevelId == levelId);
+            var targetLevel = this.CurrentSaveFile.NodeProgress.Find(level => level.LevelId == mapNodeId);
             if (targetLevel != null)
             {
                 targetLevel.SavedState = state;
@@ -125,7 +123,7 @@ namespace Assets.Scripts
             else
             {
                 var newLevelData = new MapNodeSaveData();
-                newLevelData.LevelId = levelId;
+                newLevelData.LevelId = mapNodeId;
                 newLevelData.SavedState = state;
                 this.CurrentSaveFile.NodeProgress.Add(newLevelData);
             }

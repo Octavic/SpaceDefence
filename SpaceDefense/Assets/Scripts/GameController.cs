@@ -27,19 +27,9 @@ namespace Assets.Scripts
     public class GameController : MonoBehaviour
     {
         /// <summary>
-        /// Level of the id. Must be unique across all levels 
-        /// </summary>
-        public int LevelId;
-
-        /// <summary>
         /// The total core health
         /// </summary>
         public float TotalCoreHealth;
-
-        /// <summary>
-        /// How long to defend for
-        /// </summary>
-        public float TotalDefenseDuration;
 
         #region Unity object links
         /// <summary>
@@ -209,13 +199,13 @@ namespace Assets.Scripts
 
         public void Save()
         {
-            SaveManager.CurrentInstance.SaveLevelData(this.LevelId, Grid.SaveState());
+            SaveManager.CurrentInstance.SaveMapGridState(LevelManager.CurrentInstance.CurrentLevel.TargetNode.NodeId, Grid.SaveState());
         }
 
         public void Load()
         {
             this.Grid.ResetBoard();
-            var levelData = SaveManager.CurrentInstance.GetLevelData(this.LevelId);
+            var levelData = SaveManager.CurrentInstance.GetLevelData(LevelManager.CurrentInstance.CurrentLevel.TargetNode.NodeId);
             if (levelData != null && levelData.SavedState != null)
             {
                 this.Grid.TryLoadFromState(levelData.SavedState);
@@ -264,7 +254,7 @@ namespace Assets.Scripts
             _currentInstane = this;
             this.CurrentCoreHealth = this.TotalCoreHealth;
             this._currentPhase = GamePhases.Build;
-            this._collectDataInterval = this.TotalDefenseDuration / GeneralSettings.EndGraphSections;
+            this._collectDataInterval = LevelSettings.TotalDefenseDuration / GeneralSettings.EndGraphSections;
         }
 
         /// <summary>
@@ -275,7 +265,7 @@ namespace Assets.Scripts
             if (this.CurrentPhasee == GamePhases.Fight && !this._isGameOver)
             {
                 this.TimeSinceFightStart += Time.deltaTime;
-                if (this.TimeSinceFightStart > this.TotalDefenseDuration)
+                if (this.TimeSinceFightStart > LevelSettings.TotalDefenseDuration)
                 {
                     this.OnGameOver(true);
                 }
@@ -304,7 +294,7 @@ namespace Assets.Scripts
         {
             this._isGameOver = true;
             var finalScore = this._scoreData.Last();
-            SaveManager.CurrentInstance.OnLevelEnd(this.LevelId, finalScore, didWin);
+            SaveManager.CurrentInstance.OnLevelEnd(LevelManager.CurrentInstance.CurrentLevel.TargetNode.NodeId, finalScore, didWin);
             this.GameOverScreenObject.gameObject.SetActive(true);
             var enemyPassPenalty = (this.TotalCoreHealth - this._coreHealthData.Last()) * GeneralSettings.EnemySurvivalPenaltyMultiplier;
             this.GameOverScreenObject.OnGameOver(didWin, enemyPassPenalty, this._incomeData, this._costData, this._coreHealthData);

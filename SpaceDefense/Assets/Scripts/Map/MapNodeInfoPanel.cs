@@ -40,8 +40,12 @@ namespace Assets.Scripts.Map
             var allEnemies = new List<EnemyType>();
             foreach (var path in targetNode.LevelData.SpawnPaths)
             {
-                allEnemies.Concat(path.RegularSpawns.Select(spawn => spawn.Enemy));
+                allEnemies = allEnemies
+                    .Concat(path.RegularSpawns.Select(spawn => spawn.Enemy))
+                    .Concat(path.SpecialSpawns.Select(spawn => spawn.Enemy))
+                    .ToList();
             }
+
             this.Show();
         }
 

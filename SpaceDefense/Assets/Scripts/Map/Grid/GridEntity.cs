@@ -12,6 +12,16 @@ namespace Assets.Scripts.Grid
     using System.Text;
     using UnityEngine;
     using Wiring;
+    using Map;
+
+    /// <summary>
+    /// The total resource cost
+    /// </summary>
+    public class ResourceCost
+    {
+        public ResourceType Resource;
+        public float Amount;
+    }
 
     /// <summary>
     /// Defines an entity on the grid
@@ -22,6 +32,11 @@ namespace Assets.Scripts.Grid
         /// Gets the unique ID for the grid entity
         /// </summary>
         public int ID;
+
+        /// <summary>
+        /// The cost to manufacture the entity
+        /// </summary>
+        public List<ResourceCost> ManufactureCost;
 
         /// <summary>
         /// how many times this entity was rotated

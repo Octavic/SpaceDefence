@@ -10,6 +10,7 @@ namespace Assets.Scripts.Map
     using System.Collections.Generic;
     using UnityEngine;
     using Map.Enemies;
+    using Settings;
     
     /// <summary>
     /// Defines an enemy that regularly spawns
@@ -169,7 +170,7 @@ namespace Assets.Scripts.Map
                 // Update each path
                 foreach (var path in this._paths)
                 {
-                    var timeTillEnd = gameController.TotalDefenseDuration - gameController.TimeSinceFightStart;
+                    var timeTillEnd = LevelSettings.TotalDefenseDuration - gameController.TimeSinceFightStart;
                     if (path.StopSpawnBeforeEnd >= timeTillEnd)
                     {
                         continue;
