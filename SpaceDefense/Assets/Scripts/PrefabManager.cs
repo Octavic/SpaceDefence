@@ -11,7 +11,7 @@ namespace Assets.Scripts
     using System.Linq;
     using System.Text;
     using UnityEngine;
-    using Grid;
+    using Map.Grid;
     using Map.Enemies;
     using Map;
 

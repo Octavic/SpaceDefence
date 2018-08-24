@@ -12,8 +12,8 @@ namespace Assets.Scripts
     using System.Text;
     using UnityEngine;
     using UnityEngine.UI;
-    using Wiring;
-    using Grid;
+    using Map.Wiring;
+    using Map.Grid;
     using UI.Graph;
     using Settings;
     using UI.Shop;

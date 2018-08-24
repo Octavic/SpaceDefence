@@ -13,8 +13,8 @@ namespace Assets.Scripts
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
     using UnityEngine;
-    using Grid;
-    using Grid.States;
+    using Map.Grid;
+    using Map.Grid.States;
 
     /// <summary>
     /// The save data related to one map node

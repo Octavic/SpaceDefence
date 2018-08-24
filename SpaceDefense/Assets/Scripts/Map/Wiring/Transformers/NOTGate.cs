@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Wiring.Transformers
+namespace Assets.Scripts.Map.Wiring.Transformers
 {
     using System;
     using System.Collections.Generic;

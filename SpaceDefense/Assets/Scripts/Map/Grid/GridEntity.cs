@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Grid
+namespace Assets.Scripts.Map.Grid
 {
     using System;
     using System.Collections.Generic;

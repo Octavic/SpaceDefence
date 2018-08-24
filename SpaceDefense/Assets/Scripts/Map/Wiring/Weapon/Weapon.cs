@@ -4,13 +4,13 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Wiring.Weapon
+namespace Assets.Scripts.Map.Wiring.Weapon
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using Grid;
+    using Map.Grid;
     using UnityEngine;
 
     /// <summary>

@@ -11,7 +11,7 @@ namespace Assets.Scripts.Utils
     using System.Linq;
     using System.Text;
     using UnityEngine;
-    using Wiring;
+    using Map.Wiring;
 
     /// <summary>
     /// A collection of util functions

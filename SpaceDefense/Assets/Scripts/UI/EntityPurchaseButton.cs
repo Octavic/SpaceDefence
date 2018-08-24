@@ -10,7 +10,7 @@ namespace Assets.Scripts.UI
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using Grid;
+    using Map.Grid;
     using UnityEngine;
     using Map;
 

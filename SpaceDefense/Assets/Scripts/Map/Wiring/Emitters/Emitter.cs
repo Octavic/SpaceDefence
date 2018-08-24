@@ -4,14 +4,14 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Wiring.Emitters
+namespace Assets.Scripts.Map.Wiring.Emitters
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using UnityEngine;
-    using Grid;
+    using Map.Grid;
     using Utils;
 
     /// <summary>

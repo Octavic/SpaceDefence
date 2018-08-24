@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Wiring
+namespace Assets.Scripts.Map.Wiring
 {
     using System;
     using System.Collections.Generic;

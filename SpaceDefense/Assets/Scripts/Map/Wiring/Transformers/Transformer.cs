@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Wiring.Transformers
+namespace Assets.Scripts.Map.Wiring.Transformers
 {
     using System;
     using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace Assets.Scripts.Wiring.Transformers
     using System.Text;
     using UnityEngine;
     using Settings;
-    using Grid;
+    using Map.Grid;
     using Utils;
 
     /// <summary>
