@@ -23,6 +23,11 @@ namespace Assets.Scripts.Map
         public static Dictionary<int, MapNodeBehavior> MapNodes = new Dictionary<int, MapNodeBehavior>();
 
         /// <summary>
+        /// Prefab for the line segment  to show map node dependency
+        /// </summary>
+        public MapNodeDependencyBeam DependencyBeamPrefab;
+
+        /// <summary>
         /// The node that this behavior represents
         /// </summary>
         public MapNode TargetNode;
@@ -65,6 +70,13 @@ namespace Assets.Scripts.Map
             }
 
             MapNodeBehavior.MapNodes[nodeId] = this;
+
+            foreach (var lockedById in this.TargetNode.LockedBy)
+            {
+                var lockedByNode = MapNodes[lockedById];
+                var routeVisual = Instantiate(this.DependencyBeamPrefab);
+                routeVisual.Attach(this.transform.position, lockedByNode.transform.position);
+            }
         }
     }
 }
