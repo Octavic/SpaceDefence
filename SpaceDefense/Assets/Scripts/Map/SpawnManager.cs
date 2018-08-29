@@ -27,6 +27,7 @@ namespace Assets.Scripts.Map
     /// <summary>
     /// Defines a special enemy that spawns at a specific time
     /// </summary>
+    [Serializable]
     public class PathSpecialSpawn
     {
         public EnemyType Enemy;

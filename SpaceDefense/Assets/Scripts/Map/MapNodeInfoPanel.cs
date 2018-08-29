@@ -21,15 +21,18 @@ namespace Assets.Scripts.Map
         /// <summary>
         /// The current instance
         /// </summary>
-        public static MapNodeInfoPanel CurrentInstance { get; private set; }
-
-        /// <summary>
-        /// Used for initialization
-        /// </summary>
-        protected void Start()
+        public static MapNodeInfoPanel CurrentInstance
         {
-            CurrentInstance = this;
+            get
+            {
+                if(_currentInstance == null)
+                {
+                    _currentInstance = GameObject.FindObjectOfType<MapNodeInfoPanel>();
+                }
+                return _currentInstance;
+            }
         }
+        private static MapNodeInfoPanel _currentInstance;
 
         /// <summary>
         /// Renders the panel. Should be called only once until the node changes

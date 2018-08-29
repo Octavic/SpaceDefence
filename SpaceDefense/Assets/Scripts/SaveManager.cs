@@ -137,7 +137,7 @@ namespace Assets.Scripts
         /// <param name="levelId">Target level</param>
         /// <param name="currentScore">The current score</param>
         /// <param name="didWin">If the player beat the level or not</param>
-        public void OnLevelEnd(int levelId, float currentScore, bool didWin)
+        public void OnLevelComplete(int levelId, float currentScore, bool didWin)
         {
             var targetLevel = this.CurrentSaveFile.NodeProgress.Find(level => level.LevelId == levelId);
             if (targetLevel != null)
@@ -196,6 +196,9 @@ namespace Assets.Scripts
             }
         }
 
+        /// <summary>
+        /// Saves the current state
+        /// </summary>
         private void Save()
         {
             var formatter = new BinaryFormatter();
@@ -205,6 +208,9 @@ namespace Assets.Scripts
             targetFile.Close();
         }
 
+        /// <summary>
+        /// Loads from the save file
+        /// </summary>
         private void Load()
         {
             FileStream targetFile = null;

@@ -7,6 +7,7 @@
 namespace Assets.Scripts
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -89,7 +90,7 @@ namespace Assets.Scripts
         {
             get
             {
-                return this._currentPhase ;
+                return this._currentPhase;
             }
             set
             {
@@ -143,10 +144,8 @@ namespace Assets.Scripts
         private float _collectDataInterval;
 
         /// <summary>
-        /// How much time passed since last time data was collected
+        /// Collected data
         /// </summary>
-        private float _timeSinceCollect;
-
         private List<float> _incomeData = new List<float>();
         private List<float> _costData = new List<float>();
         private List<float> _scoreData = new List<float>();
@@ -238,6 +237,12 @@ namespace Assets.Scripts
         {
             Destroy(enemy.gameObject);
             this.CurrentCoreHealth -= enemy.Worth;
+
+            if (this.CurrentCoreHealth <= 0)
+            {
+                this.CurrentCoreHealth = 0;
+                this.OnGameOver(false);
+            }
         }
 
         private void UpdateScore()
@@ -255,6 +260,7 @@ namespace Assets.Scripts
             this.CurrentCoreHealth = this.TotalCoreHealth;
             this._currentPhase = GamePhases.Build;
             this._collectDataInterval = LevelSettings.TotalDefenseDuration / GeneralSettings.EndGraphSections;
+            StartCoroutine(this.CollectData());
         }
 
         /// <summary>
@@ -271,20 +277,20 @@ namespace Assets.Scripts
                 }
 
                 this.UpdateScore();
+            }
+        }
 
-                this._timeSinceCollect += Time.deltaTime;
-
-                // Collect data every x seconds
-                if (this._timeSinceCollect >= this._collectDataInterval)
-                {
-                    this._timeSinceCollect -= this._collectDataInterval;
-
-                    this._incomeData.Add(this._curIncome);
-                    this._costData.Add(this._curCost);
-                    this._coreHealthData.Add(this.CurrentCoreHealth);
-                    this._scoreData.Add(this._curIncome - this._curCost);
-                }
-            }   
+        private IEnumerator CollectData()
+        {
+            do
+            {
+                yield return new WaitForSeconds(this._collectDataInterval);
+                this._incomeData.Add(this._curIncome);
+                this._costData.Add(this._curCost);
+                this._coreHealthData.Add(this.CurrentCoreHealth);
+                this._scoreData.Add(this._curIncome - this._curCost);
+            }
+            while (!this._isGameOver);
         }
 
         /// <summary>
@@ -294,7 +300,7 @@ namespace Assets.Scripts
         {
             this._isGameOver = true;
             var finalScore = this._scoreData.Last();
-            SaveManager.CurrentInstance.OnLevelEnd(LevelManager.CurrentInstance.CurrentLevel.TargetNode.NodeId, finalScore, didWin);
+            SaveManager.CurrentInstance.OnLevelComplete(LevelManager.CurrentInstance.CurrentLevel.TargetNode.NodeId, finalScore, didWin);
             this.GameOverScreenObject.gameObject.SetActive(true);
             var enemyPassPenalty = (this.TotalCoreHealth - this._coreHealthData.Last()) * GeneralSettings.EnemySurvivalPenaltyMultiplier;
             this.GameOverScreenObject.OnGameOver(didWin, enemyPassPenalty, this._incomeData, this._costData, this._coreHealthData);

@@ -52,7 +52,7 @@ namespace Assets.Scripts.Map
         /// <summary>
         /// Called when the node was clicked 
         /// </summary>
-        public void OnCliCkNode()
+        public void OnClickNode()
         {
             LevelManager.CurrentInstance.ShowLevelInfo(this);
         }
