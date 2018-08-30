@@ -123,13 +123,14 @@ namespace Assets.Scripts.Map
         /// </summary>
         protected void Start()
         {
-            if(LevelManager.CurrentInstance.CurrentLevel == null)
+            var currentLevel = LevelManager.CurrentInstance.CurrentLevel;
+            if(currentLevel == null)
             {
                 Debug.LogError("No level selected!");
                 return;
             }
 
-            this._paths = LevelManager.CurrentInstance.CurrentLevel.TargetNode.LevelData.SpawnPaths;
+            this._paths = currentLevel.LevelData.SpawnPaths;
 
             SpawnManager.CurrntInstance = this;
             this._pathParent = new GameObject();

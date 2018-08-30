@@ -244,6 +244,7 @@ namespace Assets.Scripts.Map.Enemies
         {
             this.HealthRemaining = this.BaseStats.Health;
             this.ShieldRemaining = this.BaseStats.Shield;
+            this.RecalculateStats();
         }
 
         /// <summary>

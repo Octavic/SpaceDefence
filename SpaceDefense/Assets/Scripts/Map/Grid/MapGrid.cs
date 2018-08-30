@@ -603,7 +603,7 @@ namespace Assets.Scripts.Map.Grid
                 return;
             }
 
-            var levelData = LevelManager.CurrentInstance.CurrentLevel.TargetNode.LevelData;
+            var levelData = LevelManager.CurrentInstance.CurrentLevel.LevelData;
             this.SizeX = levelData.GridSizeX;
             this.SizeY = levelData.GridSizeY;
 

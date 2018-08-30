@@ -67,5 +67,14 @@ namespace Assets.Scripts.Map
         {
             this.gameObject.SetActive(false);
         }
+
+        /// <summary>
+        /// Launches the level
+        /// </summary>
+        public void LaunchLevel()
+        {
+            this.Hide();
+            LevelManager.CurrentInstance.LaunchLevel();
+        }
     }
 }

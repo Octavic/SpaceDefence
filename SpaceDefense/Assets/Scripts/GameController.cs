@@ -198,13 +198,13 @@ namespace Assets.Scripts
 
         public void Save()
         {
-            SaveManager.CurrentInstance.SaveMapGridState(LevelManager.CurrentInstance.CurrentLevel.TargetNode.NodeId, Grid.SaveState());
+            SaveManager.CurrentInstance.SaveMapGridState(LevelManager.CurrentInstance.CurrentLevel.NodeId, Grid.SaveState());
         }
 
         public void Load()
         {
             this.Grid.ResetBoard();
-            var levelData = SaveManager.CurrentInstance.GetLevelData(LevelManager.CurrentInstance.CurrentLevel.TargetNode.NodeId);
+            var levelData = SaveManager.CurrentInstance.GetLevelData(LevelManager.CurrentInstance.CurrentLevel.NodeId);
             if (levelData != null && levelData.SavedState != null)
             {
                 this.Grid.TryLoadFromState(levelData.SavedState);
@@ -300,7 +300,7 @@ namespace Assets.Scripts
         {
             this._isGameOver = true;
             var finalScore = this._scoreData.Last();
-            SaveManager.CurrentInstance.OnLevelComplete(LevelManager.CurrentInstance.CurrentLevel.TargetNode.NodeId, finalScore, didWin);
+            SaveManager.CurrentInstance.OnLevelComplete(LevelManager.CurrentInstance.CurrentLevel.NodeId, finalScore, didWin);
             this.GameOverScreenObject.gameObject.SetActive(true);
             var enemyPassPenalty = (this.TotalCoreHealth - this._coreHealthData.Last()) * GeneralSettings.EnemySurvivalPenaltyMultiplier;
             this.GameOverScreenObject.OnGameOver(didWin, enemyPassPenalty, this._incomeData, this._costData, this._coreHealthData);

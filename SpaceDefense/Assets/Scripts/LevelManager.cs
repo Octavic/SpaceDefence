@@ -6,10 +6,6 @@
 
 namespace Assets.Scripts
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using Map;
     using UnityEngine;
     using UnityEngine.SceneManagement;
@@ -22,33 +18,23 @@ namespace Assets.Scripts
         /// <summary>
         /// Gets the current instance of the <see cref="LevelManager"/> class
         /// </summary>
-        public static LevelManager CurrentInstance
-        {
-            get
-            {
-                if (_currentInstance == null)
-                {
-                    _currentInstance = new GameObject().AddComponent<LevelManager>();
-                }
+        public static LevelManager CurrentInstance { get; private set; }
 
-                return _currentInstance;
-            }
-        }
-        private static LevelManager _currentInstance;
-
-        public MapNodeBehavior CurrentLevel { get; private set; }
-
+        public MapNode CurrentLevel { get; private set; }
+        private MapNodeBehavior _currentLevelBehavior;
+            
         public void ShowLevelInfo(MapNodeBehavior level)
         {
-            this.CurrentLevel = level;
+            this._currentLevelBehavior = level;
+            this.CurrentLevel = level.TargetNode;
             MapNodeInfoPanel.CurrentInstance.Render(level.TargetNode);
         }
 
         public void LaunchLevel()
         {
-            if(!this.CurrentLevel.IsAvailable)
+            if(!this._currentLevelBehavior.IsAvailable)
             {
-                Debug.Log("Unavailable level tried to launch: " + this.CurrentLevel.TargetNode.NodeId);
+                Debug.Log("Unavailable level tried to launch: " + this.CurrentLevel.NodeId);
             }
             SceneManager.LoadScene("PlayScene");
         }
@@ -58,6 +44,7 @@ namespace Assets.Scripts
         /// </summary>
         protected void Start()
         {
+            LevelManager.CurrentInstance = this;
             GameObject.DontDestroyOnLoad(this.gameObject);
         }
     }
