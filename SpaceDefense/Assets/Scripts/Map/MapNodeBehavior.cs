@@ -7,6 +7,7 @@
 namespace Assets.Scripts.Map
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -55,6 +56,7 @@ namespace Assets.Scripts.Map
         public void OnClickNode()
         {
             LevelManager.CurrentInstance.ShowLevelInfo(this);
+            UI.LevelSelectCamera.CurrentInstance.OnSelectLevelNode(this);
         }
 
         /// <summary>
@@ -65,17 +67,40 @@ namespace Assets.Scripts.Map
             var nodeId = this.TargetNode.NodeId;
             if (MapNodeBehavior.MapNodes.ContainsKey(nodeId))
             {
-                Debug.LogError("Duplicate map node id: " + nodeId);
-                return;
+                var existingNode = MapNodeBehavior.MapNodes[nodeId];
+                if(existingNode != null)
+                {
+                    Debug.LogError("Duplicate map node id: " + nodeId);
+                    return;
+                }
             }
 
             MapNodeBehavior.MapNodes[nodeId] = this;
 
+            StartCoroutine(this.DrawDependencyBeams());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected IEnumerator DrawDependencyBeams()
+        {
+            yield return new WaitForSeconds(0.1f);
             foreach (var lockedById in this.TargetNode.LockedBy)
             {
                 var lockedByNode = MapNodes[lockedById];
                 var routeVisual = Instantiate(this.DependencyBeamPrefab);
                 routeVisual.Attach(this.transform.position, lockedByNode.transform.position);
+                if (!lockedByNode.TargetNode.SaveData.IsBeat)
+                {
+                    routeVisual.GetComponentInChildren<SpriteRenderer>().color = Settings.LevelSettings.UnavailableLevelColor;
+                }
+            }
+
+            if(!this.IsAvailable)
+            {
+                this.GetComponent<SpriteRenderer>().color = Settings.LevelSettings.UnavailableLevelColor;
             }
         }
     }

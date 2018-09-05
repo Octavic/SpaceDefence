@@ -61,5 +61,10 @@ namespace Assets.Scripts.Settings
         /// The half transparent color for the phantom when it can't be placed
         /// </summary>
         public static Color DisabledPhantomColor = new Color(1, 0.2f, 0.2f, 0.5f);
+
+        /// <summary>
+        /// The default depth for all cameras
+        /// </summary>
+        public const float CameraDefaultDepth = -10;
     }
 }

@@ -69,5 +69,10 @@ namespace Assets.Scripts.Utils
                 output.UpdateBeam();
             }
         }
+
+        public static float Lerp(float f1, float f2, float ratio)
+        {
+            return (f2 - f1) * ratio + f1;
+        }
     }
 }

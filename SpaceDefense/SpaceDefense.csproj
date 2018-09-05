@@ -171,6 +171,7 @@
     <Compile Include="Assets\Scripts\UI\Graph\BaseGraph.cs" />
     <Compile Include="Assets\Scripts\UI\Graph\LineGraph.cs" />
     <Compile Include="Assets\Scripts\UI\Graph\UILine.cs" />
+    <Compile Include="Assets\Scripts\UI\LevelSelectCamera.cs" />
     <Compile Include="Assets\Scripts\UI\MainCamera.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenu.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuItem.cs" />

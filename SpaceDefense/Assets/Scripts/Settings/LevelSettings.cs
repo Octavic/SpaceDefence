@@ -10,6 +10,7 @@ namespace Assets.Scripts.Settings
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using UnityEngine;
 
     /// <summary>
     /// A collection of level related settings
@@ -35,5 +36,10 @@ namespace Assets.Scripts.Settings
         {
             return levelId;
         }
+
+        /// <summary>
+        /// The color that shows the level node is unavailable
+        /// </summary>
+        public static Color UnavailableLevelColor = new Color(0.6f, 0.6f, 0.6f);
     }
 }
