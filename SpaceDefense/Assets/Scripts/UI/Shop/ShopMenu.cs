@@ -11,7 +11,7 @@ namespace Assets.Scripts.UI.Shop
     using System.Linq;
     using System.Text;
     using UnityEngine;
-    using Grid;
+    using Map.Grid;
 
     /// <summary>
     /// The shop menu 

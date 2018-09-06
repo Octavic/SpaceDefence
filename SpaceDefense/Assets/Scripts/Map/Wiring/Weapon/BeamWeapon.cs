@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Wiring.Weapon
+namespace Assets.Scripts.Map.Wiring.Weapon
 {
     using System;
     using System.Collections.Generic;

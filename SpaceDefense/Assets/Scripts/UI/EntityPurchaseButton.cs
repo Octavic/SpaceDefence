@@ -10,8 +10,10 @@ namespace Assets.Scripts.UI
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using Grid;
+    using Map.Grid;
     using UnityEngine;
+    using Map;
+
 
     /// <summary>
     /// Defines a button to purchase entities with
@@ -22,11 +24,6 @@ namespace Assets.Scripts.UI
         /// Target entity prefab to be spawned when purchased
         /// </summary>
         public GridEntity TargetEntityPrefab;
-
-        /// <summary>
-        /// The price of purchase
-        /// </summary>
-        public float Price;
 
         /// <summary>
         /// TODO: add price check and what not

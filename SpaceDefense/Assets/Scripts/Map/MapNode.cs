@@ -10,6 +10,7 @@ namespace Assets.Scripts.Map
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using UnityEngine;
 
     /// <summary>
     /// Specific production of a resource type
@@ -34,9 +35,19 @@ namespace Assets.Scripts.Map
         public string Name;
 
         /// <summary>
+        /// Id of the map node
+        /// </summary>
+        public int NodeId;
+
+        /// <summary>
         /// Difficulty of the node
         /// </summary>
         public MapNodeDifficulty Difficulty;
+
+        /// <summary>
+        /// The source nodes that once any is unlocked, will make this node accessible
+        /// </summary>
+        public List<int> LockedBy;
 
         /// <summary>
         /// The amount of resources rewarded when this map node is captured
@@ -51,6 +62,7 @@ namespace Assets.Scripts.Map
         /// <summary>
         /// The save data for this node
         /// </summary>
+        [HideInInspector]
         public MapNodeSaveData SaveData;
 
         /// <summary>

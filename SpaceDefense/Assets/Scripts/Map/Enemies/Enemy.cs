@@ -18,7 +18,7 @@ namespace Assets.Scripts.Map.Enemies
     /// <summary>
     /// Describes an enemy entity
     /// </summary>
-    public class Enemy : MonoBehaviour
+    public class Enemy : MonoBehaviour, IHittable
     {
         /// <summary>
         /// The status bar
@@ -102,7 +102,7 @@ namespace Assets.Scripts.Map.Enemies
         /// </summary>
         /// <param name="damage">How much damage to take</param>
         /// <param name="carriedEffect">The effect carried</param>
-        public virtual void TakeDamage(float damage, IDictionary<EffectEnum, float> carriedEffects = null)
+        public virtual void OnHit(float damage, IDictionary<EffectEnum, float> carriedEffects = null)
         {
             bool isZapped = this.Effects.ContainsKey(EffectEnum.Zapped);
             bool isVulnerable = this.Effects.ContainsKey(EffectEnum.Vulnerable);
@@ -244,6 +244,7 @@ namespace Assets.Scripts.Map.Enemies
         {
             this.HealthRemaining = this.BaseStats.Health;
             this.ShieldRemaining = this.BaseStats.Shield;
+            this.RecalculateStats();
         }
 
         /// <summary>

@@ -4,13 +4,13 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Wiring.Weapon
+namespace Assets.Scripts.Map.Wiring.Weapon
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using Grid;
+    using Map.Grid;
     using UnityEngine;
 
     /// <summary>
@@ -70,6 +70,9 @@ namespace Assets.Scripts.Wiring.Weapon
         /// </summary>
         public abstract void OnInputChange();
 
+        /// <summary>
+        /// Called when the weapon is moved
+        /// </summary>
         public override void OnMove()
         {
             Utils.Utils.UpdateAllBeams(this.Inputs);

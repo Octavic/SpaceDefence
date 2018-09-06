@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>WebGL:20</UnityBuildTarget>
     <UnityVersion>2017.1.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -110,9 +112,11 @@
     <Compile Include="Assets\Scripts\Map\Grid\States\MapGridState.cs" />
     <Compile Include="Assets\Scripts\Map\Grid\States\OutputConnectionState.cs" />
     <Compile Include="Assets\Scripts\Map\Grid\States\OutputSocketState.cs" />
+    <Compile Include="Assets\Scripts\Map\IHittable.cs" />
     <Compile Include="Assets\Scripts\Map\LevelSelectItem.cs" />
     <Compile Include="Assets\Scripts\Map\MapNode.cs" />
     <Compile Include="Assets\Scripts\Map\MapNodeBehavior.cs" />
+    <Compile Include="Assets\Scripts\Map\MapNodeDependencyBeam.cs" />
     <Compile Include="Assets\Scripts\Map\MapNodeDifficulty.cs" />
     <Compile Include="Assets\Scripts\Map\MapNodeInfoPanel.cs" />
     <Compile Include="Assets\Scripts\Map\MapNodeLevelData.cs" />
@@ -145,6 +149,8 @@
     <Compile Include="Assets\Scripts\Map\Wiring\Weapon\ConstantHitbox.cs" />
     <Compile Include="Assets\Scripts\Map\Wiring\Weapon\DetonateProjectile.cs" />
     <Compile Include="Assets\Scripts\Map\Wiring\Weapon\DetonatorWeapon.cs" />
+    <Compile Include="Assets\Scripts\Map\Wiring\Weapon\HitScanWeapon.cs" />
+    <Compile Include="Assets\Scripts\Map\Wiring\Weapon\InstantFireWeapon.cs" />
     <Compile Include="Assets\Scripts\Map\Wiring\Weapon\Projectile.cs" />
     <Compile Include="Assets\Scripts\Map\Wiring\Weapon\ProjectileShell.cs" />
     <Compile Include="Assets\Scripts\Map\Wiring\Weapon\ProjectileWeapon.cs" />
@@ -168,12 +174,14 @@
     <Compile Include="Assets\Scripts\UI\Graph\BaseGraph.cs" />
     <Compile Include="Assets\Scripts\UI\Graph\LineGraph.cs" />
     <Compile Include="Assets\Scripts\UI\Graph\UILine.cs" />
+    <Compile Include="Assets\Scripts\UI\LevelSelectCamera.cs" />
     <Compile Include="Assets\Scripts\UI\MainCamera.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenu.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuItem.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuTabTypes.cs" />
     <Compile Include="Assets\Scripts\UI\VersionFooter.cs" />
     <Compile Include="Assets\Scripts\Utils\ColorExtension.cs" />
+    <Compile Include="Assets\Scripts\Utils\GlobalRandom.cs" />
     <Compile Include="Assets\Scripts\Utils\LimitedStack.cs" />
     <Compile Include="Assets\Scripts\Utils\Utils.cs" />
   </ItemGroup>

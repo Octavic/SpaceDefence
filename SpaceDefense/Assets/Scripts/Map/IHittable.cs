@@ -1,21 +1,21 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="GridPlatform.cs">
+//  <copyright file="IHittable.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Map.Grid
+namespace Assets.Scripts.Map
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using UnityEngine;
 
     /// <summary>
-    /// Defines the platform that the grid moves on
+    /// Defines an object that can be hit
     /// </summary>
-    public class GridPlatform : MonoBehaviour
+    public interface IHittable
     {
+        void OnHit(float damage, IDictionary<EffectEnum, float> carriedEffects = null);
     }
 }

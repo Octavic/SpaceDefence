@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Wiring.Emitters
+namespace Assets.Scripts.Map.Wiring.Emitters
 {
     using System;
     using System.Collections.Generic;

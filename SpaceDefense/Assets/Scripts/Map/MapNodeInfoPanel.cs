@@ -11,6 +11,7 @@ namespace Assets.Scripts.Map
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using Enemies;
 
     /// <summary>
     /// Displays the information about a specific map node
@@ -18,12 +19,37 @@ namespace Assets.Scripts.Map
     public class MapNodeInfoPanel : MonoBehaviour
     {
         /// <summary>
+        /// The current instance
+        /// </summary>
+        public static MapNodeInfoPanel CurrentInstance
+        {
+            get
+            {
+                if(_currentInstance == null)
+                {
+                    _currentInstance = GameObject.FindObjectOfType<MapNodeInfoPanel>();
+                }
+                return _currentInstance;
+            }
+        }
+        private static MapNodeInfoPanel _currentInstance;
+
+        /// <summary>
         /// Renders the panel. Should be called only once until the node changes
         /// </summary>
         /// <param name="targetNode">Target node</param>
         public void Render(MapNode targetNode)
         {
-            var allEnemies = targetNode.LevelData.SpawnPaths.Select(path => path.RegularSpawns.Select(regularSpawn => regularSpawn.Enemy));
+            var allEnemies = new List<EnemyType>();
+            foreach (var path in targetNode.LevelData.SpawnPaths)
+            {
+                allEnemies = allEnemies
+                    .Concat(path.RegularSpawns.Select(spawn => spawn.Enemy))
+                    .Concat(path.SpecialSpawns.Select(spawn => spawn.Enemy))
+                    .ToList();
+            }
+
+            this.Show();
         }
 
         /// <summary>
@@ -40,6 +66,15 @@ namespace Assets.Scripts.Map
         public void Hide()
         {
             this.gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Launches the level
+        /// </summary>
+        public void LaunchLevel()
+        {
+            this.Hide();
+            LevelManager.CurrentInstance.LaunchLevel();
         }
     }
 }

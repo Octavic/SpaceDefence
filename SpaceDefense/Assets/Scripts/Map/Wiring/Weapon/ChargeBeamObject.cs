@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Wiring.Weapon
+namespace Assets.Scripts.Map.Wiring.Weapon
 {
     using System;
     using System.Collections.Generic;
@@ -78,7 +78,7 @@ namespace Assets.Scripts.Wiring.Weapon
         /// <param name="hitEnemy">The enemy that was hit by this beam</param>
         public void OnHitEnemy(Enemy hitEnemy)
         {
-            hitEnemy.TakeDamage(this._realDamage * Time.deltaTime, null);
+            hitEnemy.OnHit(this._realDamage * Time.deltaTime, null);
         }
 
         /// <summary>

@@ -10,6 +10,7 @@ namespace Assets.Scripts.Settings
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using UnityEngine;
 
     /// <summary>
     /// A collection of level related settings
@@ -22,6 +23,11 @@ namespace Assets.Scripts.Settings
         public const int LevelSelectSceneIndex = 0;
 
         /// <summary>
+        /// The total  amount of time the player must defend for
+        /// </summary>
+        public const float TotalDefenseDuration = 60;
+
+        /// <summary>
         /// Gets the unity scene build index for the given level
         /// </summary>
         /// <param name="levelId">Target level</param>
@@ -30,5 +36,10 @@ namespace Assets.Scripts.Settings
         {
             return levelId;
         }
+
+        /// <summary>
+        /// The color that shows the level node is unavailable
+        /// </summary>
+        public static Color UnavailableLevelColor = new Color(0.6f, 0.6f, 0.6f);
     }
 }

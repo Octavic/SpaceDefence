@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Wiring.Weapon
+namespace Assets.Scripts.Map.Wiring.Weapon
 {
     using System;
     using System.Collections.Generic;
@@ -15,17 +15,12 @@ namespace Assets.Scripts.Wiring.Weapon
     /// <summary>
     /// Defines a projectile weapon
     /// </summary>
-    public class ProjectileWeapon : Weapon
+    public class ProjectileWeapon : InstantFireWeapon
     {
         /// <summary>
         /// The projectile that will be fired when the weapon fires
         /// </summary>
         public GameObject ProjectileShellPrefab;
-
-        /// <summary>
-        /// Mode of fire
-        /// </summary>
-        public ProjectileWeaponFireMode FireMode;
 
         /// <summary>
         /// Called when the weapon is fired
@@ -38,28 +33,6 @@ namespace Assets.Scripts.Wiring.Weapon
             GameController.CurrentInstance.AddCost(this.Cost);
             this.ApplyCooldown();
             return newshell;
-        }
-
-        protected override void OnCooldownEnd()
-        {
-            if (this.FireMode == ProjectileWeaponFireMode.Rapid && this.Inputs.Any(input => input.IsOn))
-            {
-                this.OnFire();
-            }
-
-            base.OnCooldownEnd();
-        }
-
-        /// <summary>
-        /// Called when there was a change in input
-        /// </summary>
-        public override void OnInputChange()
-        {
-            var fired = this.Inputs.Any(input => input.IsOn);
-            if (fired && !this.InCooldown)
-            {
-                this.OnFire();
-            }
         }
     }
 }

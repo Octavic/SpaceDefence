@@ -12,9 +12,9 @@ namespace Assets.Scripts
     using System.Text;
     using UnityEngine;
     using UnityEngine.UI;
-    using Wiring;
-    using Wiring.Emitters;
-    using Grid;
+    using Map.Wiring;
+    using Map.Wiring.Emitters;
+    using Map.Grid;
 
     /// <summary>
     /// The player controller class

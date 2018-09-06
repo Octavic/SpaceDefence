@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Grid
+namespace Assets.Scripts.Map.Grid
 {
     using System;
     using System.Collections.Generic;
@@ -30,12 +30,12 @@ namespace Assets.Scripts.Grid
         /// <summary>
         /// Width of the grid
         /// </summary>
-        public int SizeX;
+        public int SizeX { get; private set; }
 
         /// <summary>
         /// Height of the grid
         /// </summary>
-        public int SizeY;
+        public int SizeY { get; private set; }
 
         /// <summary>
         /// Gets the current instance of the <see cref="MapGrid"/> class
@@ -450,7 +450,7 @@ namespace Assets.Scripts.Grid
                     Debug.Log("Failed to load entity at " + entityState.PosX + ',' + entityState.PosY);
                     return false;
                 }
-                else 
+                else
                 {
                     // Try to place the entity on board
                     var newCoor = new GridCoordinate(entityState.PosX, entityState.PosY);
@@ -481,7 +481,7 @@ namespace Assets.Scripts.Grid
                         var targetCoordinate = new GridCoordinate(connection.ConnectedX, connection.ConnectedY);
                         if (!this._map.TryGetValue(targetCoordinate, out connectedEntity))
                         {
-                            Debug.Log("No entity at coordinate to connect to: "+ targetCoordinate);
+                            Debug.Log("No entity at coordinate to connect to: " + targetCoordinate);
                             this.ResetBoard();
                             return false;
                         }
@@ -597,6 +597,16 @@ namespace Assets.Scripts.Grid
         /// </summary>
         protected void Start()
         {
+            if (LevelManager.CurrentInstance.CurrentLevel == null)
+            {
+                Debug.LogError("No level selected!");
+                return;
+            }
+
+            var levelData = LevelManager.CurrentInstance.CurrentLevel.LevelData;
+            this.SizeX = levelData.GridSizeX;
+            this.SizeY = levelData.GridSizeY;
+
             this._bottomLeftWorldPosition = this.transform.position - new Vector3(GeneralSettings.GridSize / 2, GeneralSettings.GridSize / 2);
             var _boxCollider = this.GetComponent<BoxCollider2D>();
             _boxCollider.size = new Vector2(this.SizeX * GeneralSettings.GridSize, this.SizeY * GeneralSettings.GridSize);

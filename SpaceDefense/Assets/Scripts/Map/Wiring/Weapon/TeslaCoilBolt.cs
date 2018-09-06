@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Wiring.Weapon
+namespace Assets.Scripts.Map.Wiring.Weapon
 {
     using System;
     using System.Collections.Generic;
@@ -32,7 +32,7 @@ namespace Assets.Scripts.Wiring.Weapon
         /// <param name="hitEnemy">The enmy hit</param>
         public void OnHitEnemy(Enemy hitEnemy)
         {
-            hitEnemy.TakeDamage(this.DamagePerSecond * Time.deltaTime, this._effects);
+            hitEnemy.OnHit(this.DamagePerSecond * Time.deltaTime, this._effects);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Wiring.Weapon
+namespace Assets.Scripts.Map.Wiring.Weapon
 {
     using System;
     using System.Collections.Generic;
@@ -60,12 +60,12 @@ namespace Assets.Scripts.Wiring.Weapon
                 // Hit with outer radius
                 if (distance > this.BlastMinRadius)
                 {
-                    targetEnemy.TakeDamage(this.BlastDamage * (distance - this.BlastMinRadius) / this._blastRadiusDiff);
+                    targetEnemy.OnHit(this.BlastDamage * (distance - this.BlastMinRadius) / this._blastRadiusDiff);
                 }
                 // Perfect hit
                 else
                 {
-                    targetEnemy.TakeDamage(this.BlastDamage, this.Shell.EffectImpacts);
+                    targetEnemy.OnHit(this.BlastDamage, this.Shell.EffectImpacts);
                 }
             }
         }

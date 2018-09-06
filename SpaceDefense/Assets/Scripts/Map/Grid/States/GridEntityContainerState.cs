@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Grid.States
+namespace Assets.Scripts.Map.Grid.States
 {
     using System;
     using System.Collections.Generic;

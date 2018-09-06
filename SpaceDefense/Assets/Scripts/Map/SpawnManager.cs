@@ -10,6 +10,7 @@ namespace Assets.Scripts.Map
     using System.Collections.Generic;
     using UnityEngine;
     using Map.Enemies;
+    using Settings;
     
     /// <summary>
     /// Defines an enemy that regularly spawns
@@ -26,6 +27,7 @@ namespace Assets.Scripts.Map
     /// <summary>
     /// Defines a special enemy that spawns at a specific time
     /// </summary>
+    [Serializable]
     public class PathSpecialSpawn
     {
         public EnemyType Enemy;
@@ -73,16 +75,16 @@ namespace Assets.Scripts.Map
         /// Gets the current instance of the <see cref="SpawnManager"/> class
         /// </summary>
         public static SpawnManager CurrntInstance { get; private set; }
-
-        /// <summary>
-        /// A list of paths
-        /// </summary>
-        public List<SpawnPath> Paths;
-
+        
         /// <summary>
         /// A list of enemies
         /// </summary>
         public List<Enemy> CurrentEnemies = new List<Enemy>();
+
+        /// <summary>
+        /// A list of paths
+        /// </summary>
+        private List<SpawnPath> _paths;
 
         /// <summary>
         /// Parent object for all the paths and indicators
@@ -121,6 +123,15 @@ namespace Assets.Scripts.Map
         /// </summary>
         protected void Start()
         {
+            var currentLevel = LevelManager.CurrentInstance.CurrentLevel;
+            if(currentLevel == null)
+            {
+                Debug.LogError("No level selected!");
+                return;
+            }
+
+            this._paths = currentLevel.LevelData.SpawnPaths;
+
             SpawnManager.CurrntInstance = this;
             this._pathParent = new GameObject();
 
@@ -128,7 +139,7 @@ namespace Assets.Scripts.Map
             var indicatorPrefab = PrefabManager.CurrentInstance.SpawnPathIndicator;
 
             // Visualize each path
-            foreach (var path in this.Paths)
+            foreach (var path in this._paths)
             {
                 var indicator = Instantiate(indicatorPrefab, this._pathParent.transform);
                 indicator.TargetPath = path;
@@ -159,9 +170,9 @@ namespace Assets.Scripts.Map
                 var gameController = GameController.CurrentInstance;
 
                 // Update each path
-                foreach (var path in this.Paths)
+                foreach (var path in this._paths)
                 {
-                    var timeTillEnd = gameController.TotalDefenseDuration - gameController.TimeSinceFightStart;
+                    var timeTillEnd = LevelSettings.TotalDefenseDuration - gameController.TimeSinceFightStart;
                     if (path.StopSpawnBeforeEnd >= timeTillEnd)
                     {
                         continue;
