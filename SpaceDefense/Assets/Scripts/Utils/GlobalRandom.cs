@@ -1,17 +1,18 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="ProjectileWeaponFireMode.cs">
+//  <copyright file="GlobalRandom.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Map.Wiring.Weapon
+namespace Assets.Scripts.Utils
 {
-    /// <summary>
-    /// All possible fire mods for projectile weapons
-    /// </summary>
-    public enum WeaponFireMode
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
+    public static class GlobalRandom
     {
-        Single,
-        Rapid
+        public static Random random = new Random();
     }
 }

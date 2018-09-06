@@ -112,6 +112,7 @@
     <Compile Include="Assets\Scripts\Map\Grid\States\MapGridState.cs" />
     <Compile Include="Assets\Scripts\Map\Grid\States\OutputConnectionState.cs" />
     <Compile Include="Assets\Scripts\Map\Grid\States\OutputSocketState.cs" />
+    <Compile Include="Assets\Scripts\Map\IHittable.cs" />
     <Compile Include="Assets\Scripts\Map\LevelSelectItem.cs" />
     <Compile Include="Assets\Scripts\Map\MapNode.cs" />
     <Compile Include="Assets\Scripts\Map\MapNodeBehavior.cs" />
@@ -148,6 +149,8 @@
     <Compile Include="Assets\Scripts\Map\Wiring\Weapon\ConstantHitbox.cs" />
     <Compile Include="Assets\Scripts\Map\Wiring\Weapon\DetonateProjectile.cs" />
     <Compile Include="Assets\Scripts\Map\Wiring\Weapon\DetonatorWeapon.cs" />
+    <Compile Include="Assets\Scripts\Map\Wiring\Weapon\HitScanWeapon.cs" />
+    <Compile Include="Assets\Scripts\Map\Wiring\Weapon\InstantFireWeapon.cs" />
     <Compile Include="Assets\Scripts\Map\Wiring\Weapon\Projectile.cs" />
     <Compile Include="Assets\Scripts\Map\Wiring\Weapon\ProjectileShell.cs" />
     <Compile Include="Assets\Scripts\Map\Wiring\Weapon\ProjectileWeapon.cs" />
@@ -178,6 +181,7 @@
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuTabTypes.cs" />
     <Compile Include="Assets\Scripts\UI\VersionFooter.cs" />
     <Compile Include="Assets\Scripts\Utils\ColorExtension.cs" />
+    <Compile Include="Assets\Scripts\Utils\GlobalRandom.cs" />
     <Compile Include="Assets\Scripts\Utils\LimitedStack.cs" />
     <Compile Include="Assets\Scripts\Utils\Utils.cs" />
   </ItemGroup>

@@ -1,17 +1,21 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="ProjectileWeaponFireMode.cs">
+//  <copyright file="IHittable.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Map.Wiring.Weapon
+namespace Assets.Scripts.Map
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
     /// <summary>
-    /// All possible fire mods for projectile weapons
+    /// Defines an object that can be hit
     /// </summary>
-    public enum WeaponFireMode
+    public interface IHittable
     {
-        Single,
-        Rapid
+        void OnHit(float damage, IDictionary<EffectEnum, float> carriedEffects = null);
     }
 }

@@ -58,7 +58,7 @@ namespace Assets.Scripts.Map.Wiring.Weapon
                 effects[this.Effects[i]] = this.Impacts[i] * Time.deltaTime;
             }
 
-            hitEnemy.TakeDamage(this.DamagePerSecond * Time.deltaTime, effects);
+            hitEnemy.OnHit(this.DamagePerSecond * Time.deltaTime, effects);
         }
     }
 }

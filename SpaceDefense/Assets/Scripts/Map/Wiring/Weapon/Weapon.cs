@@ -70,6 +70,9 @@ namespace Assets.Scripts.Map.Wiring.Weapon
         /// </summary>
         public abstract void OnInputChange();
 
+        /// <summary>
+        /// Called when the weapon is moved
+        /// </summary>
         public override void OnMove()
         {
             Utils.Utils.UpdateAllBeams(this.Inputs);

@@ -17,7 +17,7 @@ namespace Assets.Scripts.Map.Enemies
     /// </summary>
     public class CloakerEnemy : Enemy
     {
-        public override void TakeDamage(float damage, IDictionary<EffectEnum, float> carriedEffects = null)
+        public override void OnHit(float damage, IDictionary<EffectEnum, float> carriedEffects = null)
         {
             var maxHP = this.CurrentStats.Health;
             var curHp = this.HealthRemaining;
@@ -25,7 +25,7 @@ namespace Assets.Scripts.Map.Enemies
             {
                 this.ApplyEffect(EffectEnum.Cloaked, 120);
             }
-            base.TakeDamage(damage, carriedEffects);
+            base.OnHit(damage, carriedEffects);
         }
     }
 }

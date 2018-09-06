@@ -76,7 +76,7 @@ namespace Assets.Scripts.Map.Wiring.Weapon
         /// <param name="hitEnemy">The enemy that was hit</param>
         public virtual void OnHittingEnemy(Enemy hitEnemy)
         {
-            hitEnemy.TakeDamage(this.Damage, this.EffectImpacts);
+            hitEnemy.OnHit(this.Damage, this.EffectImpacts);
             if (!this.DoesPenetrate)
             {
                 Destroy(this.ProjectileObject.gameObject);
