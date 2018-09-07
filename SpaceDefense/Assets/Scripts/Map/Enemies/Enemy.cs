@@ -14,6 +14,7 @@ namespace Assets.Scripts.Map.Enemies
     using Settings;
     using Wiring.Emitters;
     using Wiring.Weapon;
+    using UI;
 
     /// <summary>
     /// Describes an enemy entity
@@ -104,6 +105,8 @@ namespace Assets.Scripts.Map.Enemies
         /// <param name="carriedEffect">The effect carried</param>
         public virtual void OnHit(float damage, IDictionary<EffectEnum, float> carriedEffects = null)
         {
+            MainCamera.CurrentInstance.ShakeFromDamage(damage);
+
             bool isZapped = this.Effects.ContainsKey(EffectEnum.Zapped);
             bool isVulnerable = this.Effects.ContainsKey(EffectEnum.Vulnerable);
 

@@ -76,7 +76,6 @@ namespace Assets.Scripts.Map
             }
 
             MapNodeBehavior.MapNodes[nodeId] = this;
-
             StartCoroutine(this.DrawDependencyBeams());
         }
 
@@ -86,6 +85,8 @@ namespace Assets.Scripts.Map
         /// <returns></returns>
         protected IEnumerator DrawDependencyBeams()
         {
+            yield return new WaitForSeconds(0.1f);
+            this.TargetNode.SaveData = SaveManager.CurrentInstance.GetLevelData(this.TargetNode.NodeId);
             yield return new WaitForSeconds(0.1f);
             foreach (var lockedById in this.TargetNode.LockedBy)
             {
