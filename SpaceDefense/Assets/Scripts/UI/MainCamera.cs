@@ -18,20 +18,41 @@ namespace Assets.Scripts.UI
     public class MainCamera : MonoBehaviour
     {
         /// <summary>
-        /// How fast the camera pans
+        /// Gets the current instance of the <see cref="MainCamera"/> class
         /// </summary>
-        public float PanSpeed;
+        public static MainCamera CurrentInstance
+        {
+            get
+            {
+                if (_currentInstance == null)
+                {
+                    _currentInstance = FindObjectOfType<MainCamera>();
+                }
+
+                return _currentInstance;
+            }
+        }
+        private static MainCamera _currentInstance;
 
         /// <summary>
-        /// How fast the camera zooms
+        /// The multiplier that determines how much to shake based on the damage
         /// </summary>
-        public float ZoomSpeed;
+        public float DamageToShakeIntensityRatio;
 
         /// <summary>
-        /// Min and max zoom distance
+        /// How much screen shake we lose per fixed frame
         /// </summary>
-        public float MinZoom;
-        public float MaxZoom;
+        public float ShakeIntensityDecay;
+
+        /// <summary>
+        /// The minimal screen shake intensity
+        /// </summary>
+        public float MinShakeIntensity;
+
+        /// <summary>
+        /// The shake intensity
+        /// </summary>
+        private float _shakeIntensity;
 
         /// <summary>
         /// The attached camera component
@@ -39,67 +60,37 @@ namespace Assets.Scripts.UI
         private Camera _camera;
 
         /// <summary>
-        /// The old mouse position
+        /// Shakes the camera from damage being dealt
         /// </summary>
-        private Vector2? _oldPos;
-
-        /// <summary>
-        /// The old distance between two fingers (Mobile touch only)
-        /// </summary>
-        private float? _oldDistance;
+        public void ShakeFromDamage(float damage)
+        {
+            this._shakeIntensity += damage * this.DamageToShakeIntensityRatio;
+        }
 
         /// <summary>
         /// Used for initialization
         /// </summary>
         protected void Start()
         {
-            this._camera = this.GetComponent<Camera>();
+            this._camera = GetComponentInChildren<Camera>();
         }
 
         /// <summary>
         /// Called once per frame
         /// </summary>
-        protected void Update()
+        protected void FixedUpdate()
         {
-            // During build phase, only pan camera if the player is  dragging something 
-            if (GameController.CurrentInstance.CurrentPhasee == GamePhases.Build)
+            if (this._shakeIntensity < this.MinShakeIntensity)
             {
                 return;
             }
 
-            // Zoom
-            if (Input.touchCount == 2)
-            {
-                var newDistance = (Input.GetTouch(0).position - Input.GetTouch(1).position).magnitude;
-                if (this._oldDistance.HasValue)
-                {
-                    Debug.Log(this._camera.orthographicSize);
-                    var newSize = this._camera.orthographicSize * newDistance / this._oldDistance.Value / 100;
-                    newSize = Mathf.Max(newSize, this.MinZoom);
-                    newSize = Mathf.Min(newSize, this.MaxZoom);
-                    this._camera.orthographicSize = newSize;
-                }
-
-                this._oldDistance = newDistance;
-            }
-            // Pan
-            else if (Input.touchCount == 1)
-            {
-                var newPos = Input.GetTouch(0).position;
-                if (this._oldPos.HasValue)
-                {
-                    Debug.Log(this._camera.orthographicSize);
-                    var diff = (newPos - this._oldPos.Value) * this._camera.orthographicSize;
-                    this.transform.position -= new Vector3(diff.x, diff.y) * this.PanSpeed;
-                }
-                this._oldPos = newPos;
-            }
-            // Reset
-            else if (Input.touchCount == 0)
-            {
-                this._oldPos = null;
-                this._oldDistance = null;
-            }
+            float randomAngleRad = (float)Utils.GlobalRandom.random.NextDouble() * Mathf.PI * 2;
+            this._camera.transform.localPosition = new Vector3(
+                Mathf.Cos(randomAngleRad) * this._shakeIntensity,
+                Mathf.Sin(randomAngleRad) * this._shakeIntensity,
+                0);
+            this._shakeIntensity *= this.ShakeIntensityDecay;
         }
     }
 }

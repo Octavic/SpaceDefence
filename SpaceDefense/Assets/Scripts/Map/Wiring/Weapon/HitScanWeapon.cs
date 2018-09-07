@@ -29,6 +29,31 @@ namespace Assets.Scripts.Map.Wiring.Weapon
         public float Inaccuracy;
 
         /// <summary>
+        /// the effect that's carried
+        /// </summary>
+        public List<EffectEnum> Effects;
+        public List<float> Impacts;
+
+        /// <summary>
+        /// Damage of the weapon
+        /// </summary>
+        public float Damage;
+
+        /// <summary>
+        /// The composed effects dictionary
+        /// </summary>
+        public Dictionary<EffectEnum, float> EffectImpacts { get; private set; }
+
+        /// <summary>
+        /// Used for initialization
+        /// </summary>
+        protected override void Start()
+        {
+            this.EffectImpacts = Utils.ConvertListToDictionary(this.Effects, this.Impacts);
+            base.Start();
+        }
+
+        /// <summary>
         /// Called when the weapon is fired
         /// </summary>
         /// <returns>nothing in this case</returns>
@@ -41,7 +66,21 @@ namespace Assets.Scripts.Map.Wiring.Weapon
                     * this.Inaccuracy
                     * GlobalRandom.random.Next(2) == 0 ? 1 : -1;
                 var fireAngleRad = (curFacing + degAngleDiff) * Mathf.Rad2Deg;
-                var cast = Physics2D.RaycastAll(this.transform.position, new Vector2(Mathf.Cos(fireAngleRad), Mathf.Sin(fireAngleRad)));
+                var hittables = Physics.RaycastAll(
+                        this.transform.position,
+                        new Vector2(Mathf.Cos(fireAngleRad), Mathf.Sin(fireAngleRad))
+                    )
+                    .Select(hit => hit.collider.GetComponent<IHittable>())
+                    .ToList();
+                foreach (var hittalbe in hittables)
+                {
+                    if (hittalbe == null)
+                    {
+                        continue;
+                    }
+
+                    hittalbe.OnHit(this.Damage, this.EffectImpacts);
+                }
             }
             return null;
         }

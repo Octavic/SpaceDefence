@@ -13,6 +13,7 @@ namespace Assets.Scripts.Map.Wiring.Weapon
     using UnityEngine;
     using Utils;
     using Map.Enemies;
+    using UI;
 
     /// <summary>
     /// Defines a projectile
