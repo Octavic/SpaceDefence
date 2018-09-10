@@ -15,6 +15,7 @@ namespace Assets.Scripts
     using UnityEngine;
     using Map.Grid;
     using Map.Grid.States;
+    using Map;
 
     /// <summary>
     /// The save data related to one map node
@@ -50,7 +51,7 @@ namespace Assets.Scripts
         /// <summary>
         /// A value between 0-1 that represents how well the player did.
         /// </summary>
-        public float Efficiency;
+        public List<MapNodeResources> Resources;
     }
 
     /// <summary>
@@ -59,7 +60,15 @@ namespace Assets.Scripts
     [Serializable]
     class SaveFile
     {
+        /// <summary>
+        /// All of the beat nodes and their progress
+        /// </summary>
         public List<MapNodeSaveData> NodeProgress = new List<MapNodeSaveData>();
+
+        /// <summary>
+        /// What the player have in their inventory
+        /// </summary>
+        public Dictionary<ResourceType, float> Inventory = new Dictionary<ResourceType, float>();
     }
 
     /// <summary>
@@ -107,6 +116,30 @@ namespace Assets.Scripts
             }
         }
         private SaveFile _currentSaveFile;
+        private Dictionary<ResourceType, float> ResoureceCapacity
+        {
+            get
+            {
+                var result = new Dictionary<ResourceType, float>();
+
+                foreach (var node in this.CurrentSaveFile.NodeProgress)
+                {
+                    foreach (var resource in node.Resources)
+                    {
+                        var targetResource = resource.TargetResource;
+                        if (!result.ContainsKey(targetResource))
+                        {
+                            result[targetResource] = 0;
+                        }
+
+                        result[targetResource] += resource.CapacityBoost;
+                    }
+
+                }
+
+                return result;
+            }
+        }
 
         /// <summary>
         /// Save the state into a file
@@ -129,6 +162,21 @@ namespace Assets.Scripts
             }
 
             this.Save();
+        }
+
+        /// <summary>
+        /// Called when the level was completed
+        /// </summary>
+        /// <param name="data">The target level that was completed</param>
+        /// <param name="defenseTime">How long the defense lasted</param>
+        public void OnLevelComplete(MapNodeSaveData data, float defenseTime)
+        {
+            var existingData = this.GetLevelData(data.LevelId);
+            data.HighScore = existingData == null ? data.HighScore : Math.Max(data.HighScore, existingData.HighScore);
+            data.IsBeat = existingData.IsBeat || data.IsBeat;
+            this.CurrentSaveFile.NodeProgress[data.LevelId] = data;
+            this.AddIncome(defenseTime);
+
         }
 
         /// <summary>
@@ -196,6 +244,48 @@ namespace Assets.Scripts
             }
         }
 
+        public bool CanAfford(List<ResourceCost> totalCost)
+        {
+            var inventory = this.CurrentSaveFile.Inventory;
+            foreach (var cost in totalCost)
+            {
+                float currentlyHave;
+                if (!inventory.TryGetValue(cost.Resource, out currentlyHave))
+                {
+                    currentlyHave = 0;
+                }
+
+                if (cost.Amount > currentlyHave)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool TrySpendResource(List<ResourceCost> totalCost)
+        {
+            // First, ensure that we have enough resources to spend
+            if (!this.CanAfford(totalCost))
+            {
+                return false;
+            }
+
+            // Can afford, spend and commit
+            var inventory = this.CurrentSaveFile.Inventory;
+            foreach (var cost in totalCost)
+            {
+                if (cost.Amount > 0)
+                {
+                    inventory[cost.Resource] -= cost.Amount;
+                }
+            }
+
+            this.Save();
+            return true;
+        }
+
         /// <summary>
         /// Saves the current state
         /// </summary>
@@ -234,6 +324,43 @@ namespace Assets.Scripts
                     targetFile.Close();
                 }
             }
+        }
+
+        /// <summary>
+        /// Add income from the completed nodes
+        /// </summary>
+        /// <param name="defenseDuration">How long the defense last</param>
+        private void AddIncome(float defenseDuration)
+        {
+            var inventory = this.CurrentSaveFile.Inventory;
+            var capacity = this.ResoureceCapacity;
+
+            foreach (var node in this.CurrentSaveFile.NodeProgress)
+            {
+                foreach (var resource in node.Resources)
+                {
+                    var targetResource = resource.TargetResource;
+                    float newValue;
+                    if (!inventory.ContainsKey(targetResource))
+                    {
+                        newValue = 0;
+                    }
+                    else
+                    {
+                        newValue = inventory[targetResource] + resource.ProduceAmount * defenseDuration;
+                    }
+
+                    float resourceCap;
+                    if (!capacity.TryGetValue(targetResource, out resourceCap))
+                    {
+                        resourceCap = 0;
+                    }
+
+                    inventory[targetResource] = Math.Min(newValue, resourceCap);
+                }
+            }
+
+            this.Save();
         }
 
         /// <summary>

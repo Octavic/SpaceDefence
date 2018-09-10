@@ -18,7 +18,7 @@ namespace Assets.Scripts.Map
     [Serializable]
     public class MapNodeResources
     {
-        public ResourceType Resource;
+        public ResourceType TargetResource;
         public float ProduceAmount;
         public float CapacityBoost;
     }
