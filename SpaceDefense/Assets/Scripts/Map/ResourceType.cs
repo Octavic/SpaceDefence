@@ -19,7 +19,6 @@ namespace Assets.Scripts.Map
         Iron,
         Copper,
         Circuit,
-        Plasma,
-        Power
+        Plasma
     }
 }

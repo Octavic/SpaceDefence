@@ -24,6 +24,23 @@ namespace Assets.Scripts
     public class MapNodeSaveData
     {
         /// <summary>
+        /// Creates a deep copy
+        /// </summary>
+        /// <param name="copySource">Source of copy</param>
+        public MapNodeSaveData(MapNodeSaveData copySource = null)
+        {
+            if(copySource != null)
+            {
+                this.LevelId = copySource.LevelId;
+                this.SavedState = copySource.SavedState;
+                this.HighScore = copySource.HighScore;
+                this.IsBeat = copySource.IsBeat;
+                this.EnergyCost = copySource.EnergyCost;
+                this.GeneratingResources = copySource.GeneratingResources.Select(resource => new MapNodeResource(resource)).ToList();
+            }
+        }
+
+        /// <summary>
         /// ID for the level
         /// </summary>
         public int LevelId;
@@ -49,9 +66,9 @@ namespace Assets.Scripts
         public float EnergyCost;
 
         /// <summary>
-        /// A value between 0-1 that represents how well the player did.
+        /// The resource that's generated from the map node
         /// </summary>
-        public List<MapNodeResources> Resources;
+        public List<MapNodeResource> GeneratingResources;
     }
 
     /// <summary>
@@ -124,7 +141,7 @@ namespace Assets.Scripts
 
                 foreach (var node in this.CurrentSaveFile.NodeProgress)
                 {
-                    foreach (var resource in node.Resources)
+                    foreach (var resource in node.GeneratingResources)
                     {
                         var targetResource = resource.TargetResource;
                         if (!result.ContainsKey(targetResource))
@@ -337,7 +354,7 @@ namespace Assets.Scripts
 
             foreach (var node in this.CurrentSaveFile.NodeProgress)
             {
-                foreach (var resource in node.Resources)
+                foreach (var resource in node.GeneratingResources)
                 {
                     var targetResource = resource.TargetResource;
                     float newValue;

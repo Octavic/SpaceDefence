@@ -241,7 +241,7 @@ namespace Assets.Scripts
             if (this.CurrentCoreHealth <= 0)
             {
                 this.CurrentCoreHealth = 0;
-                this.OnGameOver(false);
+                this.OnGameOver(false, 0);
             }
         }
 
@@ -273,7 +273,7 @@ namespace Assets.Scripts
                 this.TimeSinceFightStart += Time.deltaTime;
                 if (this.TimeSinceFightStart > LevelSettings.TotalDefenseDuration)
                 {
-                    this.OnGameOver(true);
+                    this.OnGameOver(true, this.CurrentCoreHealth / this.TotalCoreHealth);
                 }
 
                 this.UpdateScore();
@@ -296,11 +296,27 @@ namespace Assets.Scripts
         /// <summary>
         /// Called when the game is over
         /// </summary>
-        private void OnGameOver(bool didWin)
+        private void OnGameOver(bool didWin, float efficiency)
         {
-            this._isGameOver = true;
+            var currentLevel = LevelManager.CurrentInstance.CurrentLevel;
+            var completedLevel = new MapNodeSaveData(currentLevel.SaveData);
             var finalScore = this._scoreData.Last();
-            SaveManager.CurrentInstance.OnLevelComplete(LevelManager.CurrentInstance.CurrentLevel.NodeId, finalScore, didWin);
+
+            completedLevel.IsBeat = didWin;
+            completedLevel.HighScore = finalScore;
+            completedLevel.GeneratingResources = new List<MapNodeResource>();
+
+            foreach (var resource in currentLevel.ResourceReward)
+            {
+                var awardedResource = new MapNodeResource();
+                awardedResource.TargetResource = resource.TargetResource;
+                awardedResource.ProduceAmount = resource.ProduceAmount * efficiency;
+                awardedResource.CapacityBoost = resource.CapacityBoost * efficiency;
+                completedLevel.GeneratingResources.Add(awardedResource);
+            }
+
+            this._isGameOver = true;
+            SaveManager.CurrentInstance.OnLevelComplete(completedLevel, this.TimeSinceFightStart);
             this.GameOverScreenObject.gameObject.SetActive(true);
             var enemyPassPenalty = (this.TotalCoreHealth - this._coreHealthData.Last()) * GeneralSettings.EnemySurvivalPenaltyMultiplier;
             this.GameOverScreenObject.OnGameOver(didWin, enemyPassPenalty, this._incomeData, this._costData, this._coreHealthData);

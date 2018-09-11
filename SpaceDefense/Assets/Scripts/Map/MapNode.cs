@@ -16,8 +16,22 @@ namespace Assets.Scripts.Map
     /// Specific production of a resource type
     /// </summary>
     [Serializable]
-    public class MapNodeResources
+    public class MapNodeResource
     {
+        /// <summary>
+        /// Creates a deep copy
+        /// </summary>
+        /// <param name="copySource"></param>
+        public MapNodeResource(MapNodeResource copySource = null)
+        {
+            if(copySource != null)
+            {
+                this.TargetResource = copySource.TargetResource;
+                this.ProduceAmount = copySource.ProduceAmount;
+                this.CapacityBoost = copySource.CapacityBoost;
+            }
+        }
+
         public ResourceType TargetResource;
         public float ProduceAmount;
         public float CapacityBoost;
@@ -52,7 +66,7 @@ namespace Assets.Scripts.Map
         /// <summary>
         /// The amount of resources rewarded when this map node is captured
         /// </summary>
-        public List<MapNodeResources> ResourceReward;
+        public List<MapNodeResource> ResourceReward;
 
         /// <summary>
         /// How much power is generated when this map node is captured
