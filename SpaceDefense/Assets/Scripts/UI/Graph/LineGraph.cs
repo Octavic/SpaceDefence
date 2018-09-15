@@ -7,6 +7,7 @@
 namespace Assets.Scripts.UI.Graph
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -41,7 +42,6 @@ namespace Assets.Scripts.UI.Graph
         /// <param name="prevDot">The previous position</param>
         private GameObject PlotNewDot(float posX, float posY, GameObject prevDot = null)
         {
-            Debug.Log(posX);
             var newDot = Instantiate(this.DotPrefab, this.transform);
             newDot.transform.GetChild(0).GetComponent<Image>().color = this.GraphColor;
             newDot.transform.localPosition = new Vector3(posX, posY);
@@ -81,7 +81,6 @@ namespace Assets.Scripts.UI.Graph
                 this._heightPerPoint = this.Height / (this._maxData - this._minData) ;
             }
         }
-
 
         /// <summary>
         /// Draws the graph

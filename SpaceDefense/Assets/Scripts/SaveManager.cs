@@ -86,17 +86,19 @@ namespace Assets.Scripts
 
                 foreach (var node in this.CurrentSaveFile.NodeProgress)
                 {
-                    foreach (var resource in node.GeneratingResources)
+                    if(node.GeneratingResources != null)
                     {
-                        var targetResource = resource.TargetResource;
-                        if (!result.ContainsKey(targetResource))
+                        foreach (var resource in node.GeneratingResources)
                         {
-                            result[targetResource] = 0;
+                            var targetResource = resource.TargetResource;
+                            if (!result.ContainsKey(targetResource))
+                            {
+                                result[targetResource] = 0;
+                            }
+
+                            result[targetResource] += resource.CapacityBoost;
                         }
-
-                        result[targetResource] += resource.CapacityBoost;
                     }
-
                 }
 
                 return result;
@@ -138,33 +140,6 @@ namespace Assets.Scripts
             data.IsBeat = existingData.IsBeat || data.IsBeat;
             this.CurrentSaveFile.NodeProgress[data.LevelId] = data;
             this.AddIncome(defenseTime);
-
-        }
-
-        /// <summary>
-        /// Updates the high score for the given level
-        /// </summary>
-        /// <param name="levelId">Target level</param>
-        /// <param name="currentScore">The current score</param>
-        /// <param name="didWin">If the player beat the level or not</param>
-        public void OnLevelComplete(int levelId, float currentScore, bool didWin)
-        {
-            var targetLevel = this.CurrentSaveFile.NodeProgress.Find(level => level.LevelId == levelId);
-            if (targetLevel != null)
-            {
-                targetLevel.HighScore = Mathf.Max(targetLevel.HighScore, currentScore);
-                targetLevel.IsBeat = targetLevel.IsBeat || didWin;
-            }
-            else
-            {
-                var newLevelData = new MapNodeSaveData();
-                newLevelData.LevelId = levelId;
-                newLevelData.HighScore = currentScore;
-                newLevelData.IsBeat = didWin;
-                this.CurrentSaveFile.NodeProgress.Add(newLevelData);
-            }
-
-            this.Save();
         }
 
         /// <summary>

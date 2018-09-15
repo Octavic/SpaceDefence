@@ -280,6 +280,10 @@ namespace Assets.Scripts
             }
         }
 
+        /// <summary>
+        /// Called at an interval to keep collecting datai
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator CollectData()
         {
             do
@@ -305,21 +309,15 @@ namespace Assets.Scripts
             completedLevel.IsBeat = didWin;
             completedLevel.HighScore = finalScore;
 
-            if(completedLevel.GeneratingResources != null)
-            {
-                if (efficiency == 0)
-                {
-                    completedLevel.GeneratingResources = new List<MapNodeResource>();
-                }
-                else if (efficiency < 1)
-                {
-                    foreach (var resource in completedLevel.GeneratingResources)
-                    {
-                        resource.ProduceAmount *= efficiency;
-                        resource.CapacityBoost *= efficiency;
-                    }
-                }
+            completedLevel.GeneratingResources = new List<MapNodeResource>(currentLevel.ResourceReward);
 
+            if (completedLevel.GeneratingResources != null && efficiency > 0)
+            {
+                foreach (var resource in completedLevel.GeneratingResources)
+                {
+                    resource.ProduceAmount *= efficiency;
+                    resource.CapacityBoost *= efficiency;
+                }
             }
 
             this._isGameOver = true;
