@@ -120,6 +120,7 @@
     <Compile Include="Assets\Scripts\Map\MapNodeDifficulty.cs" />
     <Compile Include="Assets\Scripts\Map\MapNodeInfoPanel.cs" />
     <Compile Include="Assets\Scripts\Map\MapNodeLevelData.cs" />
+    <Compile Include="Assets\Scripts\Map\MapNodeSaveData.cs" />
     <Compile Include="Assets\Scripts\Map\ResourceType.cs" />
     <Compile Include="Assets\Scripts\Map\SpawnManager.cs" />
     <Compile Include="Assets\Scripts\Map\SpawnPathIndicator.cs" />

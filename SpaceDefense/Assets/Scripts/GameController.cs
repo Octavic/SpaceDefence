@@ -304,15 +304,22 @@ namespace Assets.Scripts
 
             completedLevel.IsBeat = didWin;
             completedLevel.HighScore = finalScore;
-            completedLevel.GeneratingResources = new List<MapNodeResource>();
 
-            foreach (var resource in currentLevel.ResourceReward)
+            if(completedLevel.GeneratingResources != null)
             {
-                var awardedResource = new MapNodeResource();
-                awardedResource.TargetResource = resource.TargetResource;
-                awardedResource.ProduceAmount = resource.ProduceAmount * efficiency;
-                awardedResource.CapacityBoost = resource.CapacityBoost * efficiency;
-                completedLevel.GeneratingResources.Add(awardedResource);
+                if (efficiency == 0)
+                {
+                    completedLevel.GeneratingResources = new List<MapNodeResource>();
+                }
+                else if (efficiency < 1)
+                {
+                    foreach (var resource in completedLevel.GeneratingResources)
+                    {
+                        resource.ProduceAmount *= efficiency;
+                        resource.CapacityBoost *= efficiency;
+                    }
+                }
+
             }
 
             this._isGameOver = true;

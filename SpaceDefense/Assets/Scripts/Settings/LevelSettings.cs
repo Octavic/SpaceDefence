@@ -25,7 +25,7 @@ namespace Assets.Scripts.Settings
         /// <summary>
         /// The total  amount of time the player must defend for
         /// </summary>
-        public const float TotalDefenseDuration = 60;
+        public const float TotalDefenseDuration = 30;
 
         /// <summary>
         /// Gets the unity scene build index for the given level

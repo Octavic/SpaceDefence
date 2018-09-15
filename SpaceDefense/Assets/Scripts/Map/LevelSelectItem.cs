@@ -13,6 +13,7 @@ namespace Assets.Scripts.MapSelector
     using UnityEngine;
     using UnityEngine.UI;
     using UnityEngine.SceneManagement;
+    using Map;
 
     /// <summary>
     /// Renders an item showing a certain level in the level selection screen

@@ -48,6 +48,7 @@ namespace Assets.Scripts
             {
                 Debug.Log("Unavailable level tried to launch: " + this.CurrentLevel.NodeId);
             }
+
             SceneManager.LoadScene("PlayScene");
         }
 
