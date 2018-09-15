@@ -627,6 +627,9 @@ namespace Assets.Scripts.Map.Grid
             this._cells = cells;
 
             MapGrid.CurrentInstance = this;
+
+            // Try to load from state
+            this.TryLoadFromState(LevelManager.CurrentInstance.CurrentLevel.SaveData.SavedState);
         }
     }
 }
