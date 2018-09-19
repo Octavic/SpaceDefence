@@ -30,6 +30,11 @@ namespace Assets.Scripts.Map.Wiring.Weapon
         public GameObject MuzzleLocation;
 
         /// <summary>
+        /// If the shot pierces through enemies
+        /// </summary>
+        public bool DoesPenetrate;
+
+        /// <summary>
         /// How many lines to fire at the same time
         /// </summary>
         public int FireCount;
@@ -71,38 +76,45 @@ namespace Assets.Scripts.Map.Wiring.Weapon
         protected override GameObject OnFire()
         {
             var curFacing = this.transform.eulerAngles.z;
+            var muzzlePos = this.MuzzleLocation.transform.position;
+            // Fire a bunch
             for (int i = 0; i < this.FireCount; i++)
             {
+                // Gets the angle diff based on random inaccuracy
                 var degAngleDiff = GlobalRandom.NextFloat()
                     * this.Inaccuracy
                     * (GlobalRandom.random.Next(2) == 0 ? 1 : -1);
+
+                // Where to fire
                 var fireAngleRad = (curFacing + degAngleDiff) * Mathf.Deg2Rad;
-                var allHits = Physics2D.RaycastAll(
-                        this.MuzzleLocation.transform.position,
+                var allValidHits = Physics2D.RaycastAll(
+                        muzzlePos,
                         new Vector2(Mathf.Cos(fireAngleRad), Mathf.Sin(fireAngleRad))
                     )
-                    .Where(this.ProcessRaycastHit)
+                    .Where(hit => hit.collider.GetComponent<IHittable>() != null)
                     .ToList();
-                if (allHits.Count > 0)
+
+                if (!this.DoesPenetrate)
                 {
+                    allValidHits = new List<RaycastHit2D>() { allValidHits.First() };
+                }
+
+                // If we hit anything
+                if (allValidHits.Count > 0)
+                {
+                    // Deal damage
+                    foreach (var validHit in allValidHits)
+                    {
+                        validHit.collider.GetComponent<IHittable>().OnHit(this.Damage, this.EffectImpacts);
+                    }
+
+                    // Draw line
                     var newLine = Instantiate(this.BulletLiniePrefab);
-                    newLine.DrawHit(this.MuzzleLocation.transform.position, allHits);
+                    newLine.DrawHit(muzzlePos, allValidHits);
                 }
             }
 
             return null;
-        }
-
-        private bool ProcessRaycastHit(RaycastHit2D hit)
-        {
-            var hittalbe = hit.collider.GetComponent<IHittable>();
-            if (hittalbe == null)
-            {
-                return false;
-            }
-
-            hittalbe.OnHit(this.Damage, this.EffectImpacts);
-            return true;
         }
     }
 }
