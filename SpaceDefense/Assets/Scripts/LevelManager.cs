@@ -57,6 +57,11 @@ namespace Assets.Scripts
         /// </summary>
         protected void Start()
         {
+            if(LevelManager.CurrentInstance !=  null && LevelManager.CurrentInstance != this)
+            {
+                Destroy(this.gameObject);
+            }
+
             LevelManager.CurrentInstance = this;
             GameObject.DontDestroyOnLoad(this.gameObject);
         }

@@ -305,6 +305,10 @@ namespace Assets.Scripts
         /// </summary>
         protected void Start()
         {
+            if(CurrentInstance != null && CurrentInstance != this)
+            {
+                Destroy(this.gameObject);
+            }
             DontDestroyOnLoad(this.gameObject);
         }
     }

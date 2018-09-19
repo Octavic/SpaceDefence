@@ -30,8 +30,6 @@ namespace Assets.Scripts.Map.Wiring.Weapon
             var newshell = Instantiate(this.ProjectileShellPrefab);
             newshell.transform.eulerAngles = this.transform.eulerAngles;
             newshell.transform.position = this.transform.position;
-            GameController.CurrentInstance.AddCost(this.Cost);
-            this.ApplyCooldown();
             return newshell;
         }
     }

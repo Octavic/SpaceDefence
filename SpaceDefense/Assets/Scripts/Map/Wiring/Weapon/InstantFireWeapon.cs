@@ -24,6 +24,8 @@ namespace Assets.Scripts.Map.Wiring.Weapon
             if (this.FireMode == WeaponFireMode.Rapid && this.Inputs.Any(input => input.IsOn))
             {
                 this.OnFire();
+                this.ApplyCooldown();
+                GameController.CurrentInstance.AddCost(this.Cost);
             }
 
             base.OnCooldownEnd();
@@ -38,6 +40,8 @@ namespace Assets.Scripts.Map.Wiring.Weapon
             if (fired && !this.InCooldown)
             {
                 this.OnFire();
+                this.ApplyCooldown();
+                GameController.CurrentInstance.AddCost(this.Cost);
             }
         }
     }

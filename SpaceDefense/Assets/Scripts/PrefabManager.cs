@@ -67,11 +67,12 @@ namespace Assets.Scripts
         /// </summary>
         protected void Start()
         {
-            if (_currentInstance == null)
+            if (_currentInstance != null && _currentInstance != this)
             {
-                _currentInstance = this;
+                Destroy(this.gameObject);
             }
 
+            _currentInstance = this;
             foreach (var entity in EntityPrefabs)
             {
                 this._entityHash[entity.ID] = entity;

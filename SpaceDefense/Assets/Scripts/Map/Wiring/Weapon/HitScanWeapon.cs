@@ -12,12 +12,23 @@ namespace Assets.Scripts.Map.Wiring.Weapon
     using System.Text;
     using UnityEngine;
     using Utils;
+    using Visuals;
 
     /// <summary>
     /// Defines a weapon that uses hit scan calculation
     /// </summary>
     public class HitScanWeapon : InstantFireWeapon
     {
+        /// <summary>
+        /// prefab for the bullet line visuals
+        /// </summary>
+        public HitScanBulletLine BulletLiniePrefab;
+
+        /// <summary>
+        /// Location of the gun muzzle
+        /// </summary>
+        public GameObject MuzzleLocation;
+
         /// <summary>
         /// How many lines to fire at the same time
         /// </summary>
@@ -62,27 +73,36 @@ namespace Assets.Scripts.Map.Wiring.Weapon
             var curFacing = this.transform.eulerAngles.z;
             for (int i = 0; i < this.FireCount; i++)
             {
-                var degAngleDiff = GlobalRandom.random.NextDouble()
+                var degAngleDiff = GlobalRandom.NextFloat()
                     * this.Inaccuracy
-                    * GlobalRandom.random.Next(2) == 0 ? 1 : -1;
-                var fireAngleRad = (curFacing + degAngleDiff) * Mathf.Rad2Deg;
-                var hittables = Physics.RaycastAll(
-                        this.transform.position,
+                    * (GlobalRandom.random.Next(2) == 0 ? 1 : -1);
+                var fireAngleRad = (curFacing + degAngleDiff) * Mathf.Deg2Rad;
+                var allHits = Physics2D.RaycastAll(
+                        this.MuzzleLocation.transform.position,
                         new Vector2(Mathf.Cos(fireAngleRad), Mathf.Sin(fireAngleRad))
                     )
-                    .Select(hit => hit.collider.GetComponent<IHittable>())
+                    .Where(this.ProcessRaycastHit)
                     .ToList();
-                foreach (var hittalbe in hittables)
+                if (allHits.Count > 0)
                 {
-                    if (hittalbe == null)
-                    {
-                        continue;
-                    }
-
-                    hittalbe.OnHit(this.Damage, this.EffectImpacts);
+                    var newLine = Instantiate(this.BulletLiniePrefab);
+                    newLine.DrawHit(this.MuzzleLocation.transform.position, allHits);
                 }
             }
+
             return null;
+        }
+
+        private bool ProcessRaycastHit(RaycastHit2D hit)
+        {
+            var hittalbe = hit.collider.GetComponent<IHittable>();
+            if (hittalbe == null)
+            {
+                return false;
+            }
+
+            hittalbe.OnHit(this.Damage, this.EffectImpacts);
+            return true;
         }
     }
 }

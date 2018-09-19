@@ -91,6 +91,9 @@
     <Compile Include="Assets\Scripts\GamePhases.cs" />
     <Compile Include="Assets\Scripts\IRotatable.cs" />
     <Compile Include="Assets\Scripts\LevelManager.cs" />
+    <Compile Include="Assets\Scripts\Map\Visuals\DelayedDestroy.cs" />
+    <Compile Include="Assets\Scripts\Map\Visuals\HitScanBulletLine.cs" />
+    <Compile Include="Assets\Scripts\Map\Visuals\HitScanBulletSplash.cs" />
     <Compile Include="Assets\Scripts\Map\Enemies\CloakerEnemy.cs" />
     <Compile Include="Assets\Scripts\Map\Enemies\Enemy.cs" />
     <Compile Include="Assets\Scripts\Map\Enemies\EnemyHealthBar.cs" />
@@ -122,6 +125,7 @@
     <Compile Include="Assets\Scripts\Map\MapNodeLevelData.cs" />
     <Compile Include="Assets\Scripts\Map\MapNodeSaveData.cs" />
     <Compile Include="Assets\Scripts\Map\ResourceType.cs" />
+    <Compile Include="Assets\Scripts\Map\ScreenBoundary.cs" />
     <Compile Include="Assets\Scripts\Map\SpawnManager.cs" />
     <Compile Include="Assets\Scripts\Map\SpawnPathIndicator.cs" />
     <Compile Include="Assets\Scripts\Map\Wiring\Emitters\Detector.cs" />
