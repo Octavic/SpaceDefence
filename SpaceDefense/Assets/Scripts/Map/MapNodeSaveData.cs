@@ -27,10 +27,7 @@ namespace Assets.Scripts.Map
                 this.HighScore = copySource.HighScore;
                 this.IsBeat = copySource.IsBeat;
                 this.EnergyCost = copySource.EnergyCost;
-                if(copySource.GeneratingResources != null)
-                {
-                    this.GeneratingResources = copySource.GeneratingResources.Select(resource => new MapNodeResource(resource)).ToList();
-                }
+                this.GeneratingResources = copySource.GeneratingResources.Select(resource => new MapNodeResource(resource)).ToList();
             }
         }
 
@@ -47,7 +44,7 @@ namespace Assets.Scripts.Map
         /// <summary>
         /// Best score achieved
         /// </summary>
-        public float HighScore;
+        public float HighScore = 0;
 
         /// <summary>
         /// If the level has been beat yet
@@ -57,11 +54,11 @@ namespace Assets.Scripts.Map
         /// <summary>
         /// The energy cost for the last run
         /// </summary>
-        public float EnergyCost;
+        public float EnergyCost = 0;
 
         /// <summary>
         /// The resource that's generated from the map node
         /// </summary>
-        public List<MapNodeResource> GeneratingResources;
+        public List<MapNodeResource> GeneratingResources = new List<MapNodeResource>();
     }
 }

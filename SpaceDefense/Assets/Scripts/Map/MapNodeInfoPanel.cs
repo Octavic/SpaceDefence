@@ -12,12 +12,18 @@ namespace Assets.Scripts.Map
     using System.Text;
     using UnityEngine;
     using Enemies;
+    using UnityEngine.UI;
 
     /// <summary>
     /// Displays the information about a specific map node
     /// </summary>
     public class MapNodeInfoPanel : MonoBehaviour
     {
+        #region Unity links
+        public Text LevelName;
+        public Text HighScore;
+        #endregion
+
         /// <summary>
         /// The current instance
         /// </summary>
@@ -25,10 +31,11 @@ namespace Assets.Scripts.Map
         {
             get
             {
-                if(_currentInstance == null)
+                if (_currentInstance == null)
                 {
                     _currentInstance = GameObject.FindObjectOfType<MapNodeInfoPanel>();
                 }
+
                 return _currentInstance;
             }
         }
@@ -48,14 +55,16 @@ namespace Assets.Scripts.Map
                     .Concat(path.SpecialSpawns.Select(spawn => spawn.Enemy))
                     .ToList();
             }
+            this.LevelName.text = targetNode.Name;
+            this.HighScore.text = targetNode.SaveData.HighScore == 0 ? "/" : ((int)(targetNode.SaveData.HighScore)).ToString();
 
-            this.Show();
+            this.ShowPanel();
         }
 
         /// <summary>
         /// Shows the panel
         /// </summary>
-        public void Show()
+        public void ShowPanel()
         {
             this.gameObject.SetActive(true);
         }
@@ -63,7 +72,7 @@ namespace Assets.Scripts.Map
         /// <summary>
         /// Hides the panel
         /// </summary>
-        public void Hide()
+        public void HidePanel()
         {
             this.gameObject.SetActive(false);
         }
@@ -73,8 +82,17 @@ namespace Assets.Scripts.Map
         /// </summary>
         public void LaunchLevel()
         {
-            this.Hide();
+            this.HidePanel();
             LevelManager.CurrentInstance.LaunchLevel();
+        }
+
+        /// <summary>
+        /// Used for initialization
+        /// </summary>
+        public void Start()
+        {
+            MapNodeInfoPanel._currentInstance = this;
+            this.gameObject.SetActive(false);
         }
     }
 }

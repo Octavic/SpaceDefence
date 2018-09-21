@@ -311,7 +311,7 @@ namespace Assets.Scripts
 
             completedLevel.GeneratingResources = new List<MapNodeResource>(currentLevel.ResourceReward);
 
-            if (completedLevel.GeneratingResources != null && efficiency > 0)
+            if (efficiency > 0)
             {
                 foreach (var resource in completedLevel.GeneratingResources)
                 {

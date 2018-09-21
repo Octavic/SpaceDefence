@@ -136,7 +136,7 @@ namespace Assets.Scripts
         public void OnLevelComplete(MapNodeSaveData data, float defenseTime)
         {
             var existingData = this.GetLevelData(data.LevelId);
-            data.HighScore = existingData == null ? data.HighScore : Math.Max(data.HighScore, existingData.HighScore);
+            data.HighScore = Math.Max(data.HighScore, existingData.HighScore);
             data.IsBeat = existingData.IsBeat || data.IsBeat;
             this.CurrentSaveFile.NodeProgress[data.LevelId] = data;
             this.AddIncome(defenseTime);
@@ -157,7 +157,7 @@ namespace Assets.Scripts
 
             if (this.CurrentSaveFile == null)
             {
-                return null;
+                return new MapNodeSaveData();
             }
 
             return this.CurrentSaveFile.NodeProgress.Find(level => level.LevelId == levelId) ?? new MapNodeSaveData();
@@ -272,8 +272,10 @@ namespace Assets.Scripts
             var inventory = this.CurrentSaveFile.Inventory;
             var capacity = this.ResoureceCapacity;
 
+            // Loop through  all nodes
             foreach (var node in this.CurrentSaveFile.NodeProgress)
             {
+                // Calculate resource income
                 foreach (var resource in node.GeneratingResources)
                 {
                     var targetResource = resource.TargetResource;

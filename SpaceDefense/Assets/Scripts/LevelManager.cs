@@ -6,6 +6,7 @@
 
 namespace Assets.Scripts
 {
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using Map;
@@ -57,7 +58,7 @@ namespace Assets.Scripts
         /// </summary>
         protected void Start()
         {
-            if(LevelManager.CurrentInstance !=  null && LevelManager.CurrentInstance != this)
+            if (LevelManager.CurrentInstance != null && LevelManager.CurrentInstance != this)
             {
                 Destroy(this.gameObject);
             }
@@ -74,21 +75,37 @@ namespace Assets.Scripts
             // Called when left clicked
             if (Input.GetMouseButtonDown(0))
             {
-                var hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 15);
-                var mapNodes = hits
-                    .ToList()
+                var mapNodes = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 15)
                     .Select(hit => hit.collider.GetComponent<MapNodeBehavior>())
                     .ToList();
-                foreach(var mapNode in mapNodes)
+
+                if (mapNodes.Count == 0)
                 {
-                    if (mapNode != null)
-                    {
-                        this._currentLevelBehavior = mapNode;
-                        this.CurrentLevel = this._currentLevelBehavior.TargetNode;
-                        LevelSelectCamera.CurrentInstance.OnSelectLevelNode(this._currentLevelBehavior);
-                        return;
-                    }
+                    // User clicked on nothing
+                    StartCoroutine(this.OnClickNothing());
+                    return;
                 }
+
+                var mapNode = mapNodes.First();
+                if (mapNode != null)
+                {
+                    this._currentLevelBehavior = mapNode;
+                    this.CurrentLevel = this._currentLevelBehavior.TargetNode;
+                    MapNodeInfoPanel.CurrentInstance.Render(this.CurrentLevel);
+                    LevelSelectCamera.CurrentInstance.OnSelectLevelNode(this._currentLevelBehavior);
+                    return;
+                }
+            }
+        }
+
+        private IEnumerator OnClickNothing()
+        {
+            // The wait is to ensure the player didn't actually click on the map node
+            yield return new WaitForSeconds(0.5f);
+            this.CurrentLevel = null;
+            if(MapNodeInfoPanel.CurrentInstance != null)
+            {
+                MapNodeInfoPanel.CurrentInstance.HidePanel();
             }
         }
     }
