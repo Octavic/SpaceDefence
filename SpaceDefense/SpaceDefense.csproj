@@ -84,12 +84,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\AttachableBeam.cs" />
-    <Compile Include="Assets\Scripts\EffectEnum.cs" />
+    <Compile Include="Assets\Scripts\Map\EffectEnum.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\GameObjectExtensions.cs" />
     <Compile Include="Assets\Scripts\GameOverScreen.cs" />
     <Compile Include="Assets\Scripts\GamePhases.cs" />
-    <Compile Include="Assets\Scripts\IRotatable.cs" />
     <Compile Include="Assets\Scripts\LevelManager.cs" />
     <Compile Include="Assets\Scripts\Map\Enemies\CloakerEnemy.cs" />
     <Compile Include="Assets\Scripts\Map\Enemies\Enemy.cs" />

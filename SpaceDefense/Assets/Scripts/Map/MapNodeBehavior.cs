@@ -40,15 +40,9 @@ namespace Assets.Scripts.Map
         {
             get
             {
-                if (!this._isAvailable.HasValue)
-                {
-                    this._isAvailable = !this.TargetNode.LockedBy.Any(nodeId => !MapNodes[nodeId].TargetNode.SaveData.IsBeat);
-                }
-
-                return this._isAvailable.Value;
+                return !this.TargetNode.LockedBy.Any(nodeId => !MapNodes[nodeId].TargetNode.SaveData.IsBeat);
             }
         }
-        private bool? _isAvailable;
 
         /// <summary>
         /// Called when the node was clicked 
@@ -68,7 +62,7 @@ namespace Assets.Scripts.Map
             if (MapNodeBehavior.MapNodes.ContainsKey(nodeId))
             {
                 var existingNode = MapNodeBehavior.MapNodes[nodeId];
-                if(existingNode != null)
+                if (existingNode != null)
                 {
                     Debug.LogError("Duplicate map node id: " + nodeId);
                     return;
@@ -99,7 +93,7 @@ namespace Assets.Scripts.Map
                 }
             }
 
-            if(!this.IsAvailable)
+            if (!this.IsAvailable)
             {
                 this.GetComponent<SpriteRenderer>().color = Settings.LevelSettings.UnavailableLevelColor;
             }

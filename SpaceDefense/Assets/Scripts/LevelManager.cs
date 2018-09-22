@@ -83,7 +83,6 @@ namespace Assets.Scripts
                 if (mapNodes.Count == 0)
                 {
                     // User clicked on nothing
-                    StartCoroutine(this.OnClickNothing());
                     return;
                 }
 
@@ -96,17 +95,6 @@ namespace Assets.Scripts
                     LevelSelectCamera.CurrentInstance.OnSelectLevelNode(this._currentLevelBehavior);
                     return;
                 }
-            }
-        }
-
-        private IEnumerator OnClickNothing()
-        {
-            // The wait is to ensure the player didn't actually click on the map node
-            yield return new WaitForSeconds(0.5f);
-            this.CurrentLevel = null;
-            if(MapNodeInfoPanel.CurrentInstance != null)
-            {
-                MapNodeInfoPanel.CurrentInstance.HidePanel();
             }
         }
     }
