@@ -12,6 +12,8 @@ namespace Assets.Scripts.Map
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using Settings;
+    using Utils;
 
     /// <summary>
     /// Defines the unity behavior of a map node
@@ -82,6 +84,28 @@ namespace Assets.Scripts.Map
             yield return new WaitForSeconds(0.1f);
             this.TargetNode.SaveData = SaveManager.CurrentInstance.GetLevelData(this.TargetNode.NodeId);
             yield return new WaitForSeconds(0.1f);
+
+            Color nodeColor;
+            var efficiency = this.TargetNode.SaveData.Efficiency;
+            if (!this.IsAvailable)
+            {
+                nodeColor = UISettings.UnavailableNodeColor;
+            }
+            else if (!this.TargetNode.SaveData.IsBeat)
+            {
+                nodeColor = UISettings.AvailableNodeColor;
+            }
+            else if (efficiency == 1)
+            {
+                nodeColor = UISettings.AcedNodeColor;
+            }
+            else
+            {
+                nodeColor = Lerp.LerpColor(UISettings.MinImperfectNodeColor, UISettings.MaxImprefectNodeColor, efficiency);
+            }
+
+            this.GetComponent<SpriteRenderer>().color = nodeColor;
+
             foreach (var lockedById in this.TargetNode.LockedBy)
             {
                 var lockedByNode = MapNodes[lockedById];
@@ -89,13 +113,8 @@ namespace Assets.Scripts.Map
                 routeVisual.Attach(this.transform.position, lockedByNode.transform.position);
                 if (!lockedByNode.TargetNode.SaveData.IsBeat)
                 {
-                    routeVisual.GetComponentInChildren<SpriteRenderer>().color = Settings.LevelSettings.UnavailableLevelColor;
+                    routeVisual.GetComponentInChildren<SpriteRenderer>().color = UISettings.UnavailableNodeColor;
                 }
-            }
-
-            if (!this.IsAvailable)
-            {
-                this.GetComponent<SpriteRenderer>().color = Settings.LevelSettings.UnavailableLevelColor;
             }
         }
     }

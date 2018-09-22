@@ -188,6 +188,7 @@
     <Compile Include="Assets\Scripts\UI\VersionFooter.cs" />
     <Compile Include="Assets\Scripts\Utils\ColorExtension.cs" />
     <Compile Include="Assets\Scripts\Utils\GlobalRandom.cs" />
+    <Compile Include="Assets\Scripts\Utils\Lerp.cs" />
     <Compile Include="Assets\Scripts\Utils\LimitedStack.cs" />
     <Compile Include="Assets\Scripts\Utils\SingletonMonobehavior.cs" />
     <Compile Include="Assets\Scripts\Utils\Utils.cs" />

@@ -69,9 +69,9 @@ namespace Assets.Scripts.Map.Wiring.Weapon
             this.gameObject.SetActive(true);
             this._activeDurationLeft = this.ActiveDuration;
             this._realDamage = (this.MaxDamage - this.MinDamage) * chargeLevel * chargeLevel + this.MinDamage;
-            this._renderer.color = this.UnchargedColor.Lerp(this.FullyChargedColor, chargeLevel);
+            this._renderer.color = Lerp.LerpColor(this.UnchargedColor, this.FullyChargedColor, chargeLevel);
         }
-        
+
         /// <summary>
         /// Called when the beam hits an enemy
         /// </summary>

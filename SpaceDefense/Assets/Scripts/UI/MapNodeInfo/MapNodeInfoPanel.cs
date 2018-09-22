@@ -23,7 +23,7 @@ namespace Assets.Scripts.UI.MapNodeInfo
     {
         #region Unity links
         public Text LevelName;
-        public Text HighScore;
+        public Text Efficiency;
 
         public GameObject ResourceParent;
         #endregion
@@ -69,7 +69,7 @@ namespace Assets.Scripts.UI.MapNodeInfo
             }
 
             this.LevelName.text = targetNode.Name;
-            this.HighScore.text = targetNode.SaveData.HighScore == 0 ? "/" : ((int)(targetNode.SaveData.HighScore)).ToString();
+            this.Efficiency.text = targetNode.SaveData.Efficiency.ToString("0.00");
 
             for (int i = 0; i < targetNode.ResourceReward.Count; i++)
             {
