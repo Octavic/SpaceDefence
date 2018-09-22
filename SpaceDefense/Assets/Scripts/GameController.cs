@@ -308,6 +308,7 @@ namespace Assets.Scripts
 
             completedLevel.IsBeat = didWin;
             completedLevel.HighScore = finalScore;
+            completedLevel.Efficiency = efficiency;
 
             completedLevel.GeneratingResources = new List<MapNodeResource>(currentLevel.ResourceReward);
 

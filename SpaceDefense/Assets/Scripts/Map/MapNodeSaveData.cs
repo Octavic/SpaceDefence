@@ -57,6 +57,11 @@ namespace Assets.Scripts.Map
         public float EnergyCost = 0;
 
         /// <summary>
+        /// The final efficiency
+        /// </summary>
+        public float Efficiency = 0;
+
+        /// <summary>
         /// The resource that's generated from the map node
         /// </summary>
         public List<MapNodeResource> GeneratingResources = new List<MapNodeResource>();

@@ -30,13 +30,29 @@ namespace Assets.Scripts.UI.MapNodeInfo
         public Text AmountText;
 
         /// <summary>
+        /// Text to display the deficiency
+        /// </summary>
+        public Text DeficiencyText;
+
+        /// <summary>
         /// Sets the resource
         /// </summary>
         /// <param name="resource">Target resource</param>
-        public void SetResource(ResourceType resource, float amount)
+        public void SetResource(ResourceType resource, float totalAmount, float efficiency, bool isBeat)
         {
             this.ResourceImage.sprite = PrefabManager.CurrentInstance.GetResourceSprite(resource);
-            this.AmountText.text = amount.ToString();
+            this.AmountText.text = (totalAmount * efficiency).ToString();
+            var deficiency = (1 - efficiency) * totalAmount;
+
+            if (!isBeat && efficiency < 1)
+            {
+                this.DeficiencyText.gameObject.SetActive(true);
+                this.DeficiencyText.text = "(-" + deficiency.ToString() + ")";
+            }
+            else
+            {
+                this.DeficiencyText.gameObject.SetActive(false);
+            }
         }
     }
 }

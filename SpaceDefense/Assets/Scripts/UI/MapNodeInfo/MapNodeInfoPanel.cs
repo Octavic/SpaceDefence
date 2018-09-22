@@ -56,6 +56,7 @@ namespace Assets.Scripts.UI.MapNodeInfo
         /// <param name="targetNode">Target node</param>
         public void Render(MapNode targetNode)
         {
+            // First, remove the previous resource icons
             this.ResourceParent.DestroyAllChildren();
 
             var allEnemies = new List<EnemyType>();
@@ -74,7 +75,7 @@ namespace Assets.Scripts.UI.MapNodeInfo
             {
                 var resource = targetNode.ResourceReward[i];
                 var newResource = Instantiate(this.ResourcePrefab, this.ResourceParent.transform);
-                newResource.SetResource(resource.TargetResource, resource.ProduceAmount);
+                newResource.SetResource(resource.TargetResource, resource.ProduceAmount, targetNode.SaveData.Efficiency, targetNode.SaveData.IsBeat);
                 newResource.transform.localPosition = new Vector3(0, -i * UISettings.MapNodeInfoResourceHeight);
             }
 
