@@ -45,6 +45,11 @@ namespace Assets.Scripts
         public SpawnPathIndicator SpawnPathIndicator;
 
         /// <summary>
+        /// A list of sprites for the resources
+        /// </summary>
+        public List<Sprite> ResourceSprites;
+
+        /// <summary>
         /// Gets the current instance  of the <see cref="PrefabManager"/> class
         /// </summary>
         public static PrefabManager CurrentInstance
@@ -137,6 +142,22 @@ namespace Assets.Scripts
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the sprite for the target resource
+        /// </summary>
+        /// <param name="resource">Target resource</param>
+        /// <returns>The sprite for the resource. Null if not found</returns>
+        public Sprite GetResourceSprite(ResourceType resource)
+        {
+            var index = (int)resource;
+            if(index >= this.ResourceSprites.Count)
+            {
+                return null;
+            }
+
+            return this.ResourceSprites[index];
         }
     }
 }

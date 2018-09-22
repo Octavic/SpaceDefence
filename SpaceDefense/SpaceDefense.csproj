@@ -91,9 +91,6 @@
     <Compile Include="Assets\Scripts\GamePhases.cs" />
     <Compile Include="Assets\Scripts\IRotatable.cs" />
     <Compile Include="Assets\Scripts\LevelManager.cs" />
-    <Compile Include="Assets\Scripts\Map\Visuals\DelayedDestroy.cs" />
-    <Compile Include="Assets\Scripts\Map\Visuals\HitScanBulletLine.cs" />
-    <Compile Include="Assets\Scripts\Map\Visuals\HitScanBulletSplash.cs" />
     <Compile Include="Assets\Scripts\Map\Enemies\CloakerEnemy.cs" />
     <Compile Include="Assets\Scripts\Map\Enemies\Enemy.cs" />
     <Compile Include="Assets\Scripts\Map\Enemies\EnemyHealthBar.cs" />
@@ -121,13 +118,15 @@
     <Compile Include="Assets\Scripts\Map\MapNodeBehavior.cs" />
     <Compile Include="Assets\Scripts\Map\MapNodeDependencyBeam.cs" />
     <Compile Include="Assets\Scripts\Map\MapNodeDifficulty.cs" />
-    <Compile Include="Assets\Scripts\Map\MapNodeInfoPanel.cs" />
     <Compile Include="Assets\Scripts\Map\MapNodeLevelData.cs" />
     <Compile Include="Assets\Scripts\Map\MapNodeSaveData.cs" />
     <Compile Include="Assets\Scripts\Map\ResourceType.cs" />
     <Compile Include="Assets\Scripts\Map\ScreenBoundary.cs" />
     <Compile Include="Assets\Scripts\Map\SpawnManager.cs" />
     <Compile Include="Assets\Scripts\Map\SpawnPathIndicator.cs" />
+    <Compile Include="Assets\Scripts\Map\Visuals\DelayedDestroy.cs" />
+    <Compile Include="Assets\Scripts\Map\Visuals\HitScanBulletLine.cs" />
+    <Compile Include="Assets\Scripts\Map\Visuals\HitScanBulletSplash.cs" />
     <Compile Include="Assets\Scripts\Map\Wiring\Emitters\Detector.cs" />
     <Compile Include="Assets\Scripts\Map\Wiring\Emitters\DetectorArea.cs" />
     <Compile Include="Assets\Scripts\Map\Wiring\Emitters\Emitter.cs" />
@@ -170,6 +169,7 @@
     <Compile Include="Assets\Scripts\Settings\EnemySettings.cs" />
     <Compile Include="Assets\Scripts\Settings\GeneralSettings.cs" />
     <Compile Include="Assets\Scripts\Settings\LevelSettings.cs" />
+    <Compile Include="Assets\Scripts\Settings\UISettings.cs" />
     <Compile Include="Assets\Scripts\Settings\Version.cs" />
     <Compile Include="Assets\Scripts\Settings\WeaponSettings.cs" />
     <Compile Include="Assets\Scripts\Tags.cs" />
@@ -181,6 +181,8 @@
     <Compile Include="Assets\Scripts\UI\Graph\UILine.cs" />
     <Compile Include="Assets\Scripts\UI\LevelSelectCamera.cs" />
     <Compile Include="Assets\Scripts\UI\MainCamera.cs" />
+    <Compile Include="Assets\Scripts\UI\MapNodeInfo\MapNodeInfoPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\MapNodeInfo\MapNodeInfoPanelResource.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenu.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuItem.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuTabTypes.cs" />

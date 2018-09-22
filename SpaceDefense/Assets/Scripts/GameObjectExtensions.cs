@@ -22,7 +22,7 @@ namespace Assets.Scripts
             var children = gameobject.transform.childCount;
             for (int i = 0; i < children; i++)
             {
-                GameObject.Destroy(gameobject.transform.GetChild(i));
+                GameObject.Destroy(gameobject.transform.GetChild(i).gameObject);
             }
         }
     }

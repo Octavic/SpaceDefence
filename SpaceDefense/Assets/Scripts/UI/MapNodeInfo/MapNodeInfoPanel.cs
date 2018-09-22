@@ -4,15 +4,17 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Map
+namespace Assets.Scripts.UI.MapNodeInfo
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using UnityEngine;
-    using Enemies;
+    using Map;
+    using Map.Enemies;
     using UnityEngine.UI;
+    using Settings;
 
     /// <summary>
     /// Displays the information about a specific map node
@@ -22,7 +24,14 @@ namespace Assets.Scripts.Map
         #region Unity links
         public Text LevelName;
         public Text HighScore;
+
+        public GameObject ResourceParent;
         #endregion
+
+        /// <summary>
+        /// Prefab for the map node info panel
+        /// </summary>
+        public MapNodeInfoPanelResource ResourcePrefab;
 
         /// <summary>
         /// The current instance
@@ -47,6 +56,8 @@ namespace Assets.Scripts.Map
         /// <param name="targetNode">Target node</param>
         public void Render(MapNode targetNode)
         {
+            this.ResourceParent.DestroyAllChildren();
+
             var allEnemies = new List<EnemyType>();
             foreach (var path in targetNode.LevelData.SpawnPaths)
             {
@@ -55,8 +66,17 @@ namespace Assets.Scripts.Map
                     .Concat(path.SpecialSpawns.Select(spawn => spawn.Enemy))
                     .ToList();
             }
+
             this.LevelName.text = targetNode.Name;
             this.HighScore.text = targetNode.SaveData.HighScore == 0 ? "/" : ((int)(targetNode.SaveData.HighScore)).ToString();
+
+            for (int i = 0; i < targetNode.ResourceReward.Count; i++)
+            {
+                var resource = targetNode.ResourceReward[i];
+                var newResource = Instantiate(this.ResourcePrefab, this.ResourceParent.transform);
+                newResource.SetResource(resource.TargetResource, resource.ProduceAmount);
+                newResource.transform.localPosition = new Vector3(0, -i * UISettings.MapNodeInfoResourceHeight);
+            }
 
             this.ShowPanel();
         }
@@ -74,6 +94,7 @@ namespace Assets.Scripts.Map
         /// </summary>
         public void HidePanel()
         {
+            this.ResourceParent.DestroyAllChildren();
             this.gameObject.SetActive(false);
         }
 

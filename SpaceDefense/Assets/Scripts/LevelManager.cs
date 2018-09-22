@@ -13,6 +13,7 @@ namespace Assets.Scripts
     using UnityEngine;
     using UnityEngine.SceneManagement;
     using UI;
+    using UI.MapNodeInfo;
 
     /// <summary>
     /// Manages the current level
