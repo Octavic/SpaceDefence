@@ -263,6 +263,11 @@ namespace Assets.Scripts
             }
         }
 
+        private void UpdatePlayerInventoryUI()
+        {
+            UI.PlayerInventoryUI.Refresh(this.CurrentSaveFile.Inventory, this.ResoureceCapacity);
+        }
+
         /// <summary>
         /// Add income from the completed nodes
         /// </summary>
@@ -312,6 +317,7 @@ namespace Assets.Scripts
                 Destroy(this.gameObject);
             }
             DontDestroyOnLoad(this.gameObject);
+            this.UpdatePlayerInventoryUI();
         }
     }
 }

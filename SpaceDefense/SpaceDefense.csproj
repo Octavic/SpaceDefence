@@ -182,6 +182,8 @@
     <Compile Include="Assets\Scripts\UI\MainCamera.cs" />
     <Compile Include="Assets\Scripts\UI\MapNodeInfo\MapNodeInfoPanel.cs" />
     <Compile Include="Assets\Scripts\UI\MapNodeInfo\MapNodeInfoPanelResource.cs" />
+    <Compile Include="Assets\Scripts\UI\PlayerInventoryUI.cs" />
+    <Compile Include="Assets\Scripts\UI\PlayerInventoryResource.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenu.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuItem.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuTabTypes.cs" />
