@@ -78,6 +78,7 @@ namespace Assets.Scripts
             }
         }
         private SaveFile _currentSaveFile;
+
         private Dictionary<ResourceType, float> ResoureceCapacity
         {
             get
@@ -220,6 +221,7 @@ namespace Assets.Scripts
             }
 
             this.Save();
+            this.UpdatePlayerInventoryUI();
             return true;
         }
 
@@ -263,6 +265,9 @@ namespace Assets.Scripts
             }
         }
 
+        /// <summary>
+        /// Updates the player inventory's UI to reflect changes
+        /// </summary>
         private void UpdatePlayerInventoryUI()
         {
             UI.PlayerInventoryUI.Refresh(this.CurrentSaveFile.Inventory, this.ResoureceCapacity);
@@ -305,6 +310,7 @@ namespace Assets.Scripts
             }
 
             this.Save();
+            this.UpdatePlayerInventoryUI();
         }
 
         /// <summary>
