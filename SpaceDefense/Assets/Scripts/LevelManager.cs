@@ -62,6 +62,7 @@ namespace Assets.Scripts
             if (LevelManager.CurrentInstance != null && LevelManager.CurrentInstance != this)
             {
                 Destroy(this.gameObject);
+                return;
             }
 
             LevelManager.CurrentInstance = this;

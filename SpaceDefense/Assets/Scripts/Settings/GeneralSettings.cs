@@ -66,5 +66,10 @@ namespace Assets.Scripts.Settings
         /// The default depth for all cameras
         /// </summary>
         public const float CameraDefaultDepth = -10;
+
+        /// <summary>
+        /// How much is refunded  when an item is sold
+        /// </summary>
+        public const float RefundPriceRatio = 0.9f;
     }
 }

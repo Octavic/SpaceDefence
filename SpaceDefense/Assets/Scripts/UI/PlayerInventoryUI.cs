@@ -49,6 +49,7 @@ namespace Assets.Scripts.UI
             }
 
             _currentInstance = this;
+            DontDestroyOnLoad(this.transform.parent.gameObject);
         }
 
         /// <summary>

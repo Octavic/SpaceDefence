@@ -226,6 +226,48 @@ namespace Assets.Scripts
         }
 
         /// <summary>
+        /// Sells the given entity
+        /// </summary>
+        /// <param name="entity">Target entity to be sold</param>
+        /// <returns>The amount of resources gained</returns>
+        public List<ResourceCost> SellItem(GridEntity entity)
+        {
+            var result = new List<ResourceCost>();
+            foreach(var cost in entity.ManufactureCost)
+            {
+                var resource = cost.Resource;
+                var amountRefunded = cost.Amount * Settings.GeneralSettings.RefundPriceRatio;
+
+                var roomLeft = this.GetResourceCapacity(resource);
+                var amountOwned = this.GetResourceOwnedAmount(resource);
+                var maxAmount = amountOwned - roomLeft;
+
+                var refundedCost = new ResourceCost();
+                refundedCost.Resource = resource;
+                refundedCost.Amount = Mathf.Min(amountRefunded, maxAmount);
+
+                this.CurrentSaveFile.Inventory[resource] += refundedCost.Amount;
+                result.Add(refundedCost);
+            }
+
+            return result;
+        }
+
+        private float GetResourceCapacity(ResourceType resource)
+        {
+            float result = 0;
+            this.ResoureceCapacity.TryGetValue(resource, out result);
+            return result;
+        }
+
+        private float GetResourceOwnedAmount(ResourceType resource)
+        {
+            float result = 0;
+            this.CurrentSaveFile.Inventory.TryGetValue(resource, out result);
+            return result;
+        }
+
+        /// <summary>
         /// Saves the current state
         /// </summary>
         private void Save()
@@ -321,6 +363,7 @@ namespace Assets.Scripts
             if(CurrentInstance != null && CurrentInstance != this)
             {
                 Destroy(this.gameObject);
+                return;
             }
             DontDestroyOnLoad(this.gameObject);
             this.UpdatePlayerInventoryUI();

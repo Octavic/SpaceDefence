@@ -75,6 +75,7 @@ namespace Assets.Scripts
             if (_currentInstance != null && _currentInstance != this)
             {
                 Destroy(this.gameObject);
+                return;
             }
 
             _currentInstance = this;

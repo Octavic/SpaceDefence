@@ -17,6 +17,7 @@ namespace Assets.Scripts.Map.Grid
     /// <summary>
     /// The total resource cost
     /// </summary>
+    [Serializable]
     public class ResourceCost
     {
         public ResourceType Resource;

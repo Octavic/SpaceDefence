@@ -109,6 +109,7 @@
     <Compile Include="Assets\Scripts\Map\Grid\States\GridEntityContainerState.cs" />
     <Compile Include="Assets\Scripts\Map\Grid\States\GridEntityState.cs" />
     <Compile Include="Assets\Scripts\Map\Grid\States\MapGridState.cs" />
+    <Compile Include="Assets\Scripts\Map\Grid\States\MapGridUndoItem.cs" />
     <Compile Include="Assets\Scripts\Map\Grid\States\OutputConnectionState.cs" />
     <Compile Include="Assets\Scripts\Map\Grid\States\OutputSocketState.cs" />
     <Compile Include="Assets\Scripts\Map\IHittable.cs" />

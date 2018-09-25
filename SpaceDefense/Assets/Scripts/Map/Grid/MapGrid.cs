@@ -70,25 +70,25 @@ namespace Assets.Scripts.Map.Grid
         /// <summary>
         /// A stack of states that's been executed
         /// </summary>
-        private LimitedStack<MapGridState> _undoStack = new LimitedStack<MapGridState>(GeneralSettings.GridUndoSteps);
+        private LimitedStack<MapGridUndoItem> _undoStack = new LimitedStack<MapGridUndoItem>(GeneralSettings.GridUndoSteps);
 
         /// <summary>
         /// A stack of states that's been undid
         /// </summary>
-        private LimitedStack<MapGridState> _redoStack = new LimitedStack<MapGridState>(GeneralSettings.GridUndoSteps);
+        private LimitedStack<MapGridUndoItem> _redoStack = new LimitedStack<MapGridUndoItem>(GeneralSettings.GridUndoSteps);
 
         /// <summary>
         /// Called when the state of the grid changes
         /// </summary>
-        public void OnStateChange()
+        public void OnStateChange(List<ResourceCost> costDiff = null)
         {
             var newState = this.SaveState();
             if (this._redoStack.Count > 0)
             {
-                this._redoStack = new LimitedStack<MapGridState>(GeneralSettings.GridUndoSteps);
+                this._redoStack = new LimitedStack<MapGridUndoItem>(GeneralSettings.GridUndoSteps);
             }
 
-            this._undoStack.Push(newState);
+            this._undoStack.Push(new MapGridUndoItem(newState, costDiff));
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Assets.Scripts.Map.Grid
         {
             this.ResetBoard();
             this._redoStack.Push(this._undoStack.Pop());
-            this._tryLoadFromState(this._undoStack.Peek());
+            this._tryLoadFromState(this._undoStack.Peek().SaveState);
         }
 
         /// <summary>
@@ -111,10 +111,9 @@ namespace Assets.Scripts.Map.Grid
                 var item = this._redoStack.Pop();
                 this._undoStack.Push(item);
                 this.ResetBoard();
-                this._tryLoadFromState(item);
+                this._tryLoadFromState(item.SaveState);
             }
         }
-
 
         public GridEntity GetEntityAtPosition(Vector2 mousePos)
         {
@@ -135,7 +134,7 @@ namespace Assets.Scripts.Map.Grid
         /// <summary>
         /// Rotates the target entity
         /// </summary>
-        /// <param name="targetEntity">Entity  to be rotated</param>
+        /// <param name="targetEntity">Entity to be rotated</param>
         /// <param name="isClockWise">If the rotation is clockwise or not</param>
         public void RotateEntity(GridEntity targetEntity, bool isClockWise)
         {
@@ -193,6 +192,8 @@ namespace Assets.Scripts.Map.Grid
                 return;
             }
 
+            var refundedAmount = SaveManager.CurrentInstance.SellItem(targetEntity);
+
             this._entities.Remove(targetEntity);
             var occupiedCoors = this._getNeededCoordinates(indexCoor, targetEntity.Size);
             foreach (var occupied in occupiedCoors)
@@ -212,6 +213,11 @@ namespace Assets.Scripts.Map.Grid
         /// <returns>True if operation succeed</returns>
         public bool TryAddEntity(GridEntity newEntity, GridCoordinate coordinate, bool addToUndoStack = true)
         {
+            if(addToUndoStack && !SaveManager.CurrentInstance.TrySpendResource(newEntity.ManufactureCost))
+            {
+                return false;
+            }
+
             var neededCoordinates = _getNeededCoordinates(coordinate, newEntity.Size);
             GridEntityContainer container;
             if (!this._canAddEntity(newEntity, neededCoordinates, out container))
@@ -235,7 +241,7 @@ namespace Assets.Scripts.Map.Grid
 
                 if (addToUndoStack)
                 {
-                    this.OnStateChange();
+                    this.OnStateChange(newEntity.ManufactureCost);
                 }
 
                 return true;
