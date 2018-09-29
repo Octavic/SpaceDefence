@@ -82,7 +82,7 @@ namespace Assets.Scripts.Map.Grid
         public abstract void OnInputChange();
 
         /// <summary>
-        /// Used for intialization
+        /// Used for initialization
         /// </summary>
         protected virtual void Start()
         {
