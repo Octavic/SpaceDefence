@@ -14,7 +14,7 @@ namespace Assets.Scripts.Settings
         public const int MajorVersion = 1;
         public const int MinorVersion = 1;
         public const int PointRelease = 0;
-        public const string GitHash = "";
+        public const string GitHash = "e7f76dc";
 
         public static string GetReleaseVersion()
         {
