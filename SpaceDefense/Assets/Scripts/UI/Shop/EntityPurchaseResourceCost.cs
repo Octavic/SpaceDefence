@@ -1,5 +1,5 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="EntityPurchaseButton.cs">
+//  <copyright file="EntityPurchaseResourceCost.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
@@ -10,29 +10,26 @@ namespace Assets.Scripts.UI
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using Map.Grid;
     using UnityEngine;
+    using UnityEngine.UI;
     using Map;
 
-
     /// <summary>
-    /// Defines a button to purchase entities with
+    /// UI for each entry of entity purchase cost
     /// </summary>
-    public class EntityPurchaseButton : MonoBehaviour
+    public class EntityPurchaseResourceCost : MonoBehaviour
     {
-        /// <summary>
-        /// Target entity prefab to be spawned when purchased
-        /// </summary>
-        public GridEntity TargetEntityPrefab;
+        public Image ResourceImage;
+        public Text ResourceAmount;
 
         /// <summary>
-        /// TODO: add price check and what not
+        /// Shows the target resource and amount
         /// </summary>
-        public void OnPurchase()
+        public void ShowResource(ResourceType resource, float amount)
         {
-            var newEntity = Instantiate(this.TargetEntityPrefab);
-            newEntity.gameObject.SetActive(false);
-            PlayerController.CurrentInstancce.OnCompletingPurchase(newEntity);
+            var resourceSprite = PrefabManager.CurrentInstance.GetResourceSprite(resource);
+            this.ResourceImage.sprite = resourceSprite;
+            this.ResourceAmount.text = amount.ToString();
         }
     }
 }

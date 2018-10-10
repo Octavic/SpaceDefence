@@ -174,12 +174,13 @@
     <Compile Include="Assets\Scripts\Settings\WeaponSettings.cs" />
     <Compile Include="Assets\Scripts\Tags.cs" />
     <Compile Include="Assets\Scripts\Tips.cs" />
-    <Compile Include="Assets\Scripts\UI\EntityPurchaseButton.cs" />
+    <Compile Include="Assets\Scripts\UI\Shop\EntityPurchaseButton.cs" />
+    <Compile Include="Assets\Scripts\UI\Shop\EntityPurchaseResourceCost.cs" />
     <Compile Include="Assets\Scripts\UI\Graph\BarGraph.cs" />
     <Compile Include="Assets\Scripts\UI\Graph\BaseGraph.cs" />
     <Compile Include="Assets\Scripts\UI\Graph\LineGraph.cs" />
     <Compile Include="Assets\Scripts\UI\Graph\UILine.cs" />
-    <Compile Include="Assets\Scripts\UI\GridEntityInfoHover.cs" />
+    <Compile Include="Assets\Scripts\UI\Shop\GridEntityInfoHover.cs" />
     <Compile Include="Assets\Scripts\UI\LevelSelectCamera.cs" />
     <Compile Include="Assets\Scripts\UI\MainCamera.cs" />
     <Compile Include="Assets\Scripts\UI\MapNodeInfo\MapNodeInfoPanel.cs" />

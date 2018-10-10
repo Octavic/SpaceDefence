@@ -65,7 +65,7 @@ namespace Assets.Scripts.Map.Grid
         private int _rotation;
 
         /// <summary>
-        /// The width of the entity
+        /// The height and width of the entity
         /// </summary>
         public GridEntitySize Size;
 
@@ -86,6 +86,11 @@ namespace Assets.Scripts.Map.Grid
             }
             this.OnMove();
         }
+
+        /// <summary>
+        /// Gets the current grid eneity that's slected by the player
+        /// </summary>
+        public static GridEntity CurrentlySelected { get; private set; }
 
         /// <summary>
         /// Called when the entity moves to update the attached beams
@@ -124,6 +129,26 @@ namespace Assets.Scripts.Map.Grid
             }
 
             return phantom.GetComponent<GridEntity>();
+        }
+
+        /// <summary>
+        /// Called When the grid entity is selected
+        /// </summary>
+        public void OnSelect()
+        {
+            if(CurrentlySelected != null && CurrentlySelected != this)
+            {
+                CurrentlySelected.OnUnselect();
+            }
+            
+        }
+
+        /// <summary>
+        /// Called when the grid entity is unselected
+        /// </summary>
+        public void OnUnselect()
+        {
+
         }
     }
 }

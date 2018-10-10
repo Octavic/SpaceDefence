@@ -24,6 +24,11 @@ namespace Assets.Scripts.Settings
         public const float MapNodeInfoResourceHeight = 50.0f;
 
         /// <summary>
+        /// The height of each entity purchase info resource
+        /// </summary>
+        public const float EntityInfoResourceHeight = 35.0f;
+
+        /// <summary>
         /// The color for an aced node
         /// </summary>
 
