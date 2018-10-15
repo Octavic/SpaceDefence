@@ -268,6 +268,15 @@ namespace Assets.Scripts
         }
 
         /// <summary>
+        /// Deletes the save file
+        /// </summary>
+        public void ResetSaveData()
+        {
+            File.Delete(this._savePath);
+            this.Load();
+        }
+
+        /// <summary>
         /// Saves the current state
         /// </summary>
         private void Save()

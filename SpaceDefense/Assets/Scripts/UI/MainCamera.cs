@@ -45,7 +45,7 @@ namespace Assets.Scripts.UI
         public float ShakeIntensityDecay;
 
         /// <summary>
-        /// The minimal screen shake intensity
+        /// The minimal screen shake intensity. Going under this will result in camera resetting to still
         /// </summary>
         public float MinShakeIntensity;
 
