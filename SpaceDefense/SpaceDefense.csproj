@@ -189,6 +189,8 @@
     <Compile Include="Assets\Scripts\UI\PlayerInventoryResource.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenu.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuItem.cs" />
+    <Compile Include="Assets\Scripts\UI\Shop\ShopMenuTab.cs" />
+    <Compile Include="Assets\Scripts\UI\Shop\ShopMenuTabContent.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopMenuTabTypes.cs" />
     <Compile Include="Assets\Scripts\UI\VersionFooter.cs" />
     <Compile Include="Assets\Scripts\Utils\ColorExtension.cs" />
