@@ -11,6 +11,7 @@ namespace Assets.Scripts.Settings
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using Map;
 
     /// <summary>
     /// A collection of general settings
@@ -51,7 +52,7 @@ namespace Assets.Scripts.Settings
         /// The size of status effect icons.
         /// </summary>
         public const float IconSize = 0.15f;
-        
+
         /// <summary>
         /// The half transparent color for the phantom
         /// </summary>
@@ -71,5 +72,14 @@ namespace Assets.Scripts.Settings
         /// How much is refunded  when an item is sold
         /// </summary>
         public const float RefundPriceRatio = 0.9f;
+
+        /// <summary>
+        /// How much  resources the player starts with
+        /// </summary>
+        public static Dictionary<ResourceType, float> StartingResources = new Dictionary<ResourceType, float>()
+        {
+            { ResourceType.Iron, 100 },
+            { ResourceType.Copper, 100 }
+        };
     }
 }

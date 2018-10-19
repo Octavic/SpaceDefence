@@ -192,7 +192,6 @@ namespace Assets.Scripts
         }
         public void SetFightPhase()
         {
-            this.Save();
             this.CurrentPhasee = GamePhases.Fight;
         }
 

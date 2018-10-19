@@ -220,7 +220,6 @@ namespace Assets.Scripts
                 }
             }
 
-            this.Save();
             this.UpdatePlayerInventoryUI();
             return true;
         }
@@ -306,6 +305,7 @@ namespace Assets.Scripts
             {
                 Debug.Log("No save data");
                 this._currentSaveFile = new SaveFile();
+                this._currentSaveFile.Inventory = new Dictionary<ResourceType, float>(Settings.GeneralSettings.StartingResources);
             }
             finally
             {

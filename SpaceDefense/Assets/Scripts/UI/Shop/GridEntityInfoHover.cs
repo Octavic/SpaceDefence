@@ -65,6 +65,11 @@ namespace Assets.Scripts.UI
         /// </summary>
         public void OnPurchase()
         {
+            if(this._showingEntityPrefab == null)
+            {
+                return;
+            }
+
             var newEntity = Instantiate(this._showingEntityPrefab);
             newEntity.gameObject.SetActive(false);
             PlayerController.CurrentInstancce.OnCompletingPurchase(newEntity);
